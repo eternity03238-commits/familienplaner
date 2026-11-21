@@ -21,3 +21,19 @@ test("Command (parent view) gets no landscape art", () => {
   const cmd = readFileSync(new URL("../apps/web/components/command/CommandToday.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(cmd, /SceneHero|art-v3/);
 });
+
+test("dusk and night share exactly the same observatory architecture (only light changes)", () => {
+  const shapes = (name: string) => {
+    const svg = readFileSync(new URL(`../apps/web/public/art/v3/${name}.svg`, import.meta.url), "utf8");
+    const g = svg.match(/<g id="observatory">[\s\S]*?<\/g>/)?.[0] ?? "";
+    return [...g.matchAll(/\s(?:d|x|y|cx|cy|r|rx|ry|width|height|transform)="([^"]+)"/g)].map(m => m[1]);
+  };
+  const dusk = shapes("observatory-dusk");
+  assert.ok(dusk.length > 20, "observatory group present");
+  assert.deepEqual(shapes("observatory-night"), dusk);
+});
+test("art CSS keeps small text on scenes white and the parent view untouched", () => {
+  const art = readFileSync(new URL("../apps/web/app/art-v3.css", import.meta.url), "utf8");
+  assert.match(art, /\.fo-art-enabled \.fo-eyebrow\{color:#FFFFFF\}/);
+  assert.match(art, /\.fo-art--observatory\{--fo-art-focus:100% 55%\}/, "phone crop keeps the observatory in frame");
+});

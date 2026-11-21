@@ -12,11 +12,11 @@ export function SceneHero({ scene, time="dusk", eager=false }: {
 }) {
   if (!ART_ENABLED) {
     const key=scene==="volcano"?"volcano-expedition":`observatory-${time}`;
-    return <picture className="fo-art fo-art--vector" aria-hidden="true"><img src={vectorSceneUrl(key)} alt="" width={1440} height={810} loading={eager?"eager":"lazy"} decoding="async" fetchPriority={eager?"high":"auto"}/></picture>;
+    return <picture className={`fo-art fo-art--vector fo-art--${scene}`}><img src={vectorSceneUrl(key)} alt="" width={1440} height={810} loading={eager?"eager":"lazy"} decoding="async" fetchPriority={eager?"high":"auto"}/></picture>;
   }
   const key=scene==="volcano"?"volcano-expedition":`observatory-${time}`;
   const art=ART[key];
-  return <picture key={key} className="fo-art">
+  return <picture key={key} className={`fo-art fo-art--${scene}`}>
     <source media="(max-width: 640px)" type="image/avif" srcSet={artUrl(art.mobile.avif)}/>
     <source media="(max-width: 640px)" type="image/webp" srcSet={artUrl(art.mobile.webp)}/>
     <source type="image/avif" srcSet={artUrl(art.wide.avif)}/>

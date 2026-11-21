@@ -1,15 +1,26 @@
 /* V3 art layer — purely visual; content, state, access checks stay in existing components */
 .fo-art{position:absolute;inset:0;inline-size:100%;block-size:100%;z-index:-2;overflow:hidden;display:block;pointer-events:none;animation:fo-scene-reveal 240ms ease-out both}
-.fo-art img{inline-size:100%;block-size:100%;display:block;object-fit:cover;object-position:center center}
+.fo-art img{inline-size:100%;block-size:100%;display:block;object-fit:cover;object-position:var(--fo-art-focus,center center)}
+/* Focal points: the observatory sits in the right third, the volcano slightly right of centre.
+   On narrow heroes the crop follows the building so it is never cut (V3 plan: mobile crop is a first-class composition). */
+.fo-art--observatory{--fo-art-focus:100% 55%}
+.fo-art--volcano{--fo-art-focus:62% 50%}
 .fo-art-enabled.fo-hero{min-block-size:264px}
-.fo-art-enabled.fo-hero::before{background:linear-gradient(90deg,rgb(11 14 29 / .78),rgb(11 14 29 / .10) 75%),linear-gradient(0deg,rgb(11 14 29 / .45),transparent 68%)}
-.fo-art-enabled.fo-hero .fo-hero__text{position:relative;z-index:1;max-inline-size:70%;text-shadow:0 2px 12px rgb(11 14 29 / .4)}
+.fo-art-enabled.fo-hero::before{background:linear-gradient(90deg,rgb(11 14 29 / .80),rgb(11 14 29 / .35) 48%,rgb(11 14 29 / 0) 72%),linear-gradient(0deg,rgb(11 14 29 / .55),transparent 62%)}
+.fo-art-enabled.fo-hero .fo-hero__text{position:relative;z-index:1;max-inline-size:62%;text-shadow:0 2px 12px rgb(11 14 29 / .55)}
 .fo-art-enabled.fo-hero .fo-hero__toggle{z-index:2}
+/* small text on art: white, measured ≥4.5:1 over the brightest 5 % of the scene (scripts in docs/design/V3_ART_REVIEW.md) */
+.fo-art-enabled .fo-eyebrow{color:#FFFFFF}
 .fo-art-enabled.fo-project-hero{min-block-size:208px}
-.fo-art-enabled.fo-project-hero::before{inset:0;background:linear-gradient(90deg,rgb(11 14 29 / .82),rgb(11 14 29 / .18) 80%);clip-path:none;z-index:-1}
-.fo-art-enabled.fo-project-hero h1,.fo-art-enabled.fo-project-hero p{position:relative;z-index:1;max-inline-size:75%;text-shadow:0 2px 14px rgb(11 14 29 / .5)}
+.fo-art-enabled.fo-project-hero::before{inset:0;background:linear-gradient(90deg,rgb(11 14 29 / .84),rgb(11 14 29 / .40) 55%,rgb(11 14 29 / .05) 85%);clip-path:none;z-index:-1}
+.fo-art-enabled.fo-project-hero h1,.fo-art-enabled.fo-project-hero p{position:relative;z-index:1;max-inline-size:75%;text-shadow:0 2px 14px rgb(11 14 29 / .6)}
+.fo-art-enabled.fo-project-hero .fo-eyebrow{max-inline-size:none}
 .fo-art-enabled.fo-home__scene .fo-art{z-index:0}
-@media(min-width:700px){.fo-art-enabled.fo-hero{min-block-size:294px}.fo-art-enabled.fo-project-hero{min-block-size:236px}}
-@media(max-width:375px){.fo-art-enabled.fo-hero{min-block-size:234px}.fo-art-enabled.fo-hero .fo-hero__text{max-inline-size:80%}}
+@media(min-width:700px){.fo-art-enabled.fo-hero{min-block-size:294px}.fo-art-enabled.fo-project-hero{min-block-size:236px}.fo-art--observatory{--fo-art-focus:80% 50%}
+  .fo-art-enabled.fo-hero::before{background:radial-gradient(70% 90% at 0% 75%,rgb(11 14 29 / .78),rgb(11 14 29 / 0) 70%),linear-gradient(90deg,rgb(11 14 29 / .84),rgb(11 14 29 / .42) 48%,rgb(11 14 29 / 0) 68%),linear-gradient(0deg,rgb(11 14 29 / .5),transparent 60%)}
+  .fo-art-enabled.fo-project-hero::before{background:radial-gradient(70% 90% at 0% 70%,rgb(11 14 29 / .7),rgb(11 14 29 / 0) 70%),linear-gradient(90deg,rgb(11 14 29 / .84),rgb(11 14 29 / .4) 55%,rgb(11 14 29 / .05) 85%)}}
+/* phones: the headline wraps before it reaches the dome instead of crossing it */
+@media(max-width:699px){.fo-art-enabled.fo-hero .fo-hero__text{max-inline-size:56%}}
+@media(max-width:375px){.fo-art-enabled.fo-hero{min-block-size:234px}}
 @keyframes fo-scene-reveal{from{opacity:.38}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.fo-art{animation:none}}
