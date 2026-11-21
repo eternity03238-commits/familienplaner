@@ -11,7 +11,7 @@ Ziel: Ihr meldet euch an, legt in wenigen Minuten eure Familie an, und beide Kin
 
 ## Ablauf (ca. 3 Minuten)
 1. **Willkommen:** E-Mail-Adresse eingeben, 6-stelligen Code aus der Mail eintippen. Kein Passwort.
-2. **Familie:** Familienname vorschlagen (aus dem Google-Namen), bestätigen oder ändern.
+2. **Familie:** Familienname eintippen (ein Feld), dazu der eigene Vorname.
 3. **Kinder:** Vorname und Farbe/Avatar je Kind, „+ weiteres Kind“. Schule optional.
 4. **Partner einladen:** Einladungslink teilen (iPhone-Teilen-Menü). Der Partner meldet sich ebenfalls mit seiner E-Mail-Adresse und Code an und landet direkt in der Familie. Überspringbar.
 5. **Kindergerät verbinden:** QR-Code am Elterngerät, Kamera am Kindergerät, Kind wählt eine 4-stellige PIN. Fertig. Überspringbar, später unter „Familie“.
