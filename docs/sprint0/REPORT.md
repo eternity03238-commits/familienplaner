@@ -1,5 +1,12 @@
 # Sprint-0-Abschlussbericht (Stand 2026-11-21)
 
+> **Nachtrag 2026-11-21, 19:03 Uhr:** Die offenen Punkte A, B und C sind erledigt.
+> - **A, echter Supabase-Stack:** GitHub Actions, Lauf `44933243374`, Commit `939c52d`. Job „Migrations and RLS tests on the real Supabase local stack“: `supabase start`, `supabase db reset` mit 0001–0003, danach **39 / 39 DB-Tests grün**.
+> - **B, CI auf GitHub:** Im selben Lauf sind alle drei Jobs grün (Unit/Security/Build, Shim-DB, Supabase).
+> - **C, 375 px und Barrierefreiheit:** `npm run design:check` mit 132 Kombinationen (320–1280 px, hell/dunkel, 200 % Text, Tastatur), 0 Befunde; siehe `docs/design/INTEGRATION_V2.md`.
+>
+> Die Datenbankdateien sind seit `sprint0/foundation` unverändert. Damit sind die technischen Gate-Kriterien aus ROADMAP.md erfüllt. Die formale Freigabe von Sprint 0 und der Start von Sprint 1 liegen bei der Produktverantwortlichen. Offen bleiben die Entscheidungen in §5.
+
 **Ergebnis: Sprint 0 ist NICHT abgeschlossen.** Alle automatisierten Prüfungen, die in dieser Umgebung ausführbar waren, sind grün. Das Gate aus ROADMAP.md („alle Checks und DB-Rechttests grün“) gilt aber erst, wenn die Migrationen und RLS-Tests auf dem **echten Supabase-Local-Stack** laufen. Das war hier nicht möglich (siehe „Offene Punkte“). Sprint 1 wurde nicht begonnen.
 
 Es wurden keine echten Familien-, Kinder-, Schul- oder Anbieterdaten und keine Produktionsumgebung verwendet. Alle Testdaten sind synthetisch (`tests/db/fixtures.ts`, E-Mail-Domain `familyos.test`).
