@@ -1,16 +1,15 @@
 import type { ReactNode } from "react";
 
-/** Empty screens invite the next action instead of showing mood. */
-export function EmptyState({ title, children, action }: { title: string; children?: ReactNode; action?: ReactNode }) {
+/** Empty, loading, offline and permission states share one calm grammar: what is the case, what can you do. */
+export function EmptyState({ title, children, action, tone = "neutral" }: { title: string; children?: ReactNode; action?: ReactNode; tone?: "neutral" | "warning" | "locked" }) {
   return (
-    <div className="fo-empty" role="status">
+    <div className={`fo-empty fo-empty--${tone}`} role="status">
       <p className="fo-empty__title">{title}</p>
       {children && <p className="fo-empty__text">{children}</p>}
       {action}
     </div>
   );
 }
-
 export function Skeleton({ lines = 3, label = "Wird geladen" }: { lines?: number; label?: string }) {
   return (
     <div className="fo-skeleton" role="status" aria-label={label}>

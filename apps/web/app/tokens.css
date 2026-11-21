@@ -1,189 +1,99 @@
 /*
- * FamilyOS GAMEPLAN — semantic design tokens.
- * Source palette: docs/design/TOKENS.css + DESIGN_DIRECTION.md. Contrast is verified by tests/design-tokens.test.ts.
+ * FamilyOS Design System V2 — canonical semantic tokens.
+ * Source: docs/design/DESIGN_SYSTEM_V2.md (design/familyos-orbit-wow @ b87daa9, src/styles/tokens.css).
+ * Values from V2 are kept unchanged; additions are marked "(+)" and documented in docs/design/INTEGRATION_V2.md.
+ * Contrast of every pair the UI uses is asserted by tests/design-tokens.test.ts.
  *
- * Axes (same components, no second design system):
- *   color scheme  light (default) | dark  — prefers-color-scheme, overridable with [data-theme]
- *   density mode  parent (calm, dense)   | child (expressive, larger rhythm) — [data-mode]
- *
- * Rules encoded here:
- *   - Only --fo-primary (blue) and --fo-progress (volt) are loud accents.
- *   - Volt is a FILL with --fo-on-progress text, never text on chalk.
- *   - Graphite (#747782) is for rules/icons only (4.1:1 on chalk); muted text uses --fo-text-muted.
- *   - Violet marks study/learning surfaces only; violet text uses --fo-study-text.
+ * Axes: data-fo-theme="dark" (default) | "light"; data-fo-role="child" (Explore) | "parent" (Command).
+ * Role and theme are DISPLAY preferences only — never a permission (V2 "Roles and themes").
  */
 :root {
-  color-scheme: light;
-
-  /* raw palette */
-  --fo-chalk: #F6F5F1;
-  --fo-ink: #121318;
-  --fo-blue: #355BFF;
-  --fo-volt: #D8FF3E;
-  --fo-graphite: #747782;
-  --fo-violet: #7969EE;
-
-  /* surfaces & text */
-  --fo-bg: var(--fo-chalk);
-  --fo-surface: #FFFFFF;
-  --fo-surface-raised: #FFFFFF;
-  --fo-surface-muted: #EFEEE9;
-  --fo-surface-inverse: var(--fo-ink);
-  --fo-text: var(--fo-ink);
-  --fo-text-muted: #5F626B;
-  --fo-text-inverse: var(--fo-chalk);
-  --fo-text-inverse-muted: #B7B9C0;
-  --fo-border: #D9D9D3;
-  --fo-border-strong: var(--fo-graphite);
-  --fo-rule: var(--fo-graphite);
-
-  /* semantic accents */
-  --fo-primary: var(--fo-blue);
-  --fo-primary-hover: #2B4BE0;
-  --fo-on-primary: #FFFFFF;
-  --fo-progress: var(--fo-volt);
-  --fo-on-progress: var(--fo-ink);
-  --fo-study: var(--fo-violet);
-  --fo-study-text: #5B4BD1;
-  --fo-study-tint: #EEECFC;
-  --fo-success: #1F7A4D;
-  --fo-success-tint: #E4F2EA;
-  --fo-warning: #8A5300;
-  --fo-warning-tint: #FBF0DC;
-  --fo-danger: #C33A48;
-  --fo-danger-tint: #FBE7E9;
-
-  /* child identifiers: letter + shape carry meaning; color is secondary */
-  --fo-child-a: var(--fo-blue);
-  --fo-child-b: var(--fo-ink);
-
-  /* focus */
-  --fo-focus: var(--fo-blue);
-  --fo-focus-ring: 0 0 0 3px var(--fo-bg), 0 0 0 6px var(--fo-focus);
-
-  /* type */
-  --fo-font-body: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --fo-font-display: "Archivo Variable", "Arial Narrow", var(--fo-font-body);
-  --fo-text-xs: 0.8125rem;   /* 13 — meta only */
-  --fo-text-sm: 0.9375rem;   /* 15 — minimum body */
-  --fo-text-md: 1rem;        /* 16 */
-  --fo-text-lg: 1.1875rem;   /* 19 */
-  --fo-text-xl: 1.5rem;      /* 24 */
-  --fo-text-2xl: 2rem;       /* 32 */
-  --fo-display-time: clamp(4.5rem, 22vw, 7.5rem);
-  --fo-display-head: clamp(2.5rem, 11vw, 4.25rem);
-  --fo-leading-body: 1.5;
-  --fo-leading-tight: 1.15;
-
-  /* space: 8pt grid (4 for optical fixes) */
-  --fo-space-0-5: 4px;
-  --fo-space-1: 8px;
-  --fo-space-2: 16px;
-  --fo-space-3: 24px;
-  --fo-space-4: 32px;
-  --fo-space-5: 40px;
-  --fo-space-6: 48px;
-  --fo-space-8: 64px;
-
-  /* shape: hierarchy, not one radius for everything */
-  --fo-radius-card: 18px;
-  --fo-radius-action: 12px;
-  --fo-radius-tag: 6px;
-  --fo-clip: 22px; /* clipped-corner motif */
-
-  --fo-shadow-raised: 0 1px 0 rgba(18, 19, 24, 0.04), 0 8px 24px -16px rgba(18, 19, 24, 0.35);
-  --fo-touch: 44px;
-
-  /* motion */
-  --fo-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --fo-dur-micro: 160ms;
-  --fo-dur-nav: 240ms;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --fo-bg: #111218;
-    --fo-surface: #1D1F27;
-    --fo-surface-raised: #23252E;
-    --fo-surface-muted: #2A2D37;
-    --fo-surface-inverse: #F6F6F2;
-    --fo-text: #F6F6F2;
-    --fo-text-muted: #C2C3CA;
-    --fo-text-inverse: #121318;
-    --fo-text-inverse-muted: #4A4D57;
-    --fo-border: #444751;
-    --fo-border-strong: #8A8C95;
-    --fo-rule: #8A8C95;
-    --fo-primary: #8CA0FF;
-    --fo-primary-hover: #A9B8FF;
-    --fo-on-primary: #121318;
-    --fo-study: #AE9DFF;
-    --fo-study-text: #AE9DFF;
-    --fo-study-tint: #2A2740;
-    --fo-success: #6FD8A0;
-    --fo-success-tint: #1C3328;
-    --fo-warning: #F0B45A;
-    --fo-warning-tint: #3A2E1A;
-    --fo-danger: #FF8A95;
-    --fo-danger-tint: #3D2226;
-    --fo-child-a: #8CA0FF;
-    --fo-child-b: #F6F6F2;
-    --fo-focus: #8CA0FF;
-    --fo-shadow-raised: 0 0 0 1px #444751;
-  }
-}
-
-/* Explicit override (used by screenshot tests and a future user setting). Keep in sync with the media block. */
-:root[data-theme="dark"] {
   color-scheme: dark;
-  --fo-bg: #111218;
-  --fo-surface: #1D1F27;
-  --fo-surface-raised: #23252E;
-  --fo-surface-muted: #2A2D37;
-  --fo-surface-inverse: #F6F6F2;
-  --fo-text: #F6F6F2;
-  --fo-text-muted: #C2C3CA;
-  --fo-text-inverse: #121318;
-  --fo-text-inverse-muted: #4A4D57;
-  --fo-border: #444751;
-  --fo-border-strong: #8A8C95;
-  --fo-rule: #8A8C95;
-  --fo-primary: #8CA0FF;
-  --fo-primary-hover: #A9B8FF;
-  --fo-on-primary: #121318;
-  --fo-study: #AE9DFF;
-  --fo-study-text: #AE9DFF;
-  --fo-study-tint: #2A2740;
-  --fo-success: #6FD8A0;
-  --fo-success-tint: #1C3328;
-  --fo-warning: #F0B45A;
-  --fo-warning-tint: #3A2E1A;
-  --fo-danger: #FF8A95;
-  --fo-danger-tint: #3D2226;
-  --fo-child-a: #8CA0FF;
-  --fo-child-b: #F6F6F2;
-  --fo-focus: #8CA0FF;
-  --fo-shadow-raised: 0 0 0 1px #444751;
+  --fo-canvas: #0B0E1D;
+  --fo-surface: #181D33;
+  --fo-surface-raised: #222741;
+  --fo-surface-hover: #2A3150;
+  --fo-ink: #F7F7FF;
+  --fo-ink-muted: #C1C9DE;
+  --fo-ink-subtle: #A8B2CD;
+  --fo-stroke: #46506C;          /* decorative dividers only (2.4:1) */
+  --fo-focus: #FFC879;
+  --fo-interactive: #AF8CFF;
+  --fo-interactive-ink: #181029;
+  --fo-interactive-tint: #2B2452; /* (+) selected/pressed backgrounds */
+  --fo-success: #78E0BC;
+  --fo-success-ink: #093629;
+  --fo-success-tint: #173A34;     /* (+) */
+  --fo-warning: #FFCD8C;
+  --fo-warning-ink: #3D2A0F;
+  --fo-warning-tint: #3A2D23;     /* (+) */
+  --fo-danger: #FF9FAF;
+  --fo-danger-ink: #411A23;
+  --fo-accent-school: #B69AF6;
+  --fo-accent-sport: #76DDC5;
+  --fo-accent-family: #F2C48E;
+  --fo-hatch: #2A3150;            /* (+) private/hidden slots */
+
+  --fo-font: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --fo-radius-sm: 10px;
+  --fo-radius-md: 14px;
+  --fo-radius-lg: 18px;
+  --fo-radius-xl: 24px;
+  --fo-space-1: 4px;
+  --fo-space-2: 8px;
+  --fo-space-3: 12px;
+  --fo-space-4: 16px;
+  --fo-space-5: 20px;
+  --fo-space-6: 24px;
+  --fo-space-8: 32px;
+  --fo-type-label: 11px;
+  --fo-type-small: 13px;
+  --fo-type-body: 15px;
+  --fo-type-title: 28px;
+  --fo-ease: cubic-bezier(.2, .7, .2, 1);
+  --fo-motion-fast: 150ms;
+  --fo-motion-normal: 220ms;
+  --fo-ring: 0 0 0 3px var(--fo-focus);
+  --fo-touch: 44px;                /* (+) */
 }
 
-/* Child mode: same grammar, louder rhythm. */
-[data-mode="child"] {
-  --fo-text-sm: 1rem;
-  --fo-text-md: 1.0625rem;
-  --fo-radius-card: 20px;
-  --fo-display-head: clamp(2.75rem, 13vw, 4.75rem);
+[data-fo-theme="light"] {
+  color-scheme: light;
+  --fo-canvas: #F5F3F0;
+  --fo-surface: #FFFFFF;
+  --fo-surface-raised: #ECEAF2;
+  --fo-surface-hover: #E5E1EF;
+  --fo-ink: #191A2A;
+  --fo-ink-muted: #4A5064;
+  --fo-ink-subtle: #626B80;
+  --fo-stroke: #BCC2D0;
+  --fo-interactive: #6345B4;
+  --fo-interactive-ink: #FFFFFF;
+  --fo-interactive-tint: #ECE6FA;
+  --fo-success: #1B735B;
+  --fo-success-ink: #FFFFFF;
+  --fo-success-tint: #E2F2EC;
+  --fo-warning: #8F5518;
+  --fo-warning-ink: #FFFFFF;
+  --fo-warning-tint: #F8EBDA;
+  --fo-danger: #B82B47;
+  --fo-danger-ink: #FFFFFF;
+  --fo-focus: #6D4BC7;
+  --fo-accent-school: #6E4FC7;     /* (+) light counterparts, ≥4.8:1 */
+  --fo-accent-sport: #16735F;
+  --fo-accent-family: #8A5414;
+  --fo-hatch: #E5E1EF;
 }
+
+[data-fo-role="parent"] { --fo-radius-lg: 16px; --fo-interactive: #B9A0ED; }
+[data-fo-role="parent"][data-fo-theme="light"] { --fo-interactive: #6345B4; }
+[data-fo-role="child"] { --fo-radius-lg: 20px; }
+
+/* Explore "Tech" look: same grammar, cooler accent (display preference). */
+[data-fo-look="tech"] { --fo-interactive: #7FD6E8; --fo-interactive-ink: #08222A; --fo-interactive-tint: #16343E; }
+[data-fo-look="tech"][data-fo-theme="light"] { --fo-interactive: #0F6577; --fo-interactive-ink: #FFFFFF; --fo-interactive-tint: #E0F1F4; }
 
 @media (prefers-reduced-motion: reduce) {
-  :root {
-    --fo-dur-micro: 0ms;
-    --fo-dur-nav: 0ms;
-  }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+  :root { --fo-motion-fast: 0ms; --fo-motion-normal: 0ms; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
