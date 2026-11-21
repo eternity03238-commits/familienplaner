@@ -125,8 +125,19 @@ test("web app: no raw HTML injection, no health-route data leaks", () => {
   assert.match(health, /productionReady:\s*false/);
 });
 
-test("PWA manifest is valid JSON and German", () => {
-  const m = JSON.parse(read(join(ROOT, "apps/web/public/manifest.webmanifest")));
-  assert.equal(typeof m.name, "string");
-  assert.ok(String(m.lang ?? "de").startsWith("de"));
+test("PWA manifest is German and stays inside the deployment path", () => {
+  const m = read(join(ROOT, "apps/web/app/manifest.tsx"));
+  assert.match(m, /name: "FamilyOS"/);
+  assert.match(m, /lang: "de"/);
+  assert.match(m, /start_url: "\."/, "relative start_url works on localhost and on the GitHub Pages subpath");
+});
+
+test("GitHub Pages build is a static demo only: no API routes, never indexed", () => {
+  const cfg = read(join(ROOT, "apps/web/next.config.ts"));
+  assert.match(cfg, /output: "export"/);
+  assert.match(cfg, /pageExtensions: \["tsx"\]/, "route.ts handlers (e.g. /api/health) are excluded from the static build");
+  assert.match(read(join(ROOT, "apps/web/app/layout.tsx")), /index: false/);
+  const wf = read(join(ROOT, ".github/workflows/pages.yml"));
+  assert.doesNotMatch(wf, /secrets\./, "the public demo build must not receive secrets");
+  assert.match(wf, /permissions:[\s\S]*pages: write/);
 });

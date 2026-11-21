@@ -16,3 +16,4 @@ apps/web/next-env.d.ts
 
 # Output of npm run design:check (full PNG set); curated screenshots live in docs/design/screenshots
 .design-check/
+apps/web/out/

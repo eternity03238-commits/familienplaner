@@ -19,7 +19,7 @@ npm run lint
 npm run dev
 ```
 
-Danach `http://localhost:3000` öffnen und Explore oder Command wählen. Am iPhone im selben WLAN: `npm run preview:lan`, dann `http://<IP-des-Rechners>:3000` in Safari (Details: `docs/design/INTEGRATION_V2.md`). Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
+Danach `http://localhost:3000` öffnen und Explore oder Command wählen. Online-Demo (nur Beispieldaten): https://eternity03238-commits.github.io/familienplaner/ (Einrichtung: `docs/design/INTEGRATION_V2.md`). Am iPhone im selben WLAN: `npm run preview:lan`, dann `http://<IP-des-Rechners>:3000` in Safari (Details: `docs/design/INTEGRATION_V2.md`). Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
 
 Die Kerntests (Domain, Planung, Auth-Skeleton, Architektur-/Secret-Scans) laufen ohne Datenbank:
 

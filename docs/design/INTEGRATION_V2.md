@@ -112,6 +112,20 @@ Hinweise:
 - „Zum Home-Bildschirm“ funktioniert, aber echtes PWA-Verhalten (Offline, Push) braucht HTTPS. Das gehört zur späteren Hosting-Entscheidung.
 - Die macOS-Firewall fragt beim ersten Start eventuell nach; Node muss eingehende Verbindungen annehmen dürfen.
 
+## Online-Demo auf GitHub Pages
+Workflow `.github/workflows/pages.yml` läuft bei jedem Push auf `integration/design-v2` oder `main`. Er führt `npm test` aus, baut die statische Demo (`FAMILYOS_PAGES_BASE=/familienplaner`) und veröffentlicht sie.
+- **Adresse:** https://eternity03238-commits.github.io/familienplaner/
+- **Sichtbarkeit:** öffentlich für jeden mit Link. Nur erfundene Beispieldaten, `noindex`, keine Secrets im Workflow.
+- **Inhalt:** Die statische Version enthält alle Seiten, aber keine API-Route (`/api/health`).
+- **Was auf Pages fehlt:** Security-Header und Umleitungen der alten `/design-preview`-Adressen. GitHub Pages kann beides nicht.
+- **Lokal nachbauen:** `npm run build:pages`; die Ausgabe liegt in `apps/web/out`.
+- **Geprüft:** unter dem Unterpfad `/familienplaner/` mit denselben 132 Prüfkombinationen und Abläufen, 0 Befunde.
+
+**Einmalige Freischaltung durch die Repo-Inhaberin.** Claude kann diese Einstellungen nicht ändern:
+1. Repository → Settings → Pages → *Build and deployment* → Source: **GitHub Actions**.
+2. Settings → Environments → `github-pages` → *Deployment branches and tags*: `integration/design-v2` hinzufügen. Standardmäßig ist dort nur der Standard-Branch erlaubt.
+3. Actions → Workflow „Demo auf GitHub Pages“ → letzten Lauf öffnen → **Re-run all jobs**.
+
 ## Offen
 - **Nicht geprüft:** VoiceOver mit echtem iPhone und Safari; bisher nur Chrome mit axe.
 - **Ohne Pixel-Regression:** Screenshot-Vergleiche gegen gespeicherte Referenzbilder fehlen noch; die Screenshots unter `docs/design/screenshots/` sind Belege.

@@ -7,7 +7,7 @@ import { PrefsProvider } from "../components/Prefs.tsx";
 export const metadata: Metadata = {
   title: "FamilyOS",
   description: "Privater Familienplaner – technischer Stand mit Designvorschau (Beispieldaten)",
-  manifest: "/manifest.webmanifest",
+  robots: { index: false, follow: false }, // demo build: never indexed
   appleWebApp: { capable: true, title: "FamilyOS", statusBarStyle: "black-translucent" }
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#0B0E1D" };
