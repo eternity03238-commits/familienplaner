@@ -26,3 +26,24 @@
 .focus-actions button{min-height:44px;border-radius:11px;padding:9px 13px;border:1px solid #74639d;background:transparent;color:white;font-size:12px;font-weight:750}
 .focus-actions button:last-child{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#b28aff;color:#17102a;border-color:#b28aff}
 @media(prefers-reduced-motion:reduce){.next-move:hover{transform:none}.next-move{transition:none}}
+
+
+/* FamilyOS Explore V1.2: meaningful project journey */
+.journey{position:relative;display:grid;gap:7px;margin:17px 0}
+.journey:before{content:"";position:absolute;top:25px;bottom:25px;left:23px;width:2px;background:linear-gradient(#74dbc2,#9b79eb 65%,#424364);pointer-events:none}
+.journey-stop{position:relative;min-height:61px;display:flex;align-items:center;gap:12px;text-align:left;padding:9px 12px;color:#f7f5ff;background:#191d35;border:1px solid #353b5b;border-radius:15px;transition:border-color .18s,background .18s}
+.journey-stop.selected{background:#292342;border-color:#ae88f5}
+.journey-stop:focus-visible{outline:3px solid #ffd088;outline-offset:2px}
+.journey-node{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;background:#4b3673;color:#f4e9ff;font-size:12px;font-weight:800;z-index:1}
+.journey-stop.finished .journey-node{background:#70dfbd;color:#0e2c25}
+.journey-stop>span:nth-child(2){flex:1;min-width:0;display:grid;gap:4px}
+.journey-stop strong{font-size:12px}
+.journey-stop small{font-size:10px;color:#bcc4db}
+.journey-stop>svg{flex-shrink:0;color:#b6a5db}
+.journey-detail{border:1px solid #745baf;background:linear-gradient(135deg,#2c2550,#191e35);border-radius:17px;padding:15px;margin:12px 0 10px}
+.journey-detail h3{font-size:18px;letter-spacing:-.03em;margin:7px 0}
+.journey-detail p{font-size:12px;color:#d3cee9;line-height:1.5;margin:0 0 16px}
+.journey-actions{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.journey-actions>span{display:flex;align-items:center;gap:5px;font-size:11px;color:#d9d0ec}
+.journey-actions button{background:#ffc67c;color:#24152b;border:0;border-radius:10px;padding:10px 11px;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;min-height:44px}
+@media(prefers-reduced-motion:reduce){.journey-stop{transition:none}}
