@@ -19,7 +19,7 @@ npm run lint
 npm run dev
 ```
 
-Danach `http://localhost:3000` öffnen. Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
+Danach `http://localhost:3000` öffnen; die Designvorschau liegt unter `/design-preview`. Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
 
 Die Kerntests (Domain, Planung, Auth-Skeleton, Architektur-/Secret-Scans) laufen ohne Datenbank:
 
@@ -49,6 +49,7 @@ npm run test:db && npm run test:db:rollback
 - `packages/database` — SQL-Migrationen, RLS-Funktionen, restriktive Policies.
 - `workers/jobs` — Schnittstellen für idempotente Hintergrundjobs.
 - `tests` — ausführbare Node-TypeScript-Kerntests, Berechtigungs- und Planungsfälle.
+- `apps/web/app/tokens.css`, `apps/web/components` — GAMEPLAN-Designsystem; Vorschau unter `/design-preview` (Beispieldaten, siehe `docs/design/IMPLEMENTATION_NOTES.md`).
 - `docs` — alle fachlichen/technischen Spezifikationen, ADR und der Sprint-0-Bericht (`docs/sprint0/REPORT.md`).
 - `scripts` — Hilfsskripte für lokale DB-Prüfung, Bundle-Scan und Smoke-Test.
 

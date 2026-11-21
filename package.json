@@ -26,13 +26,15 @@
     "test:arch": "node --experimental-strip-types --test tests/architecture.test.ts",
     "security:bundle": "node --experimental-strip-types scripts/check-bundle.ts",
     "smoke:web": "node --experimental-strip-types scripts/smoke-web.ts",
-    "audit:deps": "npm audit --audit-level=high"
+    "audit:deps": "npm audit --audit-level=high",
+    "design:check": "python3 -I scripts/design/visual_check.py http://127.0.0.1:3988 .design-check"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
     "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "axe-core": "^4.14.1",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.4.6",
     "pg": "^8.23.1",

@@ -40,6 +40,7 @@ Vor jedem Schritt: Anforderungen, Sicherheitsauswirkungen, Teststrategie und beg
 
 ### Befehle
 `npm run check` (Tests, Typecheck, Lint) · `npm run build` · `npm run security:bundle` · `npm run smoke:web` · DB: `npm run test:db:prepare`, `npm run test:db`, `npm run test:db:rollback` (siehe README). Ergebnisse und offene Punkte: `docs/sprint0/REPORT.md`.
+UI: vor Änderungen `docs/design/DESIGN_DIRECTION.md` lesen; Tokens in `apps/web/app/tokens.css`; Prüfung `npm run design:check` (Server auf Port 3988, siehe `docs/design/IMPLEMENTATION_NOTES.md`).
 
 ## Definition of Done pro PR
 - Geänderte Anforderungen/Architektur dokumentiert; Migrationen reversible Strategie.

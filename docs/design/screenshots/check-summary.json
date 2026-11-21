@@ -1,0 +1,256 @@
+{
+  "checked": 50,
+  "problems": [],
+  "pages": [
+    {
+      "page": "home/iphone-se-375/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-se-375/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-se-375/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-se-375/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-se-375/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/iphone-390/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-390/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-390/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-390/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-390/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/iphone-max-430/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-max-430/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-max-430/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-max-430/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-max-430/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/ipad-820/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/ipad-820/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/ipad-820/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/ipad-820/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/ipad-820/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/desktop-1280/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/desktop-1280/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/desktop-1280/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/desktop-1280/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/desktop-1280/light",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/iphone-se-375/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-se-375/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-se-375/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-se-375/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-se-375/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/iphone-390/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-390/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-390/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-390/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-390/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/iphone-max-430/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/iphone-max-430/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/iphone-max-430/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/iphone-max-430/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/iphone-max-430/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/ipad-820/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/ipad-820/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/ipad-820/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/ipad-820/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/ipad-820/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "home/desktop-1280/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "overview/desktop-1280/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "parent/desktop-1280/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "child/desktop-1280/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    },
+    {
+      "page": "study/desktop-1280/dark",
+      "axe_violations": 0,
+      "overflow": 0
+    }
+  ]
+}
