@@ -45,8 +45,8 @@ for (const [key, raw] of Object.entries(config)) {
     if (wouldUpscale(rect, v.width)) throw new Error(`${key}/${variant}: crop ${rect.width}px is narrower than target ${v.width}px — would upscale the original`);
     const base = sharp(masterBuf).extract(rect).resize(v.width, v.height, { fit: "fill", kernel: "lanczos3" }).withMetadata({}).keepIccProfile();
     for (const fmt of ["avif", "webp"] as const) {
-      const buf = fmt === "avif" ? await base.clone().avif({ quality: 60, effort: 7, chromaSubsampling: "4:4:4" }).toBuffer()
-                                 : await base.clone().webp({ quality: 82, effort: 6, smartSubsample: true }).toBuffer();
+      const buf = fmt === "avif" ? await base.clone().avif({ quality: 55, effort: 7 }).toBuffer()
+                                 : await base.clone().webp({ quality: 78, effort: 6, smartSubsample: true }).toBuffer();
       const name = `${key}-${variant}.${fmt}`;
       writeFileSync(join(OUT, name), buf);
       files.push({ path: `apps/web/public/art/v3/${name}`, sha256: sha(buf), bytes: buf.length, width: v.width, height: v.height,

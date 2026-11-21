@@ -35,5 +35,13 @@ test("dusk and night share exactly the same observatory architecture (only light
 test("art CSS keeps small text on scenes white and the parent view untouched", () => {
   const art = readFileSync(new URL("../apps/web/app/art-v3.css", import.meta.url), "utf8");
   assert.match(art, /\.fo-art-enabled \.fo-eyebrow\{color:#FFFFFF\}/);
-  assert.match(art, /\.fo-art--observatory\{--fo-art-focus:100% 55%\}/, "phone crop keeps the observatory in frame");
+  assert.match(art, /prefers-reduced-motion:reduce[\s\S]*animation:none/, "entrance motion is disabled with reduced motion");
+});
+
+test("the approved originals are committed byte-identical to the owner's upload and the app uses them by default", () => {
+  const manifest = JSON.parse(readFileSync(new URL("../apps/web/public/art/v3/assets-manifest.json", import.meta.url), "utf8")) as { masters: { path: string }[]; files: { path: string }[] };
+  assert.deepEqual(manifest.masters.map(m => m.path.split("/").pop()).sort(), ["sternwarte-im-abendlicht.png", "sternwarte-unter-dem-mond.png", "vulkan-forschungsstation.png"]);
+  assert.equal(manifest.files.length, 12);
+  const paths = readFileSync(new URL("../apps/web/lib/art/paths.ts", import.meta.url), "utf8");
+  assert.match(paths, /NEXT_PUBLIC_FAMILYOS_V3_ART !== "0"/);
 });

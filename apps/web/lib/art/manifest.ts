@@ -1,4 +1,8 @@
-/** Art approved 2026-11-21. Binary exports are distributed in FamilyOS-Visual-World-V3-Assets.zip. */
+/**
+ * Approved ORIGINAL illustrations (owner commit 364c307 on main, assets/images/*.png, 1536×1024),
+ * copied byte-identical to docs/design/art-v3/originals/ and exported by `npm run art:export`.
+ * Phone: square crop that keeps the whole dome (full-bleed hero). Desktop/project: full 3:2 frame.
+ */
 export type SceneName = "observatory" | "volcano";
 export type SceneTime = "dusk" | "night";
 export type ArtVariant = {
@@ -8,20 +12,13 @@ export type ArtVariant = {
   wide: { avif: string; webp: string; width: number; height: number };
   decorative: true;
 };
-export const ART: Record<string,ArtVariant> = {
-  "observatory-dusk": {
-    key:"observatory-dusk",master:"futuristische_sternwarte_im_abendlicht.png",
-    mobile:{avif:"observatory-dusk-mobile.avif",webp:"observatory-dusk-mobile.webp",width:960,height:720},
-    wide:{avif:"observatory-dusk-wide.avif",webp:"observatory-dusk-wide.webp",width:1440,height:810},decorative:true
-  },
-  "observatory-night": {
-    key:"observatory-night",master:"moderne_sternwarte_unter_dem_mond.png",
-    mobile:{avif:"observatory-night-mobile.avif",webp:"observatory-night-mobile.webp",width:960,height:720},
-    wide:{avif:"observatory-night-wide.avif",webp:"observatory-night-wide.webp",width:1440,height:810},decorative:true
-  },
-  "volcano-expedition": {
-    key:"volcano-expedition",master:"dämmernde_vulkan_forschungsstation_mit_lavaglühen.png",
-    mobile:{avif:"volcano-expedition-mobile.avif",webp:"volcano-expedition-mobile.webp",width:960,height:720},
-    wide:{avif:"volcano-expedition-wide.avif",webp:"volcano-expedition-wide.webp",width:1440,height:960},decorative:true
-  }
+const variant = (key: string, master: string, mobile: [number, number], wide: [number, number]): ArtVariant => ({
+  key, master, decorative: true,
+  mobile: { avif: `${key}-mobile.avif`, webp: `${key}-mobile.webp`, width: mobile[0], height: mobile[1] },
+  wide: { avif: `${key}-wide.avif`, webp: `${key}-wide.webp`, width: wide[0], height: wide[1] }
+});
+export const ART: Record<string, ArtVariant> = {
+  "observatory-dusk": variant("observatory-dusk", "sternwarte-im-abendlicht.png", [1024, 1024], [1440, 960]),
+  "observatory-night": variant("observatory-night", "sternwarte-unter-dem-mond.png", [1024, 1024], [1440, 960]),
+  "volcano-expedition": variant("volcano-expedition", "vulkan-forschungsstation.png", [1170, 780], [1440, 960])
 };

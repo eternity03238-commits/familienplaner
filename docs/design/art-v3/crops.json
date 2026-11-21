@@ -1,18 +1,18 @@
 {
-  "$comment": "Art-directed crops for the approved ORIGINAL masters (docs/design/art-v3/originals). Rectangles are fractions of the master (x, y = top-left; w = width; height follows the target aspect). Tune after seeing the originals; never invent imagery. Mobile = 4:3, wide = 16:9 (volcano 3:2).",
+  "$comment": "Art-directed crops of the approved ORIGINAL masters (1536x1024 PNG, committed by the owner on main @364c307 under assets/images/, copied byte-identical). Fractions of the master: x/y top-left, w width; height follows the target aspect. Phone heroes are square (full-bleed, ~390x390 CSS px) and keep the whole dome; desktop and project heroes use the full 3:2 frame. Crop/resize/compress only.",
   "observatory-dusk": {
-    "master": "futuristische_sternwarte_im_abendlicht.png",
-    "mobile": { "width": 960, "height": 720, "crop": { "x": 0.30, "y": 0.12, "w": 0.70 } },
-    "wide": { "width": 1440, "height": 810, "crop": { "x": 0.0, "y": "center", "w": 1.0 } }
+    "master": "sternwarte-im-abendlicht.png",
+    "mobile": { "width": 1024, "height": 1024, "crop": { "x": 0.3334, "y": 0, "w": 0.6666 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
   },
   "observatory-night": {
-    "master": "moderne_sternwarte_unter_dem_mond.png",
-    "mobile": { "width": 960, "height": 720, "crop": { "x": 0.30, "y": 0.12, "w": 0.70 } },
-    "wide": { "width": 1440, "height": 810, "crop": { "x": 0.0, "y": "center", "w": 1.0 } }
+    "master": "sternwarte-unter-dem-mond.png",
+    "mobile": { "width": 1024, "height": 1024, "crop": { "x": 0.0781, "y": 0, "w": 0.6667 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
   },
   "volcano-expedition": {
-    "master": "dämmernde_vulkan_forschungsstation_mit_lavaglühen.png",
-    "mobile": { "width": 960, "height": 720, "crop": { "x": 0.22, "y": 0.10, "w": 0.78 } },
-    "wide": { "width": 1440, "height": 960, "crop": { "x": 0.0, "y": "center", "w": 1.0 } }
+    "master": "vulkan-forschungsstation.png",
+    "mobile": { "width": 1170, "height": 780, "crop": { "x": 0, "y": "center", "w": 1 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
   }
 }

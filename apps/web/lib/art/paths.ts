@@ -5,7 +5,8 @@ export function artUrl(file: string): string {
   if (!SAFE.test(file)) throw new Error("Unrecognized FamilyOS art asset: " + file);
   return BASE + "/art/v3/" + file;
 }
-export const ART_ENABLED = process.env.NEXT_PUBLIC_FAMILYOS_V3_ART === "1";
+/** Original raster art is on by default since the 12 verified exports are committed; set NEXT_PUBLIC_FAMILYOS_V3_ART=0 to fall back to the SVG stand-ins. */
+export const ART_ENABLED = process.env.NEXT_PUBLIC_FAMILYOS_V3_ART !== "0";
 
 /** GitHub-native vector scenes: always available, no external download. */
 const SCENES = new Set(["observatory-dusk","observatory-night","volcano-expedition"]);

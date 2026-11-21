@@ -1,33 +1,60 @@
-# Status Original-Illustrationen — **Blocked: Originalbilder nicht in GitHub**
+# Status Original-Illustrationen — Originale integriert, **visuelle Abnahme ausstehend**
 
-Stand 2026-11-21 · Branch `integration/visual-world-v3` · Auftrag: `CLAUDE_ORIGINAL_ART_IMPLEMENTATION.md`
+Stand 2026-11-21 · Branch `integration/visual-world-v3` (PR #3, Draft) · Vertrag: `CLAUDE_ORIGINAL_ART_IMPLEMENTATION.md`
 
-## Befund (geprüft, nicht angenommen)
-Durchsucht wurden alle 8 Remote-Branches, die PRs #1–#3 (Beschreibungen, Kommentare, Review-Kommentare), Issues und Releases. Es gibt **keine** PNG-, AVIF-, WebP- oder JPEG-Datei der Illustrationen. Ausgenommen sind die Prüf-Screenshots unter `docs/design/screenshots/`.
+## Herkunft
+Die Inhaberin hat die drei freigegebenen Originale auf `main` hochgeladen. Sie lagen nicht unter den ursprünglich erwarteten Dateinamen, sondern unter den folgenden:
 
-| Original | Originaldatei in GitHub | 12 Exporte | in App geladen | Mobile-Crop geprüft | echtes iPhone geprüft |
+| Original (1536 × 1024 PNG) | Commit auf `main` | Git-Blob = Kopie in `docs/design/art-v3/originals/` |
+|---|---|---|
+| `assets/images/sternwarte-im-abendlicht.png` | `364c307` | `6fcbfd6…` identisch |
+| `assets/images/sternwarte-unter-dem-mond.png` | `13ec39c` | `6227b7e…` identisch |
+| `assets/images/vulkan-forschungsstation.png` | `364c307` | `9e008ec…` identisch |
+
+`main` wurde nicht verändert. Die Kopien sind bytegleich (gleicher Git-Blob, kein zusätzlicher Speicher im Repository). SHA-256 aller Master und Exporte stehen in `apps/web/public/art/v3/assets-manifest.json`, und `npm run art:verify` prüft sie.
+
+## Status
+| Szene | Original in GitHub | 12 Exporte (AVIF/WebP) | in App geladen | iPhone-Ausschnitt geprüft | echtes iPhone geprüft |
 |---|---|---|---|---|---|
-| `futuristische_sternwarte_im_abendlicht.png` | **nein** | nein | nein (SVG-Ersatz) | nein | nein |
-| `moderne_sternwarte_unter_dem_mond.png` | **nein** | nein | nein (SVG-Ersatz) | nein | nein |
-| `dämmernde_vulkan_forschungsstation_mit_lavaglühen.png` | **nein** | nein | nein (SVG-Ersatz) | nein | nein |
+| Observatorium Abend | ja | ja | ja (HTTP 200, `img.complete`, 1024/1440 px) | ja, Chrome 320/390/430 px | **nein**, Abnahme durch Inhaberin |
+| Observatorium Nacht | ja | ja | ja | ja | **nein** |
+| Vulkan-Forschungsstation | ja | ja | ja | ja | **nein** |
 
-Die App zeigt die drei SVGs aus `apps/web/public/art/v3/*.svg`. Sie sind **Ersatzgrafiken, nicht die freigegebenen Originale**. Das gilt auch für die Überarbeitung in Commit `5f2cefe` (`V3_ART_REVIEW.md`). Deren Screenshots und Kontrastwerte beziehen sich nur auf den Ersatz.
+## Umsetzung
+- **Nur Zuschnitt, Skalierung und Kompression** der Originale (`npm run art:export`, `docs/design/art-v3/crops.json`). Keine Farbkorrektur, keine Generierung, kein Hochskalieren.
+- **iPhone:** quadratischer Ausschnitt 1024 × 1024 mit vollständiger Kuppel; Abend ab x = 512, Nacht ab x = 120 (Mond bewusst außerhalb statt halb angeschnitten). Vulkan nutzt den vollen 3:2-Rahmen.
+- **Desktop / Projekt:** voller 3:2-Rahmen (1440 × 960) mit Sonne bzw. Mond.
+- **Gestaltung:**
+  - Im Dunkelmodus läuft der Hero auf dem Telefon randlos über die ganze Breite und blendet in den Hintergrund über.
+  - Der Text liegt unten links auf dem dunklen Vordergrund.
+  - Im Hellmodus und auf dem Desktop ist der Hero eine abgerundete Karte.
+  - Einmaliges, sanftes Heranzoomen beim Laden (1,4 s) und 280 ms Überblendung Abend/Nacht; bei reduzierter Bewegung entfällt beides.
+- **Ladegewicht:** AVIF 88–135 KB pro Bild (Safari/Chrome laden AVIF), WebP-Fallback 129–219 KB. Die WebP-Dateien liegen teils über dem Budget aus dem V3-Plan (Warnung in `art:verify`).
+- **SVG-Ersatz:** bleibt als Rückfall (`NEXT_PUBLIC_FAMILYOS_V3_ART=0`) im Repo. Er ist **nicht** die freigegebene Gestaltung.
 
-## Was ohne Originale vorbereitet ist (keine neuen Bilder)
-- **`docs/design/art-v3/originals/`:** Zielordner mit Upload-Anleitung (GitHub *Add file → Upload files*, kein ZIP).
-- **`docs/design/art-v3/crops.json`:** eigene Ausschnitte pro Szene, iPhone 4:3 und Desktop 16:9 (Vulkan 3:2). Die Werte sind Startwerte und werden an den echten Originalen nachjustiert.
-- **`npm run art:export`** (`scripts/art/export-originals.ts`):
-  - erzeugt aus den Original-PNGs die 12 AVIF/WebP-Dateien und `assets-manifest.json` (Maße, Bytes, SHA-256, Quelle und Quell-Hash, Crop-Rechteck);
-  - nur Zuschnitt, Skalierung und Kompression, kein Hochskalieren, keine Generierung;
-  - ohne Originale bricht es mit „Blocked“ ab.
-- **`npm run art:verify`:** prüft zusätzlich die Herkunft. Jedes Master-PNG im Manifest muss mit identischem Hash im Repo liegen; eine Manipulation wird erkannt (getestet).
-- **Überblendung Abend/Nacht:** 240 ms, bei reduzierter Bewegung sofort. Gilt für Originale und Ersatz.
-- **Tests** (`tests/art-pipeline.test.ts`): Crop-Geometrie, kein Hochskalieren, Abgleich Crop-Konfiguration ↔ `manifest.ts`. Der Workflow darf die Raster-Art nicht ohne die 12 Dateien einschalten.
-- Mechanik einmal mit technischen Testmustern geprüft: 12 Dateien, Manifest, Prüfung grün, Manipulation erkannt. Die Testmuster wurden **nicht** committet.
+## Messungen (Chrome, Playwright)
+- **Textkontrast über den Originalen** (gegen die hellsten 5 % des Bildes hinter dem Text): Minimum **4,58:1**, Nacht-Überschrift 12,1:1. Script: `scripts/design/art_contrast.py`.
+- **`npm run design:check`:** 132 Kombinationen (11 Seiten × 6 Breiten × hell/dunkel), 0 Befunde. Dazu 200 % Text auf Explore Abend, Explore Nacht und Vulkan ohne Überlauf.
+- **Tests und Build:** 93/93 Tests, Typecheck, Lint, Audit (0), Build, Bundle-Scan und Smoke-Test grün.
 
-## Nächste Schritte, sobald die drei PNGs auf GitHub liegen
-1. `npm run art:export` ausführen, Ausschnitte an den echten Motiven nachjustieren (Kuppel rechts vollständig, ruhige Himmelsfläche links für den Text). Erst Abend, dann Nacht, dann Vulkan.
-2. `npm run art:verify`, dann ein Pages-Build mit `NEXT_PUBLIC_FAMILYOS_V3_ART=1` und dem Präfix `/familienplaner`.
-3. Soll/Ist-Vergleich mit Screenshots: Original, SVG-Ersatz und React-Ansicht bei 320, 390, 430 und 1280 px, hell und dunkel, 200 % Text, reduzierte Bewegung. Dazu Kontrastmessung (`scripts/design/art_contrast.py`) und Funktionsprüfung (`npm run design:check`).
-4. Echte iPhone-Screenshots: Claude kann nur Chrome mit iPhone-Maßen aufnehmen. Gerätescreenshots kommen von dir, über die GitHub-Pages-Vorschau.
-5. Erst nach deiner Abnahme: Raster-Art im Pages-Workflow einschalten und mergen. PR #3 bleibt bis dahin Draft.
+## Beobachtung zur Art Direction (Entscheidung der Inhaberin)
+Abend- und Nachtbild zeigen **verschiedene Gebäude und Kameraperspektiven**:
+- Abend: futuristischer Glasbau rechts im Bild.
+- Nacht: klassische weiße Kuppel links im Bild.
+
+Der Vertrag beschreibt „dieselbe Architekturfamilie und Kameraperspektive“. Die App kann das ausgleichen (Text unten links, eigener Ausschnitt je Szene). Beim Umschalten wechselt aber sichtbar das Gebäude. Falls das stört, bräuchte es ein passendes Nachtbild zum Abendbild. Die Bilder selbst werden nicht verändert.
+
+## Paralleler Commit `8e28f52` (Inhaberin, 21.11.2026)
+Gleichzeitig kamen auf diesem Branch an:
+- die Originale unter `assets/images/` (gleiche Git-Blobs wie oben),
+- `familyos-symbol.svg`, `topography.svg` und `world-orbit.svg`,
+- eigene Exporte unter denselben zwölf Dateinamen (Handy 960 × 720, Desktop 1440 × 810).
+
+Originale und SVGs bleiben unverändert. Bei den zwölf Exporten gilt die hier beschriebene Fassung, weil Layout, Ausschnitte und Kontrastmessung darauf abgestimmt sind. Die Version aus `8e28f52` bleibt in der Historie erhalten (`git checkout 8e28f52 -- apps/web/public/art/v3/`). Welche Ausschnitte bleiben, entscheidet die Inhaberin bei der Abnahme.
+
+## Vor dem Merge
+1. Echte iPhone-Screenshots durch die Inhaberin, zum Beispiel über die GitHub-Pages-Vorschau oder `npm run preview:lan`.
+2. Freigabe der Ausschnitte und der Gestaltung.
+3. Danach: PR #3 auf „Ready for review“ und Merge in `integration/design-v2`.
+
+Vergleich Original – SVG-Ersatz – App: `screenshots/v3-original/vergleich-original-ersatz-app.webp`. Dazu Einzelansichten bei 320/390/430/1280 px, Hellmodus und 200 % Text im selben Ordner.

@@ -1,3 +1,5 @@
+> **Überholt (21.11.2026):** Die freigegebenen Originale sind integriert, siehe `ORIGINAL_ART_STATUS.md`. Die SVGs sind nur noch ein Rückfall (`NEXT_PUBLIC_FAMILYOS_V3_ART=0`).
+
 # FamilyOS V3 – GitHub-only illustration workflow
 
 **Stand: 21.11.2026. Keine ZIP-Übergaben mehr erforderlich.**

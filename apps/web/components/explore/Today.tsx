@@ -21,7 +21,7 @@ export function Today() {
   return (
     <>
       <section className={`fo-hero fo-hero--${world} ${GITHUB_SCENES_AVAILABLE ? "fo-art-enabled" : ""}`} aria-labelledby="hero-title">
-        <SceneHero scene="observatory" time={world} eager/>
+        <SceneHero scene="observatory" time={world} eager toggleable />
         <button type="button" className="fo-hero__toggle" aria-pressed={world === "night"} onClick={() => setWorld(world === "dusk" ? "night" : "dusk")}>
           {world === "dusk" ? <Moon size={17} aria-hidden="true" /> : <Sun size={17} aria-hidden="true" />}
           <span className="fo-sr-only">Nachtansicht</span>

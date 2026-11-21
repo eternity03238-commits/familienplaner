@@ -1,75 +1,72 @@
 {
-  "generated": "2026-11-21T20:24:50.106Z",
+  "generated": "2026-11-21T20:32:28.342Z",
   "masters": [
     {
-      "path": "assets/images/sternwarte-im-abendlicht.png",
+      "path": "docs/design/art-v3/originals/sternwarte-im-abendlicht.png",
       "sha256": "0f5025f6890d47dbd22d155ecb45520e989bef9a90fa51412878c6c9eee1b0ae",
       "bytes": 2659454,
       "width": 1536,
       "height": 1024,
-      "kind": "generated-scene-master",
-      "sourceCommit": "364c307e8a641ccbb829266bef202718da004d83"
+      "kind": "original"
     },
     {
-      "path": "assets/images/sternwarte-unter-dem-mond.png",
+      "path": "docs/design/art-v3/originals/sternwarte-unter-dem-mond.png",
       "sha256": "5a4e2843256119fb600c8bd8eda3495926d0c0e27c88f8a789fc80c5f4154893",
       "bytes": 2575834,
       "width": 1536,
       "height": 1024,
-      "kind": "generated-scene-master",
-      "sourceCommit": "364c307e8a641ccbb829266bef202718da004d83"
+      "kind": "original"
     },
     {
-      "path": "assets/images/vulkan-forschungsstation.png",
+      "path": "docs/design/art-v3/originals/vulkan-forschungsstation.png",
       "sha256": "74f93b0123b883645107bb13b1367c191f92520a5592200015cf966da014946f",
       "bytes": 2848666,
       "width": 1536,
       "height": 1024,
-      "kind": "generated-scene-master",
-      "sourceCommit": "364c307e8a641ccbb829266bef202718da004d83"
+      "kind": "original"
     }
   ],
   "files": [
     {
       "path": "apps/web/public/art/v3/observatory-dusk-mobile.avif",
-      "sha256": "759cd9bf8d115cbb496d20dcd7e7910d760a3b7603675a8e448e0a497f2b939e",
-      "bytes": 68262,
-      "width": 960,
-      "height": 720,
+      "sha256": "9d1f3fbb6816f2b4326ff8ba91579400877c50f7c79b44119450c2f8ba8cd518",
+      "bytes": 112817,
+      "width": 1024,
+      "height": 1024,
       "kind": "derived-crop",
       "source": "sternwarte-im-abendlicht.png",
       "sourceSha256": "0f5025f6890d47dbd22d155ecb45520e989bef9a90fa51412878c6c9eee1b0ae",
       "crop": {
-        "left": 184,
+        "left": 512,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1024,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-dusk-mobile.webp",
-      "sha256": "b698872a5a7d8633216f1c2db6e8535e8b0a416c1a876f366781231f63b4daf6",
-      "bytes": 88120,
-      "width": 960,
-      "height": 720,
+      "sha256": "2948a2d353c026f88be569ea1ca5bcc914d5cfe9eee0a1a7dec34966ac2ce1eb",
+      "bytes": 195118,
+      "width": 1024,
+      "height": 1024,
       "kind": "derived-crop",
       "source": "sternwarte-im-abendlicht.png",
       "sourceSha256": "0f5025f6890d47dbd22d155ecb45520e989bef9a90fa51412878c6c9eee1b0ae",
       "crop": {
-        "left": 184,
+        "left": 512,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1024,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-dusk-wide.avif",
-      "sha256": "668e03f8c412421c02e470c98c3930f62ae8ea3579dbb9446ee18b423e53606b",
-      "bytes": 121133,
+      "sha256": "addf49312245898ac2a0c57786e00ca8b4d6769bb0fcc90ddeb93607c37b35a5",
+      "bytes": 134927,
       "width": 1440,
-      "height": 810,
+      "height": 960,
       "kind": "derived-crop",
       "source": "sternwarte-im-abendlicht.png",
       "sourceSha256": "0f5025f6890d47dbd22d155ecb45520e989bef9a90fa51412878c6c9eee1b0ae",
@@ -77,16 +74,16 @@
         "left": 0,
         "top": 0,
         "width": 1536,
-        "height": 864
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-dusk-wide.webp",
-      "sha256": "99fd04c2485c5c2d93e397ea0f9b1944e227b8c6260a873f5de7c503801c1ec9",
-      "bytes": 125680,
+      "sha256": "7c44a632044157299d07d186bc32aa14aa3430ea80be2eea6fe1b9e4b8ef0ab6",
+      "bytes": 224724,
       "width": 1440,
-      "height": 810,
+      "height": 960,
       "kind": "derived-crop",
       "source": "sternwarte-im-abendlicht.png",
       "sourceSha256": "0f5025f6890d47dbd22d155ecb45520e989bef9a90fa51412878c6c9eee1b0ae",
@@ -94,50 +91,50 @@
         "left": 0,
         "top": 0,
         "width": 1536,
-        "height": 864
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-night-mobile.avif",
-      "sha256": "aa19df5dd9eb0da113c1d9166e68532e2efdf7120f09ac1199ca349c11f60486",
-      "bytes": 75404,
-      "width": 960,
-      "height": 720,
+      "sha256": "d52d682a79cdd54a4f02e1035e4ff3de2ad5abc8262b284a6e90ae1bf5429ece",
+      "bytes": 90246,
+      "width": 1024,
+      "height": 1024,
       "kind": "derived-crop",
       "source": "sternwarte-unter-dem-mond.png",
       "sourceSha256": "5a4e2843256119fb600c8bd8eda3495926d0c0e27c88f8a789fc80c5f4154893",
       "crop": {
-        "left": 92,
+        "left": 120,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1024,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-night-mobile.webp",
-      "sha256": "6a09c3e45876e96efe727f6bc99754ccc4f09a2579c57009dbab7ea1fd7f027f",
-      "bytes": 66684,
-      "width": 960,
-      "height": 720,
+      "sha256": "14d0d186e4eb1c2533392a4acd05c03f3ed74717ff853f5ce67fe50ab6fd49c6",
+      "bytes": 133116,
+      "width": 1024,
+      "height": 1024,
       "kind": "derived-crop",
       "source": "sternwarte-unter-dem-mond.png",
       "sourceSha256": "5a4e2843256119fb600c8bd8eda3495926d0c0e27c88f8a789fc80c5f4154893",
       "crop": {
-        "left": 92,
+        "left": 120,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1024,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-night-wide.avif",
-      "sha256": "b08934d177c34633d6787465f61f0956851d725455e3a03ea11c9db21860ed5e",
-      "bytes": 91380,
+      "sha256": "ef9a87edb7da15cedc04f2c89662cecda5e7d474ca877392f2f07d4c2dfdcd5b",
+      "bytes": 112056,
       "width": 1440,
-      "height": 810,
+      "height": 960,
       "kind": "derived-crop",
       "source": "sternwarte-unter-dem-mond.png",
       "sourceSha256": "5a4e2843256119fb600c8bd8eda3495926d0c0e27c88f8a789fc80c5f4154893",
@@ -145,16 +142,16 @@
         "left": 0,
         "top": 0,
         "width": 1536,
-        "height": 864
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/observatory-night-wide.webp",
-      "sha256": "e336097aeb63942d7df912afe5e307a2bbbf7f9a14fd7f956431c6639424146c",
-      "bytes": 115432,
+      "sha256": "4e5a3931794b3a57123d179859dc44f3f17685fb1131d7afb49a63230feebd7b",
+      "bytes": 157510,
       "width": 1440,
-      "height": 810,
+      "height": 960,
       "kind": "derived-crop",
       "source": "sternwarte-unter-dem-mond.png",
       "sourceSha256": "5a4e2843256119fb600c8bd8eda3495926d0c0e27c88f8a789fc80c5f4154893",
@@ -162,48 +159,48 @@
         "left": 0,
         "top": 0,
         "width": 1536,
-        "height": 864
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/volcano-expedition-mobile.avif",
-      "sha256": "7953db941576e0e4e8c975b52147d0d013effe645898db162959b27563eaf0fc",
-      "bytes": 64240,
-      "width": 960,
-      "height": 720,
+      "sha256": "e9a7ef9ed2a322f9f4ce4ca39501d328c31de13c9106f666f11e38235da56ea1",
+      "bytes": 101598,
+      "width": 1170,
+      "height": 780,
       "kind": "derived-crop",
       "source": "vulkan-forschungsstation.png",
       "sourceSha256": "74f93b0123b883645107bb13b1367c191f92520a5592200015cf966da014946f",
       "crop": {
-        "left": 15,
+        "left": 0,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1536,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/volcano-expedition-mobile.webp",
-      "sha256": "ba50eec54e95ab30a79d3d8f03c58b2b8790019061e3d760e0414b7e10f90491",
-      "bytes": 90668,
-      "width": 960,
-      "height": 720,
+      "sha256": "e580b38d42731b15dfa45e9229a1981b304bd6115bb96e10323f1ac2b278f17a",
+      "bytes": 151102,
+      "width": 1170,
+      "height": 780,
       "kind": "derived-crop",
       "source": "vulkan-forschungsstation.png",
       "sourceSha256": "74f93b0123b883645107bb13b1367c191f92520a5592200015cf966da014946f",
       "crop": {
-        "left": 15,
+        "left": 0,
         "top": 0,
-        "width": 1352,
-        "height": 1014
+        "width": 1536,
+        "height": 1024
       },
       "approval": "pending-visual-review"
     },
     {
       "path": "apps/web/public/art/v3/volcano-expedition-wide.avif",
-      "sha256": "48e2a9b9851ad9cb54c5e8ad8f93239756b2273d28b3ba6e3759b6e3c5ad55a8",
-      "bytes": 115729,
+      "sha256": "55984d6ec652cad735f41be793ac85160be35f5d09c033f0536e75419f46a2f7",
+      "bytes": 137991,
       "width": 1440,
       "height": 960,
       "kind": "derived-crop",
@@ -219,8 +216,8 @@
     },
     {
       "path": "apps/web/public/art/v3/volcano-expedition-wide.webp",
-      "sha256": "153cae6b193e3b121130c8d2fd9ea875faa10e259fdc33315be78a7eb59e0ad3",
-      "bytes": 121340,
+      "sha256": "53c8b4220a663a559c51cdc8df22e04e8d55207e8273baa0c6afd157549a380b",
+      "bytes": 205432,
       "width": 1440,
       "height": 960,
       "kind": "derived-crop",

@@ -1,3 +1,5 @@
+> **Hinweis:** Dieser Bericht betrifft nur den SVG-Ersatz. Aktueller Stand mit den Originalen: `ORIGINAL_ART_STATUS.md`.
+
 # V3-Illustrationen — Prüfung im echten Layout und Überarbeitung
 
 Stand 2026-11-21 · Branch `integration/visual-world-v3` (PR #3) · Grundlage: `GITHUB_ONLY_ART.md`, `VISUAL_WORLD_V3_PLAN.md`, `DESIGN_SYSTEM_V2.md`
