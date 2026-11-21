@@ -30,7 +30,10 @@
     "design:check": "python3 -I scripts/design/visual_check.py http://127.0.0.1:3988 .design-check",
     "dev:lan": "npm run dev -w @familyos/web -- -H 0.0.0.0 -p 3000",
     "preview:lan": "npm run build && npm run start -w @familyos/web -- -H 0.0.0.0 -p 3000",
-    "build:pages": "FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web"
+    "build:pages": "FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web",
+    "art:verify": "node --experimental-strip-types scripts/art/verify-assets.ts",
+    "build:pages:art": "NEXT_PUBLIC_FAMILYOS_V3_ART=1 NEXT_PUBLIC_ASSET_BASE=/familienplaner FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web",
+    "art:export": "node --experimental-strip-types scripts/art/export-originals.ts"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
@@ -41,6 +44,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.4.6",
     "pg": "^8.23.1",
+    "sharp": "^0.35.5",
     "typescript": "^5.8.0"
   }
 }

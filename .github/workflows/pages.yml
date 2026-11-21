@@ -25,6 +25,7 @@ jobs:
       - name: Statische Demo bauen
         env:
           FAMILYOS_PAGES_BASE: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_ASSET_BASE: /${{ github.event.repository.name }}
           NEXT_TELEMETRY_DISABLED: "1"
         run: npm run build -w @familyos/web
       - run: touch apps/web/out/.nojekyll

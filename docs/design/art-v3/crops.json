@@ -1,0 +1,18 @@
+{
+  "$comment": "Art-directed crops of the approved ORIGINAL masters (1536x1024 PNG, committed by the owner on main @364c307 under assets/images/, copied byte-identical). Fractions of the master: x/y top-left, w width; height follows the target aspect. Phone heroes are square (full-bleed, ~390x390 CSS px) and keep the whole dome; desktop and project heroes use the full 3:2 frame. Crop/resize/compress only.",
+  "observatory-dusk": {
+    "master": "sternwarte-im-abendlicht.png",
+    "mobile": { "width": 1024, "height": 1024, "crop": { "x": 0.3334, "y": 0, "w": 0.6666 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
+  },
+  "observatory-night": {
+    "master": "sternwarte-unter-dem-mond.png",
+    "mobile": { "width": 1024, "height": 1024, "crop": { "x": 0.0781, "y": 0, "w": 0.6667 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
+  },
+  "volcano-expedition": {
+    "master": "vulkan-forschungsstation.png",
+    "mobile": { "width": 1170, "height": 780, "crop": { "x": 0, "y": "center", "w": 1 } },
+    "wide": { "width": 1440, "height": 960, "crop": { "x": 0, "y": "center", "w": 1 } }
+  }
+}

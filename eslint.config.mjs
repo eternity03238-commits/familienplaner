@@ -7,5 +7,5 @@ export default defineConfig([
   ...nextTs,
   // Monorepo: tell eslint-plugin-next where the App Router app lives.
   { settings: { next: { rootDir: "apps/web/" } } },
-  { ignores: [".next/**", "apps/web/.next/**", "node_modules/**", "next-env.d.ts"] }
+  { ignores: [".next/**", "apps/web/.next/**", "apps/web/out/**", "node_modules/**", "next-env.d.ts"] }
 ]);
