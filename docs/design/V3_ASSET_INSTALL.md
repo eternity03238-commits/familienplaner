@@ -1,32 +1,33 @@
-# Approved V3 illustrations — installation gate
+# FamilyOS Visual World V3 — Bilder direkt über GitHub
 
-Images are packaged as `FamilyOS-Visual-World-V3-Assets.zip` in the conversation. **The current GitHub text connector cannot commit binary exports.** This PR contains code only, protected by an opt-in environment flag. The app stays on the existing V2 SVG until all 12 art files are installed and verified.
+Die App benötigt **keine ZIP-Dateien, kein manuelles Weiterreichen zwischen ChatGPT und Claude Code und keine externen Bildhosts**.
 
-## Install
-1. Extract the ZIP.
-2. Copy `apps/web/public/art/v3/` from it into the same path in this branch.
-3. Preserve filenames: 3 scenes × 2 responsive crops × 2 formats = **12 image files**, plus optional source notes.
-4. Compare SHA-256 digests from `ASSET_MANIFEST.json`; verify public asset files contain no secrets or student data.
-5. On this branch, run:
-   ```bash
-   npm ci
-   npm test
-   npm run typecheck
-   npm run build
-   NEXT_PUBLIC_FAMILYOS_V3_ART=1 NEXT_PUBLIC_ASSET_BASE=/familienplaner FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web
-   ```
-6. Verify `apps/web/out/art/v3/` contains all 12 files, and each route loads via the `/familienplaner/art/v3/` prefix.
-7. Enable `NEXT_PUBLIC_FAMILYOS_V3_ART: "1"` and `NEXT_PUBLIC_ASSET_BASE: /familienplaner` in the static Pages build workflow **only after** the files are committed and visual checks pass.
-8. Run `npm run design:check` and manually test actual Safari; compare screenshots of home, Explore dusk/night and volcano.
-9. Merge to `integration/design-v2` only after acceptance. Do not push to `main` or switch Pages source until the branch is verified.
+## Aktueller, funktionierender Weg
 
-## Intended placements
-- `apps/web/components/explore/Today.tsx` → hero (dusk/night, 4:3 on phone, 16:9 desktop)
-- `apps/web/components/explore/Expedition.tsx` → volcano project header
-- `apps/web/app/page.tsx` → home brand hero
-- Parent Command keeps its calm UI; it does not get a giant landscape
+Unsere GitHub-native V3-Art-Direction liegt unter:
+- `apps/web/public/art/v3/observatory-dusk.svg`
+- `apps/web/public/art/v3/observatory-night.svg`
+- `apps/web/public/art/v3/volcano-expedition.svg`
 
-No text is baked into the image. Keep HTML headings, project titles and buttons fully accessible.
+`SceneHero.tsx` zeigt diese drei SVG-Illustrationen direkt. Sie sind eigenständige gezeichnete Interpretationen der freigegebenen Rastermotive; **nicht dieselben Bildbytes**.
 
-## Art QA
-Use one consistent composition per scene family, not new unrelated images. The night scene has a nearly matching observatory architecture to the dusk version; inspect the crop carefully, because generative scenes are not pixel-identical. Require approval of the final screenshots rather than just the standalone art.
+`apps/web/lib/art/paths.ts` ergänzt die notwendige Pfadbasis. Für GitHub Pages ist im Workflow der Wert `NEXT_PUBLIC_ASSET_BASE=/familienplaner` hinterlegt. Auf einem lokalen Server werden Pfade ohne Präfix erzeugt.
+
+**WICHTIG:** `NEXT_PUBLIC_FAMILYOS_V3_ART` nicht auf `1` setzen. Dieser alte experimentelle Schalter verlangt 12 AVIF/WebP-Bilddateien, die im Repository nicht vorliegen. Die SVG-Bilder sind unabhängig davon sichtbar.
+
+## Test
+```bash
+npm ci
+npm test
+npm run typecheck
+npm run lint
+npm run build
+FAMILYOS_PAGES_BASE=/familienplaner NEXT_PUBLIC_ASSET_BASE=/familienplaner npm run build -w @familyos/web
+```
+
+Prüfen, dass `apps/web/out/art/v3/` alle drei SVGs enthält und dass sie in der exportierten Demo unter `/familienplaner/art/v3/*.svg` erreichbar sind. Dazu Screenshots von Start, Explore-Abend, Explore-Nacht und Vulkan-Projekt bei 390 px machen. Relevantes Design-QA: `docs/design/GITHUB_ONLY_ART.md`.
+
+## Nächste Iteration
+Neue Illustrationsverbesserungen werden künftig direkt in GitHub per PR an den drei SVG-Dateien bearbeitet, getestet und reviewt. Wer irgendwann die ursprünglichen hochaufgelösten Rasterillustrationen einsetzen möchte, braucht einen separaten ausdrücklich beauftragten GitHub-Binär-Uploadworkflow. Für die jetzt verfügbare App ist das kein Blocker.
+
+Vor dem Merge nach `integration/design-v2` visuelle Screenshots prüfen und sicherstellen, dass der GitHub-Pages-Workflow nicht durch einen zweiten Pages-Build von `main` überlagert wird.
