@@ -1,0 +1,189 @@
+/*
+ * FamilyOS GAMEPLAN — semantic design tokens.
+ * Source palette: docs/design/TOKENS.css + DESIGN_DIRECTION.md. Contrast is verified by tests/design-tokens.test.ts.
+ *
+ * Axes (same components, no second design system):
+ *   color scheme  light (default) | dark  — prefers-color-scheme, overridable with [data-theme]
+ *   density mode  parent (calm, dense)   | child (expressive, larger rhythm) — [data-mode]
+ *
+ * Rules encoded here:
+ *   - Only --fo-primary (blue) and --fo-progress (volt) are loud accents.
+ *   - Volt is a FILL with --fo-on-progress text, never text on chalk.
+ *   - Graphite (#747782) is for rules/icons only (4.1:1 on chalk); muted text uses --fo-text-muted.
+ *   - Violet marks study/learning surfaces only; violet text uses --fo-study-text.
+ */
+:root {
+  color-scheme: light;
+
+  /* raw palette */
+  --fo-chalk: #F6F5F1;
+  --fo-ink: #121318;
+  --fo-blue: #355BFF;
+  --fo-volt: #D8FF3E;
+  --fo-graphite: #747782;
+  --fo-violet: #7969EE;
+
+  /* surfaces & text */
+  --fo-bg: var(--fo-chalk);
+  --fo-surface: #FFFFFF;
+  --fo-surface-raised: #FFFFFF;
+  --fo-surface-muted: #EFEEE9;
+  --fo-surface-inverse: var(--fo-ink);
+  --fo-text: var(--fo-ink);
+  --fo-text-muted: #5F626B;
+  --fo-text-inverse: var(--fo-chalk);
+  --fo-text-inverse-muted: #B7B9C0;
+  --fo-border: #D9D9D3;
+  --fo-border-strong: var(--fo-graphite);
+  --fo-rule: var(--fo-graphite);
+
+  /* semantic accents */
+  --fo-primary: var(--fo-blue);
+  --fo-primary-hover: #2B4BE0;
+  --fo-on-primary: #FFFFFF;
+  --fo-progress: var(--fo-volt);
+  --fo-on-progress: var(--fo-ink);
+  --fo-study: var(--fo-violet);
+  --fo-study-text: #5B4BD1;
+  --fo-study-tint: #EEECFC;
+  --fo-success: #1F7A4D;
+  --fo-success-tint: #E4F2EA;
+  --fo-warning: #8A5300;
+  --fo-warning-tint: #FBF0DC;
+  --fo-danger: #C33A48;
+  --fo-danger-tint: #FBE7E9;
+
+  /* child identifiers: letter + shape carry meaning; color is secondary */
+  --fo-child-a: var(--fo-blue);
+  --fo-child-b: var(--fo-ink);
+
+  /* focus */
+  --fo-focus: var(--fo-blue);
+  --fo-focus-ring: 0 0 0 3px var(--fo-bg), 0 0 0 6px var(--fo-focus);
+
+  /* type */
+  --fo-font-body: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fo-font-display: "Archivo Variable", "Arial Narrow", var(--fo-font-body);
+  --fo-text-xs: 0.8125rem;   /* 13 — meta only */
+  --fo-text-sm: 0.9375rem;   /* 15 — minimum body */
+  --fo-text-md: 1rem;        /* 16 */
+  --fo-text-lg: 1.1875rem;   /* 19 */
+  --fo-text-xl: 1.5rem;      /* 24 */
+  --fo-text-2xl: 2rem;       /* 32 */
+  --fo-display-time: clamp(4.5rem, 22vw, 7.5rem);
+  --fo-display-head: clamp(2.5rem, 11vw, 4.25rem);
+  --fo-leading-body: 1.5;
+  --fo-leading-tight: 1.15;
+
+  /* space: 8pt grid (4 for optical fixes) */
+  --fo-space-0-5: 4px;
+  --fo-space-1: 8px;
+  --fo-space-2: 16px;
+  --fo-space-3: 24px;
+  --fo-space-4: 32px;
+  --fo-space-5: 40px;
+  --fo-space-6: 48px;
+  --fo-space-8: 64px;
+
+  /* shape: hierarchy, not one radius for everything */
+  --fo-radius-card: 18px;
+  --fo-radius-action: 12px;
+  --fo-radius-tag: 6px;
+  --fo-clip: 22px; /* clipped-corner motif */
+
+  --fo-shadow-raised: 0 1px 0 rgba(18, 19, 24, 0.04), 0 8px 24px -16px rgba(18, 19, 24, 0.35);
+  --fo-touch: 44px;
+
+  /* motion */
+  --fo-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fo-dur-micro: 160ms;
+  --fo-dur-nav: 240ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --fo-bg: #111218;
+    --fo-surface: #1D1F27;
+    --fo-surface-raised: #23252E;
+    --fo-surface-muted: #2A2D37;
+    --fo-surface-inverse: #F6F6F2;
+    --fo-text: #F6F6F2;
+    --fo-text-muted: #C2C3CA;
+    --fo-text-inverse: #121318;
+    --fo-text-inverse-muted: #4A4D57;
+    --fo-border: #444751;
+    --fo-border-strong: #8A8C95;
+    --fo-rule: #8A8C95;
+    --fo-primary: #8CA0FF;
+    --fo-primary-hover: #A9B8FF;
+    --fo-on-primary: #121318;
+    --fo-study: #AE9DFF;
+    --fo-study-text: #AE9DFF;
+    --fo-study-tint: #2A2740;
+    --fo-success: #6FD8A0;
+    --fo-success-tint: #1C3328;
+    --fo-warning: #F0B45A;
+    --fo-warning-tint: #3A2E1A;
+    --fo-danger: #FF8A95;
+    --fo-danger-tint: #3D2226;
+    --fo-child-a: #8CA0FF;
+    --fo-child-b: #F6F6F2;
+    --fo-focus: #8CA0FF;
+    --fo-shadow-raised: 0 0 0 1px #444751;
+  }
+}
+
+/* Explicit override (used by screenshot tests and a future user setting). Keep in sync with the media block. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fo-bg: #111218;
+  --fo-surface: #1D1F27;
+  --fo-surface-raised: #23252E;
+  --fo-surface-muted: #2A2D37;
+  --fo-surface-inverse: #F6F6F2;
+  --fo-text: #F6F6F2;
+  --fo-text-muted: #C2C3CA;
+  --fo-text-inverse: #121318;
+  --fo-text-inverse-muted: #4A4D57;
+  --fo-border: #444751;
+  --fo-border-strong: #8A8C95;
+  --fo-rule: #8A8C95;
+  --fo-primary: #8CA0FF;
+  --fo-primary-hover: #A9B8FF;
+  --fo-on-primary: #121318;
+  --fo-study: #AE9DFF;
+  --fo-study-text: #AE9DFF;
+  --fo-study-tint: #2A2740;
+  --fo-success: #6FD8A0;
+  --fo-success-tint: #1C3328;
+  --fo-warning: #F0B45A;
+  --fo-warning-tint: #3A2E1A;
+  --fo-danger: #FF8A95;
+  --fo-danger-tint: #3D2226;
+  --fo-child-a: #8CA0FF;
+  --fo-child-b: #F6F6F2;
+  --fo-focus: #8CA0FF;
+  --fo-shadow-raised: 0 0 0 1px #444751;
+}
+
+/* Child mode: same grammar, louder rhythm. */
+[data-mode="child"] {
+  --fo-text-sm: 1rem;
+  --fo-text-md: 1.0625rem;
+  --fo-radius-card: 20px;
+  --fo-display-head: clamp(2.75rem, 13vw, 4.75rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fo-dur-micro: 0ms;
+    --fo-dur-nav: 0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
