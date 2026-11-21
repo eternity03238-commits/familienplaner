@@ -20,9 +20,17 @@ Für dieses Projekt: **AI-driven Development Life Cycle** (projektinterner Begri
 - Zwei getrennte Schulkontexte, Fächer, Klassenarbeiten, Hausaufgaben, Sport, Projektfristen, manuelle Eingabe.
 - Gate: keine falschen Fächer-/Kind-Zuordnungen; Quellen sichtbar.
 
-## Sprint 4 — KI-Lernplanung
-- Validierte strukturierte KI-Vorschläge, Planungsengine, harte Zeitkonflikte, kindgerechte Lastgrenzen, Approval-Flow.
-- Gate: keine ungefragten Kalender-Mutationen; nachvollziehbare Entscheidungen.
+## Sprint 4 — KI-Lernplanung (ADR-0006)
+**4a · FamilyOS-Connector für Erwachsene (MCP)**
+- OAuth-gesicherter Remote-MCP-Server mit lesenden Werkzeugen und reinen Vorschlags-Werkzeugen.
+- Vorschläge landen in `ai_proposals` und werden von der Planungsengine validiert (harte Zeitkonflikte, kindgerechte Lastgrenzen).
+- Freigabe in Command; erst danach entstehen Lernblöcke und die optionale Kalenderprojektion.
+- Gate: Keine ungefragten Kalender-Mutationen. Jeder Vorschlag ist erklärbar. Werkzeugaufrufe ohne Berechtigung schlagen in Tests fehl. Kein Prompt erhält Daten anderer Kinder oder Haushalte.
+
+**4b · Lernhilfe für Kinder („Frag nach“)**
+- Server-Endpunkt mit Minimal-Prompt, Moderation von Ein- und Ausgabe, Kinderschutz-System-Prompt, sichtbarer KI-Hinweis.
+- Elternschalter pro Kind (Standard: aus), Tageslimits, Verlauf für Eltern.
+- Gate: Elterneinwilligung und Datenschutzprüfung dokumentiert, Anthropic-Leitlinien für Minderjährige erfüllt. Red-Team-Tests (Grenzthemen, Prompt-Injection, Hausaufgaben-Komplettlösungen) bestehen. Bei KI-Ausfall bleibt die App ohne Fehlfunktion.
 
 ## Sprint 5 — Connectoren / Automation
 - Offiziell zugängliche Schul-APIs/Feeds (nach Prüfen), nachvollziehbare Jobs, Benachrichtigungen, Foto-/Dokumentimport.

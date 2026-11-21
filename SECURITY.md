@@ -11,6 +11,9 @@
 6. Manipulierte Aufgaben-/Kind-ID in API-Pfad (IDOR/BOLA).
 7. KI verschiebt ungefragt verbindliche Veranstaltungen.
 8. Minderjährige erhalten unangemessene oder überfordernde Planung.
+9. Kind erhält über die Lernhilfe unangemessene Inhalte oder umgeht Themengrenzen (Jailbreak).
+10. MCP-Werkzeug wird genutzt, um Daten eines nicht berechtigten Kindes zu lesen oder Rechte bzw. Freigaben zu ändern.
+11. Kosten- oder Missbrauchsspitzen durch automatisierte KI-Aufrufe.
 
 ## Kontrollen
 - Supabase Auth + verifizierte Session auf *jeder* API-Anfrage.
@@ -27,6 +30,11 @@
 - Familienaufgaben auf kindgerechte Belastung begrenzen. Kein verdecktes Performance-Scoring.
 - Audit-Logs pseudonymisieren, kurz und zweckgebunden aufbewahren.
 
+## Zusätzliche Kontrollen für die Claude-Integration (ADR-0006)
+- MCP-Werkzeuge nur mit OAuth-Sitzung der erwachsenen Person, RLS-gebunden, ohne Schreibzugriff auf Termine, Rechte oder Freigaben.
+- Kinder-Lernhilfe: Elternschalter (Standard aus), Moderation von Ein- und Ausgabe, Kinderschutz-System-Prompt, KI-Hinweis, Limits, kurze Aufbewahrung.
+- Rate-Limits und Kostenobergrenzen pro Person und Kind; Ausfall der KI darf keine Kernfunktion blockieren.
+
 ## Testfälle (Pflicht)
 - Nicht angemeldet: Zugriff auf Kinderdaten verweigert.
 - Elternteil A: Zugriff auf autorisiertes Kind A erlaubt.
@@ -36,7 +44,9 @@
 - Ablauf/Widerruf eines Grants: Zugriff verweigert.
 - Child cannot mutate task due date by completion endpoint.
 - KI darf keine kalenderübergreifende Änderung ohne ausdrückliche Autorisierung durchführen.
-- DB-RLS mit echten JWT-Rollen ausführen (noch **nicht** im Starter getestet).
+- DB-RLS mit echten JWT-Rollen ausführen (seit 2026-11-21 in CI auf dem echten Supabase-Stack grün).
+- MCP: Werkzeugaufruf für fremdes Kind verweigert; Vorschlags-Werkzeug erzeugt nur `pending`; kein Werkzeug ändert `access_grants`.
+- Lernhilfe: deaktiviertes Kind erhält keine Antwort; Prompt enthält keine Namen oder Schulen; Grenzthemen und Injection-Versuche werden abgefangen.
 
 ## Datenminimierung
 Namen optional pseudonymisieren; Geburtstag nur falls erforderlich; Fächer/Termine möglichst ohne personenbezogene Schultexte an KI. Nachvollziehbare Löschpfade und Exportrecht planen. Produktionshosting und Subprozessoren im EU-Kontext bewerten.
