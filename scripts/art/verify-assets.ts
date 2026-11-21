@@ -12,7 +12,7 @@ import { ART } from "../../apps/web/lib/art/manifest.ts";
 
 const ROOT = new URL("../../", import.meta.url).pathname;
 const DIR = join(ROOT, "apps/web/public/art/v3");
-const manifestPath = process.argv[2] ?? join(DIR, "ASSET_MANIFEST.json");
+const manifestPath = process.argv[2] ?? (existsSync(join(DIR, "assets-manifest.json")) ? join(DIR, "assets-manifest.json") : join(DIR, "ASSET_MANIFEST.json"));
 const problems: string[] = [];
 const warnings: string[] = [];
 
@@ -49,6 +49,17 @@ function webpSize(b: Buffer): { w: number; h: number } | null {
 function avifSize(b: Buffer): { w: number; h: number } | null {
   const i = b.indexOf("ispe");
   return i > 0 ? { w: b.readUInt32BE(i + 8), h: b.readUInt32BE(i + 12) } : null;
+}
+
+// Provenance: every master named in the manifest must be the committed original with the same hash.
+if (existsSync(manifestPath)) {
+  const m = JSON.parse(readFileSync(manifestPath, "utf8")) as { masters?: { path: string; sha256: string }[] };
+  if (!m.masters?.length) problems.push("manifest lists no original masters (provenance missing)");
+  for (const master of m.masters ?? []) {
+    const mp = join(ROOT, master.path);
+    if (!existsSync(mp)) { problems.push(`original master missing: ${master.path}`); continue; }
+    if (createHash("sha256").update(readFileSync(mp)).digest("hex") !== master.sha256) problems.push(`original master changed: ${master.path}`);
+  }
 }
 
 let total = 0;
