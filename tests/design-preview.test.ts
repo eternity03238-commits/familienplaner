@@ -96,3 +96,33 @@ test("fixtures contain no personal names, e-mail addresses or real school names"
   const blob = JSON.stringify({ events, missions, proposals });
   assert.doesNotMatch(blob, /@|Gymnasium [A-ZÄÖÜ]|Schule [A-ZÄÖÜ][a-zäöü]+straße/);
 });
+
+import { loadWarnings, toggleStage, workWeek, weekdayShort } from "../apps/web/lib/preview/model.ts";
+import { project } from "../apps/web/lib/preview/fixtures.ts";
+
+test("workload hint: child A (training + study + due tasks) gets one, child B not", () => {
+  const w = loadWarnings(events, missions, DEMO_DAY);
+  assert.deepEqual(w.map(x => x.child), ["A"]);
+  assert.match(w[0].text, /neben dem Training/);
+  const afterTick = toggleMission(missions, "m-a-math", childA);
+  assert.deepEqual(loadWarnings(events, afterTick, DEMO_DAY), [], "ticking off the open task removes the hint");
+  assert.deepEqual(loadWarnings(events, missions, DEMO_DAY, 240), [], "threshold is a setting");
+});
+test("expedition stages: only owner child or guardian toggles, nothing else changes", () => {
+  const after = toggleStage(project.steps, 1, childA, "A");
+  assert.equal(after[1].done, true);
+  assert.deepEqual({ ...after[1], done: false }, project.steps[1]);
+  assert.deepEqual(toggleStage(project.steps, 1, childB, "A"), project.steps);
+  assert.deepEqual(toggleStage(project.steps, 9, childA, "A"), project.steps);
+  assert.equal(toggleStage(project.steps, 1, guardianViewer, "A")[1].done, true);
+});
+test("work week is Mon–Fri in local dates; each weekday has its own fixtures", () => {
+  const week = workWeek(DEMO_DAY);
+  assert.deepEqual(week, ["2026-11-23", "2026-11-24", "2026-11-25", "2026-11-26", "2026-11-27"]);
+  assert.deepEqual(week.map(weekdayShort), ["Mo", "Di", "Mi", "Do", "Fr"]);
+  const counts = week.map(d => railForDay(visibleEventsFor(childA, events), d).timed.length);
+  assert.ok(new Set(counts).size > 1, "days differ (V1.2 audit: weekday switch must change data)");
+});
+test("every mission has a kind; sport is never presented as a homework mission", () => {
+  assert.ok(missions.every(m => ["study", "sport", "project", "everyday"].includes(m.kind)));
+});

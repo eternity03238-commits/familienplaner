@@ -32,9 +32,11 @@ export interface PreviewEvent {
   source: Source;
 }
 
+export type MissionKind = "study" | "sport" | "project" | "everyday";
 export interface Mission {
   id: string;
   child: ChildKey;
+  kind: MissionKind;
   title: string;
   subject: string;
   estimateMinutes: number;
@@ -183,3 +185,50 @@ function relative(iso: string, now: string): string {
 export const kindLabel: Record<EventKind, string> = {
   school: "Schule", sport: "Sport", study: "Lernen", family: "Familie", appointment: "Termin"
 };
+
+export interface Stage { title: string; minutes: number; description: string; dueOn: string; done: boolean }
+
+/** Toggles one expedition stage. Only the owning child or a guardian may do it; nothing but `done` changes. */
+export function toggleStage(stages: readonly Stage[], index: number, actor: Viewer, owner: ChildKey): Stage[] {
+  const allowed = actor.kind === "child" ? actor.id === owner : actor.children.includes(owner);
+  if (!allowed || index < 0 || index >= stages.length) return [...stages];
+  return stages.map((s, i) => (i === index ? { ...s, done: !s.done } : s));
+}
+
+/** Monday-to-Friday local dates of the week containing `day` (YYYY-MM-DD, Europe/Berlin). */
+export function workWeek(day: string): string[] {
+  const d = new Date(`${day}T12:00:00Z`);
+  const monday = new Date(d);
+  monday.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+  return Array.from({ length: 5 }, (_, i) => {
+    const x = new Date(monday);
+    x.setUTCDate(monday.getUTCDate() + i);
+    return x.toISOString().slice(0, 10);
+  });
+}
+
+const weekdayFmt = new Intl.DateTimeFormat("de-DE", { timeZone: "UTC", weekday: "short" });
+export const weekdayShort = (date: string) => weekdayFmt.format(new Date(`${date}T12:00:00Z`)).replace(".", "");
+export const dayOfMonth = (date: string) => String(Number(date.slice(8, 10)));
+
+export interface LoadWarning { child: ChildKey; minutes: number; text: string }
+/**
+ * Workload hint per child for one local day: planned study blocks + open missions due by the next day.
+ * Product rule: rather show a conflict than overfill the plan. Threshold is a setting (default 60 extra minutes).
+ */
+export function loadWarnings(events: readonly PreviewEvent[], missions: readonly Mission[], day: string, thresholdMinutes = 60): LoadWarning[] {
+  const next = new Date(`${day}T12:00:00Z`);
+  next.setUTCDate(next.getUTCDate() + 1);
+  const nextDay = next.toISOString().slice(0, 10);
+  const out: LoadWarning[] = [];
+  for (const child of ["A", "B"] as const) {
+    const study = events.filter(e => e.owner === child && e.kind === "study" && e.startsAt && e.endsAt && localDate(e.startsAt) === day)
+      .reduce((n, e) => n + (Date.parse(e.endsAt!) - Date.parse(e.startsAt!)) / 60_000, 0);
+    const open = missions.filter(m => m.child === child && !m.done && m.kind !== "everyday" && m.dueOn <= nextDay).reduce((n, m) => n + m.estimateMinutes, 0);
+    const sport = events.some(e => e.owner === child && e.kind === "sport" && e.startsAt && localDate(e.startsAt) === day);
+    const minutes = Math.round(study + open);
+    if (minutes > thresholdMinutes || (sport && minutes >= thresholdMinutes * 0.75))
+      out.push({ child, minutes, text: `Kind ${child}: etwa ${minutes} Minuten Lernen und Aufgaben${sport ? " neben dem Training" : ""}. Lieber einen Block verschieben als den Nachmittag überfüllen.` });
+  }
+  return out;
+}

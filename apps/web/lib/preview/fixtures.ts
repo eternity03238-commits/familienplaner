@@ -34,17 +34,30 @@ export const events: PreviewEvent[] = [
   { id: "e-family-dinner", title: "Abendessen", detail: "alle zu Hause", kind: "family", owner: "family", visibility: "shared", startsAt: "2026-11-24T17:30:00Z", endsAt: "2026-11-24T18:15:00Z", source: manual },
   { id: "e-ad2-evening", title: "Elternabend", detail: "Gemeinschaftsschule, Aula", kind: "school", owner: "adult2", visibility: "shared", startsAt: "2026-11-24T18:30:00Z", endsAt: "2026-11-24T20:00:00Z", source: google },
   { id: "e-b-trip", title: "Wandertag", detail: "Rucksack, Proviant", kind: "school", owner: "B", visibility: "shared", allDay: true, date: "2026-11-26", source: manual },
+  // other days of the demo week (Mon 23 – Fri 27 Nov), all synthetic
+  { id: "e-a-mon-school", title: "Unterricht", kind: "school", owner: "A", visibility: "shared", startsAt: "2026-11-23T06:45:00Z", endsAt: "2026-11-23T12:20:00Z", source: manual },
+  { id: "e-b-mon-school", title: "Unterricht", kind: "school", owner: "B", visibility: "shared", startsAt: "2026-11-23T07:00:00Z", endsAt: "2026-11-23T13:30:00Z", source: manual },
+  { id: "e-a-mon-eng", title: "Englisch lernen", detail: "Vokabeln Unit 3", kind: "study", owner: "A", visibility: "shared", startsAt: "2026-11-23T14:00:00Z", endsAt: "2026-11-23T14:20:00Z", source: manual },
+  { id: "e-a-wed-school", title: "Unterricht", kind: "school", owner: "A", visibility: "shared", startsAt: "2026-11-25T06:45:00Z", endsAt: "2026-11-25T13:00:00Z", source: manual },
+  { id: "e-b-wed-school", title: "Unterricht", kind: "school", owner: "B", visibility: "shared", startsAt: "2026-11-25T07:00:00Z", endsAt: "2026-11-25T13:30:00Z", source: manual },
+  { id: "e-a-wed-ref", title: "Referat vorbereiten", detail: "Quellen sammeln", kind: "study", owner: "A", visibility: "shared", startsAt: "2026-11-25T14:30:00Z", endsAt: "2026-11-25T15:00:00Z", source: manual },
+  { id: "e-b-wed-swim", title: "Schwimmen", kind: "sport", owner: "B", visibility: "shared", startsAt: "2026-11-25T16:00:00Z", endsAt: "2026-11-25T17:00:00Z", source: google },
+  { id: "e-a-thu-school", title: "Unterricht", kind: "school", owner: "A", visibility: "shared", startsAt: "2026-11-26T06:45:00Z", endsAt: "2026-11-26T12:30:00Z", source: manual },
+  { id: "e-a-thu-football", title: "Fußballtraining", kind: "sport", owner: "A", visibility: "shared", startsAt: "2026-11-26T15:30:00Z", endsAt: "2026-11-26T17:00:00Z", source: google },
+  { id: "e-a-fri-school", title: "Unterricht", kind: "school", owner: "A", visibility: "shared", startsAt: "2026-11-27T06:45:00Z", endsAt: "2026-11-27T11:30:00Z", source: manual },
+  { id: "e-b-fri-school", title: "Unterricht", kind: "school", owner: "B", visibility: "shared", startsAt: "2026-11-27T07:00:00Z", endsAt: "2026-11-27T12:30:00Z", source: manual },
+  { id: "e-family-fri", title: "Freie Zeit", detail: "nichts geplant", kind: "family", owner: "family", visibility: "shared", startsAt: "2026-11-27T16:00:00Z", endsAt: "2026-11-27T17:00:00Z", source: manual },
   { id: "e-a-allday", title: "Bücherei-Rückgabe", detail: "Sachbuch Vulkane", kind: "school", owner: "A", visibility: "shared", allDay: true, date: "2026-11-24", source: manual }
 ];
 
 export const missions: Mission[] = [
-  { id: "m-a-math", child: "A", title: "Übungsblatt Brüche", subject: "Mathe", estimateMinutes: 20, dueOn: "2026-11-25", done: false, source: manual },
-  { id: "m-a-eng", child: "A", title: "Vokabeln Unit 3", subject: "Englisch", estimateMinutes: 15, dueOn: "2026-11-25", done: true, source: manual },
-  { id: "m-a-ref", child: "A", title: "Drei Quellen für das Referat", subject: "Geografie", estimateMinutes: 30, dueOn: "2026-11-27", done: false, source: manual },
-  { id: "m-a-bag", child: "A", title: "Sporttasche packen", subject: "Alltag", estimateMinutes: 5, dueOn: "2026-11-24", done: true, source: manual },
-  { id: "m-b-ger", child: "B", title: "Diktat üben, Seite 42", subject: "Deutsch", estimateMinutes: 20, dueOn: "2026-11-27", done: false, source: manual },
-  { id: "m-b-bio", child: "B", title: "Steckbrief Igel fertigstellen", subject: "Biologie", estimateMinutes: 25, dueOn: "2026-11-30", done: false, source: manual },
-  { id: "m-b-sign", child: "B", title: "Elternbrief unterschreiben lassen", subject: "Alltag", estimateMinutes: 2, dueOn: "2026-11-25", done: true, source: manual }
+  { id: "m-a-math", kind: "study", child: "A", title: "Übungsblatt Brüche", subject: "Mathe", estimateMinutes: 20, dueOn: "2026-11-25", done: false, source: manual },
+  { id: "m-a-eng", kind: "study", child: "A", title: "Vokabeln Unit 3", subject: "Englisch", estimateMinutes: 15, dueOn: "2026-11-25", done: true, source: manual },
+  { id: "m-a-ref", kind: "project", child: "A", title: "Drei Quellen für das Referat", subject: "Geografie", estimateMinutes: 30, dueOn: "2026-11-27", done: false, source: manual },
+  { id: "m-a-bag", kind: "everyday", child: "A", title: "Sporttasche packen", subject: "Alltag", estimateMinutes: 5, dueOn: "2026-11-24", done: true, source: manual },
+  { id: "m-b-ger", kind: "study", child: "B", title: "Diktat üben, Seite 42", subject: "Deutsch", estimateMinutes: 20, dueOn: "2026-11-27", done: false, source: manual },
+  { id: "m-b-bio", kind: "project", child: "B", title: "Steckbrief Igel fertigstellen", subject: "Biologie", estimateMinutes: 25, dueOn: "2026-11-30", done: false, source: manual },
+  { id: "m-b-sign", kind: "everyday", child: "B", title: "Elternbrief unterschreiben lassen", subject: "Alltag", estimateMinutes: 2, dueOn: "2026-11-25", done: true, source: manual }
 ];
 
 export const project = {
@@ -53,13 +66,13 @@ export const project = {
   subject: "Geografie",
   dueOn: "2026-12-04",
   steps: [
-    { title: "Thema eingrenzen", dueOn: "2026-11-20", done: true },
-    { title: "Drei Quellen sammeln", dueOn: "2026-11-27", done: false },
-    { title: "Gliederung schreiben", dueOn: "2026-11-30", done: false },
-    { title: "Folien gestalten", dueOn: "2026-12-02", done: false },
-    { title: "Vortrag zweimal üben", dueOn: "2026-12-03", done: false }
+    { title: "Thema eingrenzen", minutes: 15, description: "Fragestellung festlegen und kurz mit der Lehrkraft abgleichen.", dueOn: "2026-11-20", done: true },
+    { title: "Drei Quellen sammeln", minutes: 30, description: "Drei geeignete Quellen finden und Stichpunkte notieren.", dueOn: "2026-11-27", done: false },
+    { title: "Gliederung schreiben", minutes: 25, description: "Einleitung, drei Hauptpunkte und Schluss festlegen.", dueOn: "2026-11-30", done: false },
+    { title: "Folien gestalten", minutes: 45, description: "Klare Folien mit Bildern und Quellenangaben erstellen.", dueOn: "2026-12-02", done: false },
+    { title: "Vortrag zweimal üben", minutes: 30, description: "Laut proben und auf die verfügbare Zeit achten.", dueOn: "2026-12-03", done: false }
   ]
-};
+};;
 
 export const exam = { child: "A" as const, subject: "Mathe", title: "Klassenarbeit Brüche", examOn: "2026-12-03", topics: ["Brüche kürzen", "Erweitern", "Vergleichen"] };
 
