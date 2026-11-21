@@ -1,0 +1,68 @@
+/* FamilyOS Design System V2 – semantic, accessible, role-neutral */
+:root {
+  color-scheme: dark;
+  --fo-canvas:#0B0E1D;
+  --fo-surface:#181D33;
+  --fo-surface-raised:#222741;
+  --fo-surface-hover:#2A3150;
+  --fo-ink:#F7F7FF;
+  --fo-ink-muted:#C1C9DE;
+  --fo-ink-subtle:#A8B2CD;
+  --fo-stroke:#46506C;
+  --fo-focus:#FFC879;
+  --fo-interactive:#AF8CFF;
+  --fo-interactive-ink:#181029;
+  --fo-success:#78E0BC;
+  --fo-success-ink:#093629;
+  --fo-warning:#FFCD8C;
+  --fo-warning-ink:#3D2A0F;
+  --fo-danger:#FF9FAF;
+  --fo-danger-ink:#411A23;
+  --fo-accent-school:#B69AF6;
+  --fo-accent-sport:#76DDC5;
+  --fo-accent-family:#F2C48E;
+  --fo-radius-sm:10px;
+  --fo-radius-md:14px;
+  --fo-radius-lg:18px;
+  --fo-radius-xl:24px;
+  --fo-space-1:4px;
+  --fo-space-2:8px;
+  --fo-space-3:12px;
+  --fo-space-4:16px;
+  --fo-space-5:20px;
+  --fo-space-6:24px;
+  --fo-space-8:32px;
+  --fo-type-label:11px;
+  --fo-type-small:13px;
+  --fo-type-body:15px;
+  --fo-type-title:28px;
+  --fo-ease:cubic-bezier(.2,.7,.2,1);
+  --fo-motion-fast:150ms;
+  --fo-motion-normal:220ms;
+  --fo-ring:0 0 0 3px var(--fo-focus);
+}
+[data-fo-theme="light"]{
+  color-scheme:light;
+  --fo-canvas:#F5F3F0;
+  --fo-surface:#FFFFFF;
+  --fo-surface-raised:#ECEAF2;
+  --fo-surface-hover:#E5E1EF;
+  --fo-ink:#191A2A;
+  --fo-ink-muted:#4A5064;
+  --fo-ink-subtle:#626B80;
+  --fo-stroke:#BCC2D0;
+  --fo-interactive:#6345B4;
+  --fo-interactive-ink:#FFFFFF;
+  --fo-success:#1B735B;
+  --fo-success-ink:#FFFFFF;
+  --fo-warning:#8F5518;
+  --fo-warning-ink:#FFFFFF;
+  --fo-danger:#B82B47;
+  --fo-danger-ink:#FFFFFF;
+  --fo-focus:#6D4BC7;
+}
+[data-fo-role="parent"]{--fo-radius-lg:16px;--fo-interactive:#B9A0ED}
+[data-fo-role="child"]{--fo-radius-lg:20px}
+@media(prefers-reduced-motion:reduce){
+  :root{--fo-motion-fast:0ms;--fo-motion-normal:0ms}
+}
