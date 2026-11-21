@@ -14,7 +14,7 @@ export function SceneHero({ scene, time="dusk", eager=false }: {
   if (!ART_ENABLED) return scene==="observatory"?<Observatory world={time}/>:null;
   const key=scene==="volcano"?"volcano-expedition":`observatory-${time}`;
   const art=ART[key];
-  return <picture key={key} className="fo-scene" aria-hidden="true">
+  return <picture key={key} className="fo-art">
     <source media="(max-width: 640px)" type="image/avif" srcSet={artUrl(art.mobile.avif)}/>
     <source media="(max-width: 640px)" type="image/webp" srcSet={artUrl(art.mobile.webp)}/>
     <source type="image/avif" srcSet={artUrl(art.wide.avif)}/>
