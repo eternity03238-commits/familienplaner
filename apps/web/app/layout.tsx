@@ -1,15 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
-import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource-variable/dm-sans";
 import "./tokens.css";
 import "./styles.css";
+import { PrefsProvider } from "../components/Prefs.tsx";
 
-export const metadata: Metadata = { title: "FamilyOS", description: "Privater Familienplaner – technisches Sprint-0-Grundgerüst", manifest: "/manifest.webmanifest" };
-export const viewport: Viewport = {
-  width: "device-width", initialScale: 1, viewportFit: "cover",
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#F6F5F1" }, { media: "(prefers-color-scheme: dark)", color: "#111218" }]
+export const metadata: Metadata = {
+  title: "FamilyOS",
+  description: "Privater Familienplaner – technischer Stand mit Designvorschau (Beispieldaten)",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: { capable: true, title: "FamilyOS", statusBarStyle: "black-translucent" }
 };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#0B0E1D" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="de" className={GeistSans.variable}><body>{children}</body></html>;
+  return <html lang="de" data-fo-theme="dark"><body><PrefsProvider>{children}</PrefsProvider></body></html>;
 }
