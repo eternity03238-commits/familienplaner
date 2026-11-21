@@ -6,3 +6,11 @@ export function artUrl(file: string): string {
   return BASE + "/art/v3/" + file;
 }
 export const ART_ENABLED = process.env.NEXT_PUBLIC_FAMILYOS_V3_ART === "1";
+
+/** GitHub-native vector scenes: always available, no external download. */
+const SCENES = new Set(["observatory-dusk","observatory-night","volcano-expedition"]);
+export const GITHUB_SCENES_AVAILABLE = true;
+export function vectorSceneUrl(scene: string): string {
+  if (!SCENES.has(scene)) throw new Error("Unknown scene: " + scene);
+  return BASE + "/art/v3/" + scene + ".svg";
+}
