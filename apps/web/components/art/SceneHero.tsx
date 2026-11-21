@@ -1,6 +1,5 @@
 import { ART, type SceneName, type SceneTime } from "../../lib/art/manifest.ts";
-import { ART_ENABLED, artUrl } from "../../lib/art/paths.ts";
-import { Observatory } from "../Observatory.tsx";
+import { ART_ENABLED, artUrl, vectorSceneUrl } from "../../lib/art/paths.ts";
 
 /**
  * Decorative V3 scene with art-directed responsive mobile crop.
@@ -11,7 +10,10 @@ import { Observatory } from "../Observatory.tsx";
 export function SceneHero({ scene, time="dusk", eager=false }: {
   scene:SceneName;time?:SceneTime;eager?:boolean;
 }) {
-  if (!ART_ENABLED) return scene==="observatory"?<Observatory world={time}/>:null;
+  if (!ART_ENABLED) {
+    const key=scene==="volcano"?"volcano-expedition":`observatory-${time}`;
+    return <picture className="fo-art fo-art--vector" aria-hidden="true"><img src={vectorSceneUrl(key)} alt="" width={1440} height={810} loading={eager?"eager":"lazy"} decoding="async" fetchPriority={eager?"high":"auto"}/></picture>;
+  }
   const key=scene==="volcano"?"volcano-expedition":`observatory-${time}`;
   const art=ART[key];
   return <picture key={key} className="fo-art">
