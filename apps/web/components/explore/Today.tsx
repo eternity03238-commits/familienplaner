@@ -64,7 +64,7 @@ export function Today() {
       <Link href="/explore/projekt" className="fo-feature fo-feature--expedition">
         <Eyebrow>Projekt der Woche</Eyebrow>
         <strong>Referat: Vulkane</strong>
-        <span>{stagesDone} von {stages.length} Etappen <ChevronRight size={17} aria-hidden="true" /></span>
+        <span className="fo-feature__meta">{stagesDone} von {stages.length} Etappen <ChevronRight size={17} aria-hidden="true" /></span>
         <span className="fo-feature__meter" aria-hidden="true"><i style={{inlineSize:`${stages.length ? 100 * stagesDone / stages.length : 0}%`}} /></span>
       </Link>
 
