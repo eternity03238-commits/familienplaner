@@ -40,7 +40,7 @@ Vor jedem Schritt: Anforderungen, Sicherheitsauswirkungen, Teststrategie und beg
 
 ### Befehle
 `npm run check` (Tests, Typecheck, Lint) · `npm run build` · `npm run security:bundle` · `npm run smoke:web` · DB: `npm run test:db:prepare`, `npm run test:db`, `npm run test:db:rollback` (siehe README). Ergebnisse und offene Punkte: `docs/sprint0/REPORT.md`.
-UI: vor Änderungen `docs/design/DESIGN_DIRECTION.md` lesen; Tokens in `apps/web/app/tokens.css`; Prüfung `npm run design:check` (Server auf Port 3988, siehe `docs/design/IMPLEMENTATION_NOTES.md`).
+UI: Designquelle ist `docs/design/DESIGN_SYSTEM_V2.md` (vor `PARENT_COMMAND_V1_3.md`, `ITERATION_V1_2_AUDIT.md`; GAMEPLAN-Dokumente sind historisch). Explore (`/explore`, Kinder) und Command (`/command`, Eltern) nutzen dieselben `--fo-*`-Tokens (`apps/web/app/tokens.css`) und Bausteine (`apps/web/components/ui.tsx`); Rolle/Thema sind Darstellung, keine Berechtigung. Observatorium nur als ein Szenen-Hero pro Bildschirm. Neue Komponenten ohne Hex-Werte. Prüfung: `npm run design:check` (Server auf Port 3988); Integrationsstand: `docs/design/INTEGRATION_V2.md`. Lokal am iPhone: `npm run preview:lan`.
 
 ## Definition of Done pro PR
 - Geänderte Anforderungen/Architektur dokumentiert; Migrationen reversible Strategie.

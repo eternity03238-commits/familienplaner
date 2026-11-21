@@ -29,7 +29,7 @@ try {
   assert.equal(home.status, 200);
   const html = await home.text();
   assert.match(html, /<html lang="de"/);
-  assert.match(html, /Kein Live-Betrieb|keine echten Termine/);
+  assert.match(html, /kein Live-Betrieb/i);
   assert.equal(home.headers.get("x-content-type-options"), "nosniff");
   assert.equal(home.headers.get("x-frame-options"), "DENY");
   assert.equal(home.headers.get("referrer-policy"), "strict-origin-when-cross-origin");

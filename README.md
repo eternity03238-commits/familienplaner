@@ -19,7 +19,7 @@ npm run lint
 npm run dev
 ```
 
-Danach `http://localhost:3000` öffnen; die Designvorschau liegt unter `/design-preview`. Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
+Danach `http://localhost:3000` öffnen und Explore oder Command wählen. Am iPhone im selben WLAN: `npm run preview:lan`, dann `http://<IP-des-Rechners>:3000` in Safari (Details: `docs/design/INTEGRATION_V2.md`). Ohne Supabase-Konfiguration startet lediglich die öffentliche Startseite. **Nicht** sofort produktive Familien-, Schul- oder Google-Daten eingeben. 
 
 Die Kerntests (Domain, Planung, Auth-Skeleton, Architektur-/Secret-Scans) laufen ohne Datenbank:
 
@@ -49,7 +49,7 @@ npm run test:db && npm run test:db:rollback
 - `packages/database` — SQL-Migrationen, RLS-Funktionen, restriktive Policies.
 - `workers/jobs` — Schnittstellen für idempotente Hintergrundjobs.
 - `tests` — ausführbare Node-TypeScript-Kerntests, Berechtigungs- und Planungsfälle.
-- `apps/web/app/tokens.css`, `apps/web/components` — GAMEPLAN-Designsystem; Vorschau unter `/design-preview` (Beispieldaten, siehe `docs/design/IMPLEMENTATION_NOTES.md`).
+- `apps/web/app/tokens.css`, `apps/web/components` — Design System V2: Explore (`/explore`, Kinder), Command (`/command`, Eltern), Katalog `/design-system`. Nur Beispieldaten; siehe `docs/design/INTEGRATION_V2.md`.
 - `docs` — alle fachlichen/technischen Spezifikationen, ADR und der Sprint-0-Bericht (`docs/sprint0/REPORT.md`).
 - `scripts` — Hilfsskripte für lokale DB-Prüfung, Bundle-Scan und Smoke-Test.
 

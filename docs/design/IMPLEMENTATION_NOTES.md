@@ -1,3 +1,5 @@
+> **Historisch.** GAMEPLAN wurde durch Design System V2 abgelöst; aktueller Stand: `INTEGRATION_V2.md`. Die hier beschriebene Ansichtslogik (Datenschutz, Filter, Freigaben, Planungsengine) und die Prüfskripte wurden übernommen; die `/design-preview`-Routen leiten auf `/explore`, `/command` und `/design-system` um.
+
 # GAMEPLAN — Umsetzungsbericht (Phasen A–C)
 
 Stand 2026-11-21 · Branch `design/gameplan-ui` (Basis: `sprint0/foundation`) · Vorgaben: `DESIGN_DIRECTION.md`, `IMPLEMENTATION_BRIEF.md`, `TOKENS.css`

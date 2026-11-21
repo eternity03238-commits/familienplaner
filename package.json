@@ -27,7 +27,9 @@
     "security:bundle": "node --experimental-strip-types scripts/check-bundle.ts",
     "smoke:web": "node --experimental-strip-types scripts/smoke-web.ts",
     "audit:deps": "npm audit --audit-level=high",
-    "design:check": "python3 -I scripts/design/visual_check.py http://127.0.0.1:3988 .design-check"
+    "design:check": "python3 -I scripts/design/visual_check.py http://127.0.0.1:3988 .design-check",
+    "dev:lan": "npm run dev -w @familyos/web -- -H 0.0.0.0 -p 3000",
+    "preview:lan": "npm run build && npm run start -w @familyos/web -- -H 0.0.0.0 -p 3000"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
