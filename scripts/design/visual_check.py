@@ -12,7 +12,7 @@ BASE = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:3988"
 OUT = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else ".design-check")
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 AXE = (ROOT / "node_modules/axe-core/axe.min.js").read_text()
-PAGES = {"home": "/", "design-system": "/design-system",
+PAGES = {"home": "/", "einrichten": "/einrichten", "design-system": "/design-system",
          "explore-today": "/explore", "explore-calendar": "/explore/kalender", "explore-missions": "/explore/missionen", "explore-project": "/explore/projekt", "explore-profile": "/explore/profil",
          "command-today": "/command", "command-calendar": "/command/kalender", "command-planning": "/command/planung", "command-profile": "/command/profil"}
 VIEWPORTS = {"small-320": (320, 640), "iphone-se-375": (375, 812), "iphone-390": (390, 844), "iphone-max-430": (430, 932), "ipad-820": (820, 1180), "desktop-1280": (1280, 900)}

@@ -39,3 +39,10 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - Tests: `tests/db/onboarding.test.ts` mit 10 Szenarien. Es gibt keine Datenlecks zwischen Familien, zwischen Geschwistern oder zwischen Kind und Eltern. Einladungen und Kopplungscodes funktionieren einmalig, laufen ab und werden nur als Hash gespeichert. Ein abgemeldetes Gerät verliert sofort den Zugriff. Jede Änderung erzeugt einen Audit-Eintrag ohne Geheimnisse.
   - DB-Tests lokal: 50/50. Rollback-Prüfung grün. `npm run check`: 93/93.
 - **Noch nicht** auf das Supabase-Projekt der Inhaberin angewendet. Das passiert erst nach Freigabe, zusammen mit dem Login-Schritt.
+- **Schritt 3 als Vorschau umgesetzt (21.11.2026):** Einrichtung unter `/einrichten`, nach der Designvorgabe der Inhaberin (Commit `e822036`).
+  - Layout: links das Bild, rechts ein Schritt pro Bildschirm.
+  - Ablauf: E-Mail und Code → Familie → Kinder → Partner → Kindergeräte → Zusammenfassung. In der Zusammenfassung lässt sich jeder Abschnitt mit „Ändern“ bearbeiten.
+  - Das Bild zeigt Familienname und Kinder schon während der Eingabe. Am Ende blendet es von Abend zu Nacht über.
+  - **Vorschau:** Es wird nichts gespeichert oder verschickt, jeder 6-stellige Code funktioniert, der QR-Code ist ein Platzhalter. Die Anbindung an Supabase (Code-Login, 0004-Funktionen, echter QR-Code) folgt als nächster Schritt.
+  - Logik und Tests: `apps/web/lib/setup/flow.ts`, `tests/setup-flow.test.ts`. Die Namensregeln entsprechen denen der Datenbank.
+  - Prüfungen: `design:check` 144 Kombinationen / 0 Befunde, 98/98 Tests. Screenshots in `docs/design/screenshots/sprint1/`.

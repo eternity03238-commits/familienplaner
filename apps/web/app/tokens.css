@@ -9,6 +9,9 @@
  */
 :root {
   color-scheme: dark;
+  /* (+) Text and scrim on top of the scenic original art; identical in both themes because the art is always dark at the text edge. */
+  --fo-on-art: #FFFFFF;
+  --fo-art-scrim: #0B0E1DF0;
   --fo-canvas: #0B0E1D;
   --fo-surface: #181D33;
   --fo-surface-raised: #222741;
