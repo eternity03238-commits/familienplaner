@@ -6,7 +6,7 @@ import { DEMO_DAY, DEMO_NOW, events } from "../../lib/preview/fixtures.ts";
 import { currentAndNext, formatDay, formatTime, minutesUntil, visibleEventsFor } from "../../lib/preview/model.ts";
 import { FocusDialog } from "../FocusDialog.tsx";
 import { SceneHero } from "../art/SceneHero.tsx";
-import { ART_ENABLED } from "../../lib/art/paths.ts";
+import { GITHUB_SCENES_AVAILABLE } from "../../lib/art/paths.ts";
 import { ActionButton, Eyebrow, SectionHeading, TaskTile } from "../ui.tsx";
 import { exploreViewer, useExplore } from "./ExploreState.tsx";
 
@@ -20,7 +20,7 @@ export function Today() {
   const stagesDone = stages.filter(s => s.done).length;
   return (
     <>
-      <section className={`fo-hero fo-hero--${world} ${ART_ENABLED ? "fo-art-enabled" : ""}`} aria-labelledby="hero-title">
+      <section className={`fo-hero fo-hero--${world} ${GITHUB_SCENES_AVAILABLE ? "fo-art-enabled" : ""}`} aria-labelledby="hero-title">
         <SceneHero scene="observatory" time={world} eager/>
         <button type="button" className="fo-hero__toggle" aria-pressed={world === "night"} onClick={() => setWorld(world === "dusk" ? "night" : "dusk")}>
           {world === "dusk" ? <Moon size={17} aria-hidden="true" /> : <Sun size={17} aria-hidden="true" />}
