@@ -31,3 +31,11 @@ Ziel: Ihr meldet euch an, legt in wenigen Minuten eure Familie an, und beide Kin
 
 ## Was du tun musst
 Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca. 5 Minuten). Bis dahin baue und teste ich alles lokal mit Testkonten.
+
+## Stand
+- **Schritt 1 erledigt (lokal, 21.11.2026):** Migration `0004_family_onboarding.sql` mit Rollback.
+  - Funktionen: `create_family`, `add_child`, `rename_person`, `rename_family`, `create_family_invite`/`accept_family_invite` (7 Tage, einmalig), `create_child_pairing_code` (10 Minuten, nur der neueste Code gilt), `revoke_child_device`, `my_family`.
+  - Das Gerätekonto bindet nur der Server: `app_private.redeem_child_pairing`, ausführbar ausschließlich mit der Service-Rolle.
+  - Tests: `tests/db/onboarding.test.ts` mit 10 Szenarien. Es gibt keine Datenlecks zwischen Familien, zwischen Geschwistern oder zwischen Kind und Eltern. Einladungen und Kopplungscodes funktionieren einmalig, laufen ab und werden nur als Hash gespeichert. Ein abgemeldetes Gerät verliert sofort den Zugriff. Jede Änderung erzeugt einen Audit-Eintrag ohne Geheimnisse.
+  - DB-Tests lokal: 50/50. Rollback-Prüfung grün. `npm run check`: 93/93.
+- **Noch nicht** auf das Supabase-Projekt der Inhaberin angewendet. Das passiert erst nach Freigabe, zusammen mit dem Login-Schritt.

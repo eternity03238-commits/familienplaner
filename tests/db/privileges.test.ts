@@ -6,7 +6,7 @@ after(closePool);
 
 /** Schema-level invariants: a future migration that forgets RLS, search_path or grants fails here. */
 
-const SELECTABLE_BY_AUTHENTICATED = ["ai_proposals", "calendar_events", "exams", "persons", "project_steps", "projects", "study_sessions", "tasks", "users"];
+const SELECTABLE_BY_AUTHENTICATED = ["ai_proposals", "calendar_events", "child_devices", "exams", "persons", "project_steps", "projects", "study_sessions", "tasks", "users"];
 
 test("every public table has RLS enabled AND forced", async () => {
   await asBackend(async q => {
@@ -14,7 +14,7 @@ test("every public table has RLS enabled AND forced", async () => {
       where n.nspname = 'public' and c.relkind in ('r','p') and not (c.relrowsecurity and c.relforcerowsecurity)`);
     assert.deepEqual(bad, []);
     const count = await q.rows<{ n: string }>(`select count(*)::text n from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname='public' and c.relkind='r'`);
-    assert.equal(count[0].n, "24", "table inventory changed: extend 0002/this test deliberately");
+    assert.equal(count[0].n, "27", "table inventory changed: extend 0002/0004/this test deliberately");
   });
 });
 
@@ -60,11 +60,11 @@ test("all SECURITY DEFINER functions pin search_path (CLAUDE.md rule 14) and hav
   });
 });
 
-test("only the two permission helpers are executable by authenticated; guard/trigger functions are internal", async () => {
+test("only the three permission helpers are executable by authenticated; guard/trigger functions are internal", async () => {
   await asBackend(async q => {
     const rows = await q.rows<{ name: string }>(`select p.proname name from pg_proc p join pg_namespace n on n.oid = p.pronamespace
       where n.nspname = 'app_private' and has_function_privilege('authenticated', p.oid, 'EXECUTE') order by 1`);
-    assert.deepEqual(rows.map(r => r.name), ["can_access_child", "current_person_id"]);
+    assert.deepEqual(rows.map(r => r.name), ["can_access_child", "current_person_id", "is_my_child"]);
   });
 });
 
@@ -83,5 +83,19 @@ test("service_role is the only API role with write access (backend-only); anon/a
       from pg_roles r cross join pg_namespace n where r.rolname in ('anon','authenticated') and n.nspname in ('public','app_private')`);
     // Supabase historically grants CREATE on public to API roles on some versions; we require it to be absent.
     for (const r of rows) assert.equal(r.create_priv, false, `${r.r} must not have CREATE on schema ${r.s}`);
+  });
+});
+
+test("public RPCs: exactly the onboarding functions, executable by authenticated only (0004)", async () => {
+  await asBackend(async q => {
+    const rows = await q.rows<{ name: string; auth: boolean; svc: boolean }>(`select p.proname name,
+        has_function_privilege('authenticated', p.oid, 'EXECUTE') auth, has_function_privilege('service_role', p.oid, 'EXECUTE') svc
+      from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' order by 1`);
+    assert.deepEqual(rows.map(r => r.name), ["accept_family_invite", "add_child", "create_child_pairing_code", "create_family",
+      "create_family_invite", "my_family", "rename_family", "rename_person", "revoke_child_device"]);
+    for (const r of rows) { assert.equal(r.auth, true, r.name); assert.equal(r.svc, false, `${r.name}: service_role has no business calling end-user RPCs`); }
+    const svc = await q.rows<{ name: string }>(`select p.proname name from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+      where n.nspname = 'app_private' and has_function_privilege('service_role', p.oid, 'EXECUTE') order by 1`);
+    assert.deepEqual(svc.map(r => r.name), ["redeem_child_pairing"]);
   });
 });

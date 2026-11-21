@@ -33,9 +33,13 @@ try {
   assert.equal(await count("select count(*) n from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='app_private' and p.proname in ('is_verified_guardian','ai_proposals_guard','tasks_actor_guard','access_grants_guard')"), 0);
   assert.equal(await count("select count(*) n from pg_constraint where conname='ai_proposals_status_consistency'"), 0);
   assert.equal(await count("select count(*) n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and c.relrowsecurity and c.relforcerowsecurity"), 24, "RLS baseline from 0002 must survive rollback of 0003");
+  assert.equal(await count("select count(*) n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname in ('family_invites','child_pairing_codes','child_devices')"), 0, "0004 tables must be gone after rollback");
+  assert.equal(await count("select count(*) n from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public'"), 0, "0004 RPCs must be gone after rollback");
+  assert.equal(await count("select count(*) n from pg_policies where policyname='calendar_owner_read' and qual not like '%is_my_child%'"), 1, "0002 calendar policy restored");
   for (const f of migrationFiles().slice(2)) await applySqlFile(c, join(MIGRATIONS_DIR, f));
   assert.equal(await count(guards), 3, "guards must be re-creatable after rollback");
-  console.log("rollback check ok: 0003 applies, rolls back cleanly and re-applies; 0001/0002 RLS baseline intact");
+  assert.equal(await count("select count(*) n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'"), 27, "0004 must re-apply");
+  console.log("rollback check ok: 0003+0004 apply, roll back cleanly and re-apply; 0001/0002 RLS baseline intact");
 } catch (e) {
   console.error(e);
   process.exitCode = 1;

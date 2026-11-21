@@ -119,13 +119,13 @@ test("expired and revoked grants deny access", async () => {
     await asUser(who)(async q => assert.equal((await q.rows("select 1 from public.tasks")).length, 0, who));
 });
 
-test("adult private calendar events are private; no blanket guardian access", async () => {
+test("adult private events stay private; guardians see all events of their children (ADR-0007)", async () => {
   await asUser("ad1")(async q => {
     const ev = await ids(q, "select id from public.calendar_events");
     assert.ok(ev.includes(f.event.ad1Private));
     assert.ok(!ev.includes(f.event.ad2Private), "other adult's private event must stay private");
     assert.ok(ev.includes(f.event.kaShared), "guardian sees shared child events");
-    assert.ok(!ev.includes(f.event.kaPrivate), "child's private event stays private (design decision, see report)");
+    assert.ok(ev.includes(f.event.kaPrivate), "guardians see every event of their child (ADR-0007)");
   });
   await asUser("ad2")(async q => {
     const ev = await ids(q, "select id from public.calendar_events");
@@ -134,6 +134,10 @@ test("adult private calendar events are private; no blanket guardian access", as
   await asUser("ka")(async q => {
     assert.deepEqual(await ids(q, "select id from public.calendar_events"), sorted(f.event.kaShared, f.event.kaPrivate));
   });
+  await asUser("kb")(async q => assert.deepEqual(await ids(q, "select id from public.calendar_events"), [], "sibling sees nothing of child A"));
+  await asUser("outsider")(async q => assert.deepEqual(await ids(q, "select id from public.calendar_events"), []));
+  // A scoped grantee without guardianship still only sees shared events, and only with the schedule scope.
+  await asUser("grSports")(async q => assert.ok(!(await ids(q, "select id from public.calendar_events")).includes(f.event.kaPrivate)));
 });
 
 test("tables without any read policy stay invisible to authenticated users", async () => {
