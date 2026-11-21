@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ActionButton, SourcePill, StatusChip } from "../components/ui";
 import { AlertTriangle, ArrowRight, CalendarClock, Check, ChevronRight, Clock3, GraduationCap, LockKeyhole, ShieldCheck, Sparkles, Users, WandSparkles } from "lucide-react";
 
 export type ParentTab = "today" | "calendar" | "project" | "profile";
@@ -23,7 +24,7 @@ export default function ParentCommand({tab}:{tab:ParentTab}){
   const visible=useMemo(()=>events.filter(e=>filter==="all"||e.child===filter),[filter]);
   const conflicts=filter==="childB"?0:1;
   return <section className="view parent-command" aria-label="FamilyOS Command Center">
-    <div className="command-heading"><span className="overline">FAMILYOS / COMMAND</span><span className="command-live"><span/> DEMO</span></div>
+    <div className="command-heading"><span className="overline">FAMILYOS / COMMAND</span><StatusChip tone="warning">Demo</StatusChip></div>
     <h2 className="view-title">{tab==="today"?"Alles im Blick.":tab==="calendar"?"Unsere Woche.":tab==="project"?"Planung mit Köpfchen.":"Familie & Zugriff."}</h2>
     <p className="subtle">{tab==="today"?"Zwei Schulen. Ein gemeinsamer Rhythmus.":tab==="calendar"?"Alle Termine übersichtlich und nachvollziehbar.":tab==="project"?"Vorschläge prüfen, bevor etwas geändert wird.":"Personen, Ansichten und Privatsphäre."}</p>
     <div className="command-filters" role="group" aria-label="Familienmitglied auswählen">
@@ -56,7 +57,7 @@ export default function ParentCommand({tab}:{tab:ParentTab}){
       <div className="command-privacy-row"><span className="command-privacy-icon"><GraduationCap size={19}/></span><div><strong>Patchwork-Freigaben</strong><small>Architektur vorgesehen, hier noch nicht aktiv</small></div><ArrowRight size={18}/></div>
       <p className="command-privacy-note">Dies ist eine Designvorschau ohne Authentifizierung. Filter ersetzen keine echten Zugriffsberechtigungen.</p>
     </div>}
-    <div className="command-source"><ShieldCheck size={14}/> Ausschließlich Demo-Daten · keine Kalenderänderungen</div>
+    <div className="command-source"><SourcePill source="FamilyOS" status="demo"/></div>
   </section>;
 }
 function EventRail({items}:{items:FamilyEvent[]}){
@@ -74,8 +75,8 @@ function Proposal({proposal,setProposal,expanded,setExpanded}:{proposal:"pending
     {expanded&&<div className="command-explain"><strong>Warum dieser Vorschlag?</strong><span>Demodaten: ein offener Mathe-Lernblock, ein Referatsprojekt und ein freies Zeitfenster. Keine echte KI-Analyse und keine automatische Optimierung.</span></div>}
     <button className="command-explain-btn" onClick={()=>setExpanded(!expanded)} aria-expanded={expanded}>Warum wird das vorgeschlagen? <ChevronRight size={15}/></button>
     <div className="command-proposal-actions">
-      <button onClick={()=>setProposal("dismissed")} disabled={proposal!=="pending"}>Ablehnen</button>
-      <button onClick={()=>setProposal("accepted")} disabled={proposal!=="pending"}><Check size={15}/> Demo freigeben</button>
+      <ActionButton tone="quiet" onClick={()=>setProposal("dismissed")} disabled={proposal!=="pending"}>Ablehnen</ActionButton>
+      <ActionButton onClick={()=>setProposal("accepted")} disabled={proposal!=="pending"}><Check size={15}/> Demo freigeben</ActionButton>
       {proposal!=="pending"&&<button onClick={()=>setProposal("pending")}>Zurücksetzen</button>}
     </div>
   </div>;
