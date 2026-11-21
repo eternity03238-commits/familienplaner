@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/dm-sans";
 import "./tokens.css";
 import "./styles.css";
+import "./art-v3.css";
 import { PrefsProvider } from "../components/Prefs.tsx";
 
 export const metadata: Metadata = {
