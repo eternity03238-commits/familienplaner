@@ -1,0 +1,16 @@
+/* V3 art layer — purely visual; content, state, access checks stay in existing components */
+.fo-scene{position:absolute;inset:0;inline-size:100%;block-size:100%;z-index:-2;overflow:hidden;display:block;pointer-events:none;animation:fo-scene-reveal 240ms ease-out both}
+.fo-scene img{inline-size:100%;block-size:100%;display:block;object-fit:cover;object-position:center center}
+.fo-scene--home{z-index:0}
+.fo-art-enabled.fo-hero{min-block-size:264px}
+.fo-art-enabled.fo-hero::before{background:linear-gradient(90deg,rgb(11 14 29 / .78),rgb(11 14 29 / .10) 75%),linear-gradient(0deg,rgb(11 14 29 / .45),transparent 68%)}
+.fo-art-enabled.fo-hero .fo-hero__text{position:relative;z-index:1;max-inline-size:70%;text-shadow:0 2px 12px rgb(11 14 29 / .4)}
+.fo-art-enabled.fo-hero .fo-hero__toggle{z-index:2}
+.fo-art-enabled.fo-project-hero{min-block-size:208px}
+.fo-art-enabled.fo-project-hero::before{inset:0;background:linear-gradient(90deg,rgb(11 14 29 / .82),rgb(11 14 29 / .18) 80%);clip-path:none;z-index:-1}
+.fo-art-enabled.fo-project-hero h1,.fo-art-enabled.fo-project-hero p{position:relative;z-index:1;max-inline-size:75%;text-shadow:0 2px 14px rgb(11 14 29 / .5)}
+.fo-art-enabled.fo-home__scene .fo-scene{z-index:0}
+@media(min-width:700px){.fo-art-enabled.fo-hero{min-block-size:294px}.fo-art-enabled.fo-project-hero{min-block-size:236px}}
+@media(max-width:375px){.fo-art-enabled.fo-hero{min-block-size:234px}.fo-art-enabled.fo-hero .fo-hero__text{max-inline-size:80%}}
+@keyframes fo-scene-reveal{from{opacity:.38}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.fo-scene{animation:none}}
