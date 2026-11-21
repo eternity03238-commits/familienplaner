@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SceneHero } from "../components/art/SceneHero.tsx";
-import { ART_ENABLED } from "../lib/art/paths.ts";
+import { GITHUB_SCENES_AVAILABLE } from "../lib/art/paths.ts";
 
 const status: { title: string; state: string; done: boolean }[] = [
   { title: "Rechte und Datenschutz", state: "Datenbankregeln mit echten Rollen getestet", done: true },
@@ -16,7 +16,7 @@ export default function Home() {
     <div className="fo-app fo-home" data-fo-role="child">
       <a className="fo-skip" href="#inhalt">Zum Inhalt springen</a>
       <main id="inhalt" className="fo-home__main" tabIndex={-1}>
-        <div className={`fo-home__scene ${ART_ENABLED ? "fo-art-enabled" : ""}`}><SceneHero scene="observatory" time="night" eager /></div>
+        <div className={`fo-home__scene ${GITHUB_SCENES_AVAILABLE ? "fo-art-enabled" : ""}`}><SceneHero scene="observatory" time="night" eager /></div>
         <p className="fo-eyebrow">FamilyOS</p>
         <h1 className="fo-home__title">Eine Welt.<br />Zwei Perspektiven.</h1>
         <p className="fo-home__lead">Kinder sehen ihren Tag als Missionen. Eltern behalten im Command Center den Überblick und geben Lernpläne frei.</p>
