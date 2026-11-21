@@ -23,6 +23,7 @@ export default function Home() {
         <nav aria-label="Perspektive wählen" className="fo-home__choices">
           <Link href="/explore" className="fo-home__choice"><strong>Explore</strong><span>Mein Tag als Kind A – Missionen, Woche, Projektroute</span></Link>
           <Link href="/command" className="fo-home__choice fo-home__choice--quiet"><strong>Command</strong><span>Familienüberblick für Eltern – Termine, Hinweise, Freigaben</span></Link>
+          <Link href="/einrichten" className="fo-home__link">Familieneinrichtung ansehen</Link>
           <Link href="/design-system" className="fo-home__link">Design-System ansehen</Link>
         </nav>
         <p className="fo-home__status" role="note"><strong>Technischer Stand, kein Live-Betrieb.</strong> Alle Inhalte sind erfunden. Es sind keine Konten, Kalender oder Schulplattformen verbunden.</p>
