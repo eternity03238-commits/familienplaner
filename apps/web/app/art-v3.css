@@ -52,3 +52,12 @@
 .fo-expedition__footer svg{color:var(--fo-interactive);flex:none}
 @media(max-width:350px){.fo-route__trailing{display:none}.fo-expedition-hero__copy{max-inline-size:85%}.fo-expedition-hero__mark{opacity:.5}}
 @media(prefers-reduced-motion:reduce){.fo-route--expedition .fo-route__stop>button,.fo-expedition__meter span{transition:none}}
+
+
+/* Explore dashboard uses the same progress language as its expedition route. */
+.fo-feature--expedition{position:relative;overflow:hidden;border-color:var(--fo-interactive);background:linear-gradient(115deg,var(--fo-surface-raised),var(--fo-surface));gap:7px;transition:border-color var(--fo-motion-normal) var(--fo-ease)}
+.fo-feature--expedition::before{content:"";position:absolute;inline-size:104px;block-size:104px;inset-inline-end:-25px;inset-block-start:-45px;border:1px solid var(--fo-interactive);border-radius:50%;opacity:.24;pointer-events:none}
+.fo-feature--expedition .fo-feature__meta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--fo-ink-muted);font-size:var(--fo-type-small)}
+.fo-feature--expedition .fo-feature__meter{display:block;inline-size:100%;block-size:6px;overflow:hidden;border-radius:99px;background:var(--fo-surface-hover)}
+.fo-feature--expedition .fo-feature__meter i{display:block;block-size:100%;background:var(--fo-success);border-radius:inherit;transition:inline-size var(--fo-motion-normal) var(--fo-ease)}
+@media(prefers-reduced-motion:reduce){.fo-feature--expedition,.fo-feature--expedition .fo-feature__meter i{transition:none}}
