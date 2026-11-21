@@ -1,0 +1,41 @@
+{
+  "name": "familyos",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.16.0"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @familyos/web",
+    "build": "npm run build -w @familyos/web",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "test:security": "node --experimental-strip-types --test tests/authorization.test.ts tests/authorization.extended.test.ts tests/architecture.test.ts",
+    "lint": "eslint .",
+    "check": "npm run test && npm run typecheck && npm run lint",
+    "test:db:prepare": "node --experimental-strip-types scripts/db-prepare.ts",
+    "test:db:seed": "node --experimental-strip-types scripts/db-seed.ts",
+    "test:db": "npm run test:db:seed && node --experimental-strip-types --test tests/db/*.test.ts",
+    "test:db:rollback": "node --experimental-strip-types scripts/db-rollback-check.ts",
+    "test:arch": "node --experimental-strip-types --test tests/architecture.test.ts",
+    "security:bundle": "node --experimental-strip-types scripts/check-bundle.ts",
+    "smoke:web": "node --experimental-strip-types scripts/smoke-web.ts",
+    "audit:deps": "npm audit --audit-level=high"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.4.6",
+    "pg": "^8.23.1",
+    "typescript": "^5.8.0"
+  }
+}
