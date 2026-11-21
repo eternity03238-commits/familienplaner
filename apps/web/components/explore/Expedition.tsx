@@ -7,7 +7,7 @@ import { formatLocalDate } from "../../lib/preview/model.ts";
 import { ActionButton, Eyebrow, SectionHeading } from "../ui.tsx";
 import { useExplore } from "./ExploreState.tsx";
 import { SceneHero } from "../art/SceneHero.tsx";
-import { ART_ENABLED } from "../../lib/art/paths.ts";
+import { GITHUB_SCENES_AVAILABLE } from "../../lib/art/paths.ts";
 
 /** Project route = the one visual emphasis of the project module (V2). Stages: select, read, complete/reopen. */
 export function Expedition() {
@@ -19,7 +19,7 @@ export function Expedition() {
   return (
     <>
       <Link href="/explore" className="fo-back"><ChevronLeft size={18} aria-hidden="true" /> Mein Tag</Link>
-      <header className={`fo-project-hero ${ART_ENABLED ? "fo-art-enabled" : ""}`}>
+      <header className={`fo-project-hero ${GITHUB_SCENES_AVAILABLE ? "fo-art-enabled" : ""}`}>
         <SceneHero scene="volcano" eager />
         <Eyebrow as="p">Deine große Mission · {project.subject}</Eyebrow>
         <h1>Referat: Vulkane</h1>
