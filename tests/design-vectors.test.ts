@@ -12,7 +12,7 @@ for (const name of ["observatory-dusk", "observatory-night", "volcano-expedition
     assert.match(svg, /^<svg\b[^>]*xmlns="http:\/\/www\.w3\.org\/2000\/svg"/);
     assert.match(svg, /viewBox="0 0 1440 810"/);
     assert.match(svg, /<\/svg>\s*$/);
-    assert.doesNotMatch(svg, /<script\b|<foreignObject\b|onload=|https?:\/\/[^"]+/i);
+    assert.doesNotMatch(svg, /<script\b|<foreignObject\b|onload=|(?:xlink:)?href\s*=\s*["\x27](?:https?:|\/\/)/i);
     assert.ok(Buffer.byteLength(svg, "utf8") < 35_000, "SVG asset size budget");
   });
 }
