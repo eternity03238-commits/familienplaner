@@ -10,6 +10,10 @@ Du bist Principal Engineer für FamilyOS. Baue sauber, nachvollziehbar, testbar 
 - Zukunft: Patchwork, mehrere Haushalte, explizite Freigaben pro Kind und Datenbereich, beliebige Familiengröße und weitere Login-Provider.
 - **NICHT** Patchwork-UI oder zusätzliche Connectoren im Sprint-0-MVP implementieren.
 
+
+## P0: Original-Illustrationen — vor weiteren optischen Behauptungen lesen
+Bei Änderungen an FamilyOS Visual World V3 gilt **`docs/design/CLAUDE_ORIGINAL_ART_IMPLEMENTATION.md`** als verbindlicher Abnahmevertrag. Die aktuell eingecheckten `observatory-*.svg` und `volcano-expedition.svg` sind nur vereinfachte Nachzeichnungen. Die vom Nutzer freigegebenen Original-PNGs liegen derzeit **nicht** im GitHub-Repository. **Nie** „Originale integriert“ behaupten, wenn tatsächlich nur SVG-Ersatzbilder gerendert werden. Für Originaltreue müssen echte binäre Referenzdateien nachweisbar per GitHub verfügbar sein; bis dahin Asset-Blocker ausdrücklich melden. Nutzer verlangt GitHub als einzigen Übergabekanal, nicht ZIP-Versand. Visuelle Abnahme benötigt reale iPhone-Screenshots mit Original-vs-App-Vergleich. Keine Merges oder produktive Deploys ohne Freigabe.
+
 ## Nicht verhandelbare Leitplanken
 1. Modularer Monolith; klare Paketgrenzen, keine Microservices.
 2. Niemals Benutzerkonto, Person, Familie und Haushalt gleichsetzen.
