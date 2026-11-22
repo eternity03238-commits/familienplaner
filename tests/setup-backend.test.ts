@@ -29,6 +29,8 @@ test("browser config: missing values mean preview; secret keys are refused", () 
   assert.equal(supabaseConfig({ url: undefined, key: undefined }), null);
   assert.deepEqual(supabaseConfig({ url: "https://abcdefghijklmnopqrst.supabase.co", key: "sb_publishable_x" }), { url: "https://abcdefghijklmnopqrst.supabase.co", key: "sb_publishable_x" });
   assert.throws(() => supabaseConfig({ url: "https://abcdefghijklmnopqrst.supabase.co", key: "sb_secret_abc" }), /secret/);
+  assert.deepEqual(supabaseConfig({ url: ' "https://abcdefghijklmnopqrst.supabase.co/" ', key: " 'sb_publishable_x' " }),
+    { url: "https://abcdefghijklmnopqrst.supabase.co", key: "sb_publishable_x" }, "pasted quotes, spaces and trailing slash are tolerated");
   assert.throws(() => supabaseConfig({ url: "http://evil.example", key: "k" }), /supabase\.co/);
   const jwt = (role: string) => `x.${Buffer.from(JSON.stringify({ role })).toString("base64url")}.y`;
   assert.ok(supabaseConfig({ url: "https://abcdefghijklmnopqrst.supabase.co", key: jwt("anon") }));

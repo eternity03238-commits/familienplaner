@@ -11,7 +11,9 @@ let client: SupabaseClient | null | undefined;
 export function supabaseConfig(env: Record<string, string | undefined> = {
   url: process.env.NEXT_PUBLIC_SUPABASE_URL, key: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 }): { url: string; key: string } | null {
-  const url = env.url?.trim(), key = env.key?.trim();
+  // Tolerate what people paste from dashboards: surrounding quotes, spaces and a trailing slash.
+  const tidy = (v?: string) => v?.trim().replace(/^["']|["']$/g, "").trim();
+  const url = tidy(env.url)?.replace(/\/+$/, ""), key = tidy(env.key);
   if (!url || !key) return null;
   if (!URL_RE.test(url)) throw new Error("NEXT_PUBLIC_SUPABASE_URL must look like https://<project-ref>.supabase.co");
   if (/^sb_secret_/.test(key) || legacyJwtRole(key) !== null && legacyJwtRole(key) !== "anon") throw new Error("Refusing a secret Supabase key in the browser");
