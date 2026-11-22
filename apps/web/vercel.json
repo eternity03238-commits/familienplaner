@@ -1,4 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["dub1"]
+  "regions": ["dub1"],
+  "installCommand": "cd ../.. && npm ci --include=dev --no-audit --no-fund",
+  "buildCommand": "next build"
 }
