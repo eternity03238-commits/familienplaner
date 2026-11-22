@@ -59,3 +59,10 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - Prüfung danach: 27 Tabellen, 0 ohne RLS, 0 öffentliche Funktionen für `anon` ausführbar.
   - Noch keine Nutzerdaten. Es gibt noch keinen App-Deploy mit Live-Modus.
 - **Login vereinfacht (22.11.2026, Entscheidung der Inhaberin):** E-Mail und Passwort statt Code, ohne Bestätigungsmail und ohne SMTP. Siehe ADR-0007, Punkt 2. Der E2E-Test prüft Registrierung, falsches Passwort, doppelte Registrierung und erneutes Anmelden.
+- **Echte Elternansicht (22.11.2026):** Im Live-Modus zeigt `/command` nach der Anmeldung die echte Familie, ohne Demodaten und ohne Demo-Banner.
+  - Startseite: „Heute“ als leerer Zustand mit Hinweis auf den Kalender, dazu „So geht es weiter“ mit offenen und erledigten Schritten.
+  - Kalender und Planung erklären im leeren Zustand den nächsten Schritt. Das Profil zeigt die Mitglieder und hat „Abmelden“.
+  - Neue Seite `/command/verbindungen`: Google Kalender (kommt als Nächstes), LernSax, VP Plan, beste.schule, DLS, jeweils mit ehrlichem Status, wie die Verbindung funktionieren wird und was dafür fehlt.
+  - Die Kinderansicht bleibt Beispiel, mit eigenem Hinweis, bis Kindergeräte gekoppelt sind.
+  - Abgemeldet oder ohne Familie: Hinweis mit Weg zu `/einrichten`.
+  - Tests: `tests/live.test.ts`. Live-Screens im Browser mit simulierter Supabase-Antwort geprüft (hell/dunkel, ohne Konsolenfehler). `design:check` 156/0.

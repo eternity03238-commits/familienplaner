@@ -12,14 +12,18 @@ export interface NavItem { href: string; label: string; Icon: LucideIcon }
  * App frame for both perspectives: one world, two characters (V2). Full-screen on phones (no device mock),
  * centred column on larger screens. Role is a display preference; the link to the other perspective is not a permission.
  */
-export function AppFrame({ role, nav, children }: { role: "child" | "parent"; nav: NavItem[]; children: ReactNode }) {
+export function AppFrame({ role, nav, children, demoNote = "Erfundene Beispieldaten. Nichts wird gespeichert oder verbunden." }: {
+  role: "child" | "parent"; nav: NavItem[]; children: ReactNode;
+  /** Text of the demo banner; null hides it (live mode with real family data). */
+  demoNote?: string | null;
+}) {
   const path = usePathname();
   const { theme, look } = usePrefs();
   const current = (href: string) => (href === nav[0].href ? path === href : path.startsWith(href));
   return (
     <div className={`fo-app fo-app--${role}`} data-fo-role={role} data-fo-theme={theme} data-fo-look={role === "child" ? look : undefined}>
       <a className="fo-skip" href="#inhalt">Zum Inhalt springen</a>
-      <aside className="fo-demo" aria-label="Demo-Hinweis"><strong>Demo</strong><span>Erfundene Beispieldaten. Nichts wird gespeichert oder verbunden.</span></aside>
+      {demoNote && <aside className="fo-demo" aria-label="Demo-Hinweis"><strong>Demo</strong><span>{demoNote}</span></aside>}
       <header className="fo-appbar">
         <Link href="/" className="fo-logo">
           <span className="fo-logo__mark" aria-hidden="true">◭</span> FamilyOS <span className="fo-logo__mode">{role === "child" ? "Explore" : "Command"}</span><span className="fo-sr-only">, zur Startseite</span>
