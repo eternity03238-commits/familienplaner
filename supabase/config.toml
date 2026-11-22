@@ -15,19 +15,9 @@ port = 54323
 enabled = true
 site_url = "http://localhost:3000"
 additional_redirect_urls = ["http://localhost:3000"]
-# Sprint 1: passwordless email code (ADR-0007). Same values are set by hand in the hosted project.
+minimum_password_length = 8
+# Sprint 1: email + password without confirmation mail (ADR-0007, update 22.11.2026).
+# Same values are set by hand in the hosted project (Authentication → Sign In / Providers → Email).
 [auth.email]
 enable_signup = true
 enable_confirmations = false
-otp_length = 6
-otp_expiry = 600
-max_frequency = "1s"
-[auth.email.template.magic_link]
-subject = "Dein FamilyOS-Code"
-content_path = "./supabase/templates/code.html"
-[auth.email.template.confirmation]
-subject = "Dein FamilyOS-Code"
-content_path = "./supabase/templates/code.html"
-[auth.rate_limit]
-# Local stack only: the e2e test signs in three synthetic accounts.
-email_sent = 30

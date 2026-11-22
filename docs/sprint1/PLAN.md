@@ -10,15 +10,15 @@ Ziel: Ihr meldet euch an, legt in wenigen Minuten eure Familie an, und beide Kin
 - **Leere Seiten erklären den nächsten Schritt** („Noch keine Aufgaben. Leg die erste an.“).
 
 ## Ablauf (ca. 3 Minuten)
-1. **Willkommen:** E-Mail-Adresse eingeben, 6-stelligen Code aus der Mail eintippen. Kein Passwort.
+1. **Willkommen:** „Neu hier“: E-Mail-Adresse und Passwort festlegen (das iPhone speichert es). Es wird keine Mail verschickt.
 2. **Familie:** Familienname eintippen (ein Feld), dazu der eigene Vorname.
 3. **Kinder:** Vorname und Farbe/Avatar je Kind, „+ weiteres Kind“. Schule optional.
-4. **Partner einladen:** Einladungslink teilen (iPhone-Teilen-Menü). Der Partner meldet sich ebenfalls mit seiner E-Mail-Adresse und Code an und landet direkt in der Familie. Überspringbar.
+4. **Partner einladen:** Einladungslink teilen (iPhone-Teilen-Menü). Der Partner legt über den Link ebenfalls ein Konto mit E-Mail-Adresse und Passwort an und landet direkt in der Familie. Überspringbar.
 5. **Kindergerät verbinden:** QR-Code am Elterngerät, Kamera am Kindergerät, Kind wählt eine 4-stellige PIN. Fertig. Überspringbar, später unter „Familie“.
 
 ## Umsetzung (kleine PRs)
 1. Migration 0004 + Rollback + RLS-Tests (Kopplung, Sichtbarkeit, Familienmitglieder).
-2. Supabase-Adapter für `packages/auth` (serverseitige Session-Prüfung, fail-closed) + E-Mail-Code-Login (OTP) + Abmelden.
+2. Supabase-Adapter für `packages/auth` (serverseitige Session-Prüfung, fail-closed) + E-Mail/Passwort-Login ohne Bestätigungsmail + Abmelden.
 3. Onboarding-Bildschirme 1–4 (Design System V2, 375 px, VoiceOver, 200 % Text).
 4. Kindergerät koppeln (QR, Einmalcode, PIN-Sperre, Geräteliste mit „Abmelden“).
 5. Explore/Command lesen echte Daten statt Demodaten. Die Demo bleibt per Schalter erhalten.
@@ -58,3 +58,4 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
 - **Datenbank eingespielt (22.11.2026, Freigabe der Inhaberin):** 0001 bis 0004 im Supabase-Projekt (eu-west-1) über `db-deploy.yml`, Lauf auf Commit `9918e8d`.
   - Prüfung danach: 27 Tabellen, 0 ohne RLS, 0 öffentliche Funktionen für `anon` ausführbar.
   - Noch keine Nutzerdaten. Es gibt noch keinen App-Deploy mit Live-Modus.
+- **Login vereinfacht (22.11.2026, Entscheidung der Inhaberin):** E-Mail und Passwort statt Code, ohne Bestätigungsmail und ohne SMTP. Siehe ADR-0007, Punkt 2. Der E2E-Test prüft Registrierung, falsches Passwort, doppelte Registrierung und erneutes Anmelden.

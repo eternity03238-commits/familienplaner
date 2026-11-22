@@ -22,9 +22,8 @@ test("five numbered steps, then the summary", () => {
 
 test("each step explains what is missing instead of silently blocking", () => {
   let s: f.SetupState = { ...f.initialState };
-  assert.match(f.blocker(s)!, /E-Mail/);
-  s = { ...s, codeSent: true };
-  assert.match(f.blocker(s)!, /Code/);
+  assert.match(f.blocker(s)!, /E-Mail-Adresse und Passwort/);
+  assert.equal(s.accountMode, "neu", "first visit creates an account");
   s = { ...s, signedIn: true };
   assert.equal(f.blocker(s), null);
   s = { ...s, step: "familie", familyName: "Sommer" };
@@ -52,11 +51,12 @@ test("children: add, rename, remove; empty rows are ignored; at most 8", () => {
   assert.equal(f.removeChild({ ...f.initialState }, "k1").children.length, 1, "always one input row");
 });
 
-test("email and code validation", () => {
+test("email and password validation (no mail is ever sent)", () => {
   assert.ok(f.validEmail(" eltern@example.com "));
   assert.ok(!f.validEmail("eltern@example"));
-  assert.ok(f.validCode("123456"));
-  assert.ok(!f.validCode("12345a"));
+  assert.ok(f.validPassword("abcdefgh"));
+  assert.ok(!f.validPassword("1234567"));
+  assert.ok(!f.validPassword("x".repeat(73)), "bcrypt limit");
 });
 
 test("only new or renamed children are written; saved names are not re-sent", () => {

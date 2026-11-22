@@ -8,7 +8,7 @@ Diese Schritte machst **du**, weil es deine Konten sind. **Kein neues Passwort n
 3. Das Datenbank-Passwort nur in deinem Passwort-Manager speichern.
 4. Mir genügt die **Projekt-URL** (`https://xxxx.supabase.co`). Sie ist nicht geheim.
 
-## 2. E-Mail-Anmeldung in Supabase einstellen
+## 2. (überholt, siehe Abschnitt 5) E-Mail-Anmeldung
 1. Supabase → dein Projekt → **Authentication → Sign In / Providers → Email**: „Enable Email provider“ an, „Confirm email“ an.
 2. **Authentication → Emails → Magic Link**: Die Vorlage soll den Code `{{ .Token }}` zeigen. Den Text passe ich später mit dir auf Deutsch an.
 3. Supabase verschickt zunächst nur an Adressen aus deinem Supabase-Team und nur 2 Mails pro Stunde. Für deine Tests reicht das. Bevor dein Partner sich anmeldet, richten wir einen eigenen Mailversand (SMTP) ein. Dessen Zugangsdaten trägst du selbst direkt in Supabase ein.
@@ -30,8 +30,11 @@ Die Datenbankänderungen spielt ein GitHub-Workflow ein (`.github/workflows/db-d
 3. Gib mir Bescheid. Ich starte dann zuerst eine **Vorschau** (nur Anzeige, keine Änderung), zeige dir das Ergebnis und spiele erst danach ein.
 4. Optional, aber empfohlen: GitHub → Settings → Environments → `supabase-production` → **Required reviewers** = du. Dann wartet jeder Lauf auf deinen Klick „Approve“.
 
-## 5. E-Mail-Code in Supabase einstellen
-1. **Authentication → Emails → Templates → „Magic Link“** und **„Confirm signup“**:
-   - Betreff: `Dein FamilyOS-Code`.
-   - Inhalt: den Text aus `supabase/templates/code.html` einfügen. Er zeigt nur den 6-stelligen Code, keinen Link.
-2. **Authentication → URL Configuration → Site URL:** die Vercel-Adresse, sobald es sie gibt.
+## 5. Anmeldung in Supabase einstellen (1 Minute, keine Mails nötig)
+1. Authentication → **Sign In / Providers** → **Email**:
+   - „Enable Email provider“: **an**
+   - „Confirm email“: **aus**
+   - „Minimum password length“: **8**
+   - **Save**
+2. SMTP und Mailvorlagen werden **nicht** gebraucht.
+3. Authentication → URL Configuration → Site URL: die Vercel-Adresse, sobald es sie gibt.

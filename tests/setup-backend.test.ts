@@ -5,8 +5,10 @@ import { supabaseConfig } from "../apps/web/lib/supabase/browser.ts";
 
 test("errors become short German next steps, server text is never shown", () => {
   assert.match(explain({ status: 429, message: "email rate limit exceeded" }), /zu viele Codes/);
-  assert.match(explain({ code: "otp_expired", message: "Token has expired or is invalid" }), /neuen an/);
-  assert.match(explain({ message: "email_address_not_authorized" }), /noch keine E-Mail/);
+  assert.match(explain({ code: "invalid_credentials", message: "Invalid login credentials" }), /Passwort stimmen nicht/);
+  assert.match(explain({ code: "user_already_exists" }), /schon ein Konto/);
+  assert.match(explain({ code: "weak_password" }), /mindestens 8/);
+  assert.match(explain({ code: "confirmation_required" }), /Confirm email/);
   assert.match(explain({ code: "22023", message: "Invite is not valid" }), /Einladung/);
   assert.match(explain({ code: "23505" }), /schon zu einer Familie/);
   assert.match(explain({ code: "42501" }), /Berechtigung/);

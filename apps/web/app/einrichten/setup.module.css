@@ -49,7 +49,6 @@
 .field input { width: 100%; box-sizing: border-box; font: inherit; min-height: 3rem; padding: .75rem 1rem; border-radius: var(--fo-radius-md); color: var(--fo-ink); background: var(--fo-canvas); border: 1px solid var(--fo-ink-subtle); }
 .field input::placeholder { color: var(--fo-ink-subtle); }
 .field input[aria-invalid="true"] { border-color: var(--fo-danger); }
-.code { font-size: 1.6rem !important; letter-spacing: .5em; text-align: center; font-variant-numeric: tabular-nums; }
 .error { color: var(--fo-danger); font-size: .9rem; font-weight: 600; margin: 0 !important; }
 .note { font-size: .9rem; margin: 0 !important; }
 
@@ -108,3 +107,9 @@
 .copy { display: flex; gap: .5rem; }
 .copy input { flex: 1; min-width: 0; font-size: .9rem; }
 @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+
+/* Account mode switch */
+.segment { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem; padding: .25rem; border-radius: var(--fo-radius-md); background: var(--fo-canvas); border: 1px solid var(--fo-stroke); }
+.segment button { font: inherit; min-height: 2.75rem; border: 0; border-radius: calc(var(--fo-radius-md) - .2rem); background: none; color: var(--fo-ink-muted); font-weight: 650; cursor: pointer; }
+.segment button[aria-pressed="true"] { background: var(--fo-surface-raised); color: var(--fo-ink); box-shadow: 0 0 0 1px var(--fo-stroke); }
+.hint { color: var(--fo-ink-muted); font-size: .85rem; }

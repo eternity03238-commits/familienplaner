@@ -17,14 +17,18 @@ export function cleanName(raw: string): string | null {
   return v.length >= 1 && v.length <= NAME_MAX ? v : null;
 }
 export const validEmail = (raw: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(raw.trim());
-export const validCode = (raw: string) => /^\d{6}$/.test(raw.trim());
+/** Passwords: 8–72 characters (72 = bcrypt limit in Supabase Auth). The iPhone keychain suggests and stores strong ones. */
+export const PASSWORD_MIN = 8;
+export const validPassword = (raw: string) => raw.length >= PASSWORD_MIN && raw.length <= 72;
+export type AccountMode = "neu" | "login";
 
 /** `id` is set once the child exists in the database; `savedName` is the name stored there. */
 export interface Child { key: string; name: string; id?: string; savedName?: string }
 export interface SetupState {
   step: Step;
   email: string;
-  codeSent: boolean;
+  /** "neu" = create account, "login" = existing account. */
+  accountMode: AccountMode;
   signedIn: boolean;
   familyName: string;
   myName: string;
@@ -40,7 +44,7 @@ export interface SetupState {
   invite: string | null;
 }
 export const initialState: SetupState = {
-  step: "konto", email: "", codeSent: false, signedIn: false, familyName: "", myName: "",
+  step: "konto", email: "", accountMode: "neu", signedIn: false, familyName: "", myName: "",
   children: [{ key: "k1", name: "" }], inviteShared: false, pairedChildKeys: [], familyId: null, myId: null, savedFamilyName: null, savedMyName: null, invite: null
 };
 
@@ -58,8 +62,7 @@ export const namedChildren = (st: SetupState) =>
 export function blocker(st: SetupState): string | null {
   switch (st.step) {
     case "konto":
-      if (!st.signedIn) return st.codeSent ? "Bitte den 6-stelligen Code aus der E-Mail eingeben." : "Bitte eine gültige E-Mail-Adresse eingeben.";
-      return null;
+      return st.signedIn ? null : "Bitte E-Mail-Adresse und Passwort eingeben.";
     case "familie":
       if (st.invite) return cleanName(st.myName) ? null : "Bitte deinen Vornamen eingeben (bis 60 Zeichen).";
       if (!cleanName(st.familyName)) return "Bitte einen Familiennamen eingeben (bis 60 Zeichen).";

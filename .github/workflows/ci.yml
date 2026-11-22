@@ -80,7 +80,7 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
         run: npm run test:db
-      - name: Live setup flow end-to-end (email code via local Mailpit, RPCs, RLS)
+      - name: Live setup flow end-to-end (email + password, RPCs, RLS)
         run: |
           export SUPABASE_ANON_KEY="$(supabase status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
           npm run test:e2e:live

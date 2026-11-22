@@ -1,6 +1,6 @@
 /**
  * End-to-end check of the live setup backend against the local Supabase stack (CI job `supabase-local`).
- * Real GoTrue email OTP (codes read from the local Mailpit inbox), real PostgREST RPCs, real RLS.
+ * Real GoTrue email + password sign-up (no confirmation mail), real PostgREST RPCs, real RLS.
  * Synthetic addresses only (@familyos.test). Never point this at a hosted project.
  */
 import assert from "node:assert/strict";
@@ -9,33 +9,17 @@ import { liveBackend } from "../../apps/web/lib/setup/backend.ts";
 
 const API = process.env.SUPABASE_API_URL ?? "http://127.0.0.1:54321";
 const KEY = process.env.SUPABASE_ANON_KEY;
-const MAIL = process.env.MAILPIT_URL ?? "http://127.0.0.1:54324";
 if (!KEY) throw new Error("SUPABASE_ANON_KEY missing (supabase status -o env)");
 if (!/^http:\/\/(127\.0\.0\.1|localhost):/.test(API)) throw new Error("e2e runs only against the local stack");
 
 const run = Date.now().toString(36);
 const client = () => createClient(API, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
 
-async function codeFor(email: string): Promise<string> {
-  for (let i = 0; i < 40; i++) {
-    const res = await fetch(`${MAIL}/api/v1/search?query=${encodeURIComponent(`to:${email}`)}`);
-    const list = (await res.json()) as { messages?: { ID: string }[] };
-    const id = list.messages?.[0]?.ID;
-    if (id) {
-      const msg = (await (await fetch(`${MAIL}/api/v1/message/${id}`)).json()) as { Text?: string; HTML?: string };
-      const m = /\b(\d{6})\b/.exec(`${msg.Text ?? ""} ${msg.HTML ?? ""}`);
-      if (m) return m[1];
-    }
-    await new Promise(r => setTimeout(r, 250));
-  }
-  throw new Error(`no code mail for ${email}`);
-}
-
+const PW = `Test-${run}-Passwort!`;
 async function signIn(email: string) {
   const sb = client();
   const b = liveBackend(sb);
-  await b.sendCode(email);
-  await b.verifyCode(email, await codeFor(email));
+  await b.signUp(email, PW);
   return { sb, b };
 }
 
@@ -66,8 +50,15 @@ const leak = await stranger.sb.from("persons").select("id");
 assert.equal(leak.error, null);
 assert.equal(leak.data?.length, 0, "RLS: stranger sees no persons");
 
+// Returning parent signs in with the password; wrong password and duplicate sign-up give clear messages.
+const again = liveBackend(client());
+await assert.rejects(again.signIn(`eltern1-${run}@familyos.test`, "falsch-falsch"), /stimmen nicht/);
+await assert.rejects(again.signUp(`eltern1-${run}@familyos.test`, PW), /schon ein Konto|stimmen nicht/);
+await again.signIn(`eltern1-${run}@familyos.test`, PW);
+assert.equal((await again.loadFamily())?.familyName, "Familie E2E Neu", "returning parent sees the family");
+
 const anon = client();
 const anonCall = await anon.rpc("my_family");
 assert.ok(anonCall.error, "anon cannot call RPCs");
 
-console.log("e2e setup ok: email OTP, create family, children, rename, invite, accept, isolation");
+console.log("e2e setup ok: email+password sign-up/sign-in, create family, children, rename, invite, accept, isolation");

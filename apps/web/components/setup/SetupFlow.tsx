@@ -6,7 +6,7 @@
  */
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, Check, Copy, Loader2, Mail, Plus, QrCode, Share2, Smartphone, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Copy, Loader2, Plus, QrCode, Share2, Smartphone, X } from "lucide-react";
 import { artUrl } from "../../lib/art/paths.ts";
 import { usePrefs } from "../Prefs.tsx";
 import * as flow from "../../lib/setup/flow.ts";
@@ -28,7 +28,7 @@ const tone = (i: number) => CHILD_TONES[i % CHILD_TONES.length];
 export function SetupFlow() {
   const { theme } = usePrefs();
   const [st, setSt] = useState<flow.SetupState>(flow.initialState);
-  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
   const [touched, setTouched] = useState(false);
   const [pairing, setPairing] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -81,12 +81,12 @@ export function SetupFlow() {
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (st.step === "konto" && !st.codeSent) {
-      if (flow.validEmail(st.email)) void run(async b => { await b.sendCode(st.email); setTouched(false); setSt(s => ({ ...s, codeSent: true })); });
-      return;
-    }
     if (st.step === "konto" && !st.signedIn) {
-      if (flow.validCode(code)) void run(async b => { await b.verifyCode(st.email, code); setTouched(false); await afterSignIn(b); });
+      if (!flow.validEmail(st.email) || !flow.validPassword(password)) return;
+      void run(async b => {
+        if (st.accountMode === "neu") await b.signUp(st.email, password); else await b.signIn(st.email, password);
+        setPassword(""); setTouched(false); await afterSignIn(b);
+      });
       return;
     }
     if (problem) return;
@@ -187,25 +187,26 @@ export function SetupFlow() {
           )}
 
           <form onSubmit={submit} noValidate>
-            {st.step === "konto" && (!st.codeSent ? <>
+            {st.step === "konto" && <>
               <Title innerRef={heading}>{view.invite ? "Du wurdest eingeladen" : "Willkommen bei FamilyOS"}</Title>
-              <p>{view.invite ? "Melde dich mit deiner E-Mail-Adresse an, dann bist du gleich in eurer Familie. " : "Melde dich mit deiner E-Mail-Adresse an. "}Du bekommst einen 6-stelligen Code, ein Passwort brauchst du nicht.</p>
+              <p>{st.accountMode === "neu"
+                ? (view.invite ? "Leg dein Konto an, dann bist du gleich in eurer Familie." : "Leg einmal dein Konto an. Dein iPhone merkt sich das Passwort, danach reicht Face ID.")
+                : "Schön, dass du wieder da bist."}</p>
+              <div className={styles.segment} role="group" aria-label="Konto">
+                <button type="button" aria-pressed={st.accountMode === "neu"} onClick={() => { setTouched(false); setFailure(null); setSt(s => ({ ...s, accountMode: "neu" })); }}>Neu hier</button>
+                <button type="button" aria-pressed={st.accountMode === "login"} onClick={() => { setTouched(false); setFailure(null); setSt(s => ({ ...s, accountMode: "login" })); }}>Ich habe ein Konto</button>
+              </div>
               <Field label="E-Mail-Adresse" error={touched && !flow.validEmail(st.email) ? "Bitte eine gültige E-Mail-Adresse eingeben." : null}>
-                {p => <input {...p} type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false}
+                {p => <input {...p} type="email" name="username" inputMode="email" autoComplete="username" autoCapitalize="none" spellCheck={false}
                   value={st.email} onChange={e => setSt(s => ({ ...s, email: e.target.value }))} placeholder="name@example.com" />}
               </Field>
-              <Primary busy={busy}><Mail size={18} aria-hidden="true" />Code senden</Primary>
-            </> : <>
-              <Title innerRef={heading}>Code eingeben</Title>
-              <p>Wir haben einen Code an <strong>{st.email.trim()}</strong> geschickt. Schau auch im Spam-Ordner nach.</p>
-              <Field label="6-stelliger Code" error={touched && !flow.validCode(code) ? "Bitte den 6-stelligen Code aus der E-Mail eingeben." : null}>
-                {p => <input {...p} className={styles.code} inputMode="numeric" autoComplete="one-time-code" maxLength={6}
-                  value={code} onChange={e => setCode(e.target.value.replace(/\D/g, ""))} placeholder="••••••" />}
+              <Field label="Passwort" hint={st.accountMode === "neu" ? `Mindestens ${flow.PASSWORD_MIN} Zeichen. Tipp: Nimm den Vorschlag deines iPhones.` : undefined}
+                error={touched && !flow.validPassword(password) ? `Bitte ein Passwort mit mindestens ${flow.PASSWORD_MIN} Zeichen eingeben.` : null}>
+                {p => <input {...p} type="password" name="password" autoComplete={st.accountMode === "neu" ? "new-password" : "current-password"}
+                  minLength={flow.PASSWORD_MIN} maxLength={72} value={password} onChange={e => setPassword(e.target.value)} />}
               </Field>
-              <Primary busy={busy}>Anmelden</Primary>
-              <button type="button" className={styles.quiet} disabled={busy} onClick={() => void run(async b => { await b.sendCode(st.email); setCode(""); })}>Neuen Code senden</button>
-              <button type="button" className={styles.quiet} onClick={() => { setCode(""); setTouched(false); setFailure(null); setSt(s => ({ ...s, codeSent: false })); }}>Andere E-Mail-Adresse verwenden</button>
-            </>)}
+              <Primary busy={busy}>{st.accountMode === "neu" ? "Konto anlegen" : "Anmelden"}</Primary>
+            </>}
 
             {st.step === "familie" && view.invite && <>
               <Title innerRef={heading}>Wie heißt du?</Title>
@@ -313,7 +314,7 @@ export function SetupFlow() {
           {st.step !== "konto" && !done && (
             <button type="button" className={styles.back} onClick={() => go(flow.prev(st.step))}><ArrowLeft size={16} aria-hidden="true" />Zurück</button>
           )}
-          {!live && <small className={styles.footnote}>Vorschau: Es wird nichts gespeichert oder verschickt. Jeder 6-stellige Code funktioniert.</small>}
+          {!live && <small className={styles.footnote}>Vorschau: Es wird nichts gespeichert. Jede E-Mail-Adresse und jedes Passwort ab 8 Zeichen funktioniert.</small>}
         </section>
       </div>
     </main>
@@ -335,12 +336,14 @@ function Title({ children, innerRef }: { children: ReactNode; innerRef: React.Re
   return <h1 id="setup-title" ref={innerRef} tabIndex={-1}>{children}</h1>;
 }
 
-function Field({ label, error, children }: { label: string; error: string | null; children: (p: { id: string; "aria-invalid": boolean; "aria-describedby"?: string }) => ReactNode }) {
+function Field({ label, hint, error, children }: { label: string; hint?: string; error: string | null; children: (p: { id: string; "aria-invalid": boolean; "aria-describedby"?: string }) => ReactNode }) {
   const id = useId();
+  const described = [hint ? `${id}-hint` : "", error ? `${id}-err` : ""].filter(Boolean).join(" ") || undefined;
   return (
     <div className={styles.field}>
       <label htmlFor={id}>{label}</label>
-      {children({ id, "aria-invalid": !!error, "aria-describedby": error ? `${id}-err` : undefined })}
+      {children({ id, "aria-invalid": !!error, "aria-describedby": described })}
+      {hint && <span id={`${id}-hint`} className={styles.hint}>{hint}</span>}
       {error && <span id={`${id}-err`} className={styles.error} role="alert">{error}</span>}
     </div>
   );
