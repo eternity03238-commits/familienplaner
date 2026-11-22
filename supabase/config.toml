@@ -31,6 +31,3 @@ content_path = "./supabase/templates/code.html"
 [auth.rate_limit]
 # Local stack only: the e2e test signs in three synthetic accounts.
 email_sent = 30
-[inbucket]
-enabled = true
-port = 54324
