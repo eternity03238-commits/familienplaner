@@ -57,7 +57,7 @@ jobs:
         run: supabase db push --db-url "$SUPABASE_DB_URL" --dry-run
       - name: Anwenden
         if: env.MODE == 'apply'
-        run: supabase db push --db-url "$SUPABASE_DB_URL"
+        run: supabase db push --db-url "$SUPABASE_DB_URL" --yes
       - name: Prüfung nach dem Anwenden (nur lesend)
         if: env.MODE == 'apply'
         run: |
