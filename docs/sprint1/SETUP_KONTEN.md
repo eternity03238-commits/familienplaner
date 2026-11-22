@@ -22,3 +22,16 @@ Gib mir Bescheid, sobald die Schritte erledigt sind (nur die Supabase-URL schick
 
 ## Warum nicht Firebase?
 Die Rechte (Familie ↔ Familie, Kind ↔ Kind) setzt die Postgres-Datenbank selbst durch (RLS) und auf GitHub prüfen sie 39 Tests. Firestore nutzt ein anderes Rechtemodell. Ein Wechsel hieße, genau diesen sicherheitskritischen Teil neu zu bauen. Supabase bietet dasselbe „Anmelden mit einem bestehenden Konto“ wie Firebase.
+
+## 4. Datenbank über GitHub einrichten (ca. 5 Minuten)
+Die Datenbankänderungen spielt ein GitHub-Workflow ein (`.github/workflows/db-deploy.yml`). Das Passwort geht dabei nie durch den Chat.
+1. Supabase → dein Projekt → oben **„Connect“** → **Session pooler** → die URI kopieren. Sie sieht so aus: `postgresql://postgres.<ref>:[YOUR-PASSWORD]@aws-…pooler.supabase.com:5432/postgres`. `[YOUR-PASSWORD]` durch dein Datenbank-Passwort ersetzen.
+2. GitHub → Repository → **Settings → Secrets and variables → Actions → New repository secret**. Name `SUPABASE_DB_URL`, als Wert die URI.
+3. Gib mir Bescheid. Ich starte dann zuerst eine **Vorschau** (nur Anzeige, keine Änderung), zeige dir das Ergebnis und spiele erst danach ein.
+4. Optional, aber empfohlen: GitHub → Settings → Environments → `supabase-production` → **Required reviewers** = du. Dann wartet jeder Lauf auf deinen Klick „Approve“.
+
+## 5. E-Mail-Code in Supabase einstellen
+1. **Authentication → Emails → Templates → „Magic Link“** und **„Confirm signup“**:
+   - Betreff: `Dein FamilyOS-Code`.
+   - Inhalt: den Text aus `supabase/templates/code.html` einfügen. Er zeigt nur den 6-stelligen Code, keinen Link.
+2. **Authentication → URL Configuration → Site URL:** die Vercel-Adresse, sobald es sie gibt.

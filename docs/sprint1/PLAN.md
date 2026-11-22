@@ -46,3 +46,12 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - **Vorschau:** Es wird nichts gespeichert oder verschickt, jeder 6-stellige Code funktioniert, der QR-Code ist ein Platzhalter. Die Anbindung an Supabase (Code-Login, 0004-Funktionen, echter QR-Code) folgt als nächster Schritt.
   - Logik und Tests: `apps/web/lib/setup/flow.ts`, `tests/setup-flow.test.ts`. Die Namensregeln entsprechen denen der Datenbank.
   - Prüfungen: `design:check` 144 Kombinationen / 0 Befunde, 98/98 Tests. Screenshots in `docs/design/screenshots/sprint1/`.
+- **Schritt 2 und 3 live-fähig (22.11.2026):** Die Einrichtung schaltet automatisch in den echten Modus, sobald `NEXT_PUBLIC_SUPABASE_URL` und `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` gesetzt sind. Ohne diese Werte bleibt sie Vorschau, zum Beispiel auf GitHub Pages.
+  - Code-Login per E-Mail (Supabase OTP). Familie anlegen und umbenennen, Kinder anlegen und umbenennen.
+  - Einladungslink: Der Token steht im URL-Fragment und wird sofort aus der Adresszeile entfernt. Der Beitritt als Partner braucht nur den Vornamen.
+  - Wer schon eingerichtet ist, landet direkt in der Zusammenfassung. Eine zweite Familie entsteht nicht.
+  - Fehler erscheinen als kurze deutsche Handlungsanweisung, interne Servermeldungen werden nie angezeigt.
+  - Kindergeräte koppeln: im Live-Modus noch nicht freigeschaltet. Das Einlösen braucht eine Server-Route mit Service-Rolle (nächster Schritt).
+  - Tests: `tests/setup-backend.test.ts`. Dazu `tests/e2e/setup-live.ts` in der CI gegen den echten lokalen Supabase-Stack: Codes kommen aus Mailpit, RPCs und RLS sind echt.
+  - Bundle-Prüfung blockiert jetzt auch `sb_secret_…`-Schlüssel.
+  - Datenbank-Deploy über `db-deploy.yml` (Tag `db/dry-run/…` bzw. `db/apply/…`, Secret `SUPABASE_DB_URL`), danach eine lesende RLS-Prüfung.

@@ -19,7 +19,8 @@ export function cleanName(raw: string): string | null {
 export const validEmail = (raw: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(raw.trim());
 export const validCode = (raw: string) => /^\d{6}$/.test(raw.trim());
 
-export interface Child { key: string; name: string }
+/** `id` is set once the child exists in the database; `savedName` is the name stored there. */
+export interface Child { key: string; name: string; id?: string; savedName?: string }
 export interface SetupState {
   step: Step;
   email: string;
@@ -30,10 +31,17 @@ export interface SetupState {
   children: Child[];
   inviteShared: boolean;
   pairedChildKeys: string[];
+  /** Database ids and stored names once the family exists (so going back renames instead of re-creating). */
+  familyId: string | null;
+  myId: string | null;
+  savedFamilyName: string | null;
+  savedMyName: string | null;
+  /** Invite token when the person joins an existing family (partner flow). */
+  invite: string | null;
 }
 export const initialState: SetupState = {
   step: "konto", email: "", codeSent: false, signedIn: false, familyName: "", myName: "",
-  children: [{ key: "k1", name: "" }], inviteShared: false, pairedChildKeys: []
+  children: [{ key: "k1", name: "" }], inviteShared: false, pairedChildKeys: [], familyId: null, myId: null, savedFamilyName: null, savedMyName: null, invite: null
 };
 
 /** 1-based number of the step for "Schritt n von 5"; the final summary has no number. */
@@ -53,6 +61,7 @@ export function blocker(st: SetupState): string | null {
       if (!st.signedIn) return st.codeSent ? "Bitte den 6-stelligen Code aus der E-Mail eingeben." : "Bitte eine gültige E-Mail-Adresse eingeben.";
       return null;
     case "familie":
+      if (st.invite) return cleanName(st.myName) ? null : "Bitte deinen Vornamen eingeben (bis 60 Zeichen).";
       if (!cleanName(st.familyName)) return "Bitte einen Familiennamen eingeben (bis 60 Zeichen).";
       if (!cleanName(st.myName)) return "Bitte deinen Vornamen eingeben (bis 60 Zeichen).";
       return null;
@@ -78,4 +87,17 @@ export function removeChild(st: SetupState, key: string): SetupState {
 }
 export function renameChild(st: SetupState, key: string, name: string): SetupState {
   return { ...st, children: st.children.map(c => (c.key === key ? { ...c, name } : c)) };
+}
+
+/** Children that still need to be created or renamed in the database. */
+export type ChildWrite = { kind: "add"; key: string; name: string } | { kind: "rename"; key: string; id: string; name: string };
+export function pendingChildWrites(st: SetupState): ChildWrite[] {
+  return namedChildren(st).flatMap((c): ChildWrite[] =>
+    !c.id ? [{ kind: "add" as const, key: c.key, name: c.name }]
+      : c.name !== c.savedName ? [{ kind: "rename" as const, key: c.key, id: c.id, name: c.name }] : []);
+}
+
+/** The partner who joins by invite only enters a first name; family, children and devices belong to the family. */
+export function stepsFor(st: SetupState): readonly Step[] {
+  return st.invite ? (["konto", "familie", "fertig"] as const) : STEPS;
 }

@@ -100,3 +100,11 @@
   .scene, .progress i { transition: none; }
   .crew li { animation: none; }
 }
+
+/* Live mode additions */
+.primary:disabled, .secondary:disabled, .quiet:disabled { opacity: .7; cursor: progress; }
+.spin { animation: spin 900ms linear infinite; }
+@keyframes spin { to { transform: rotate(1turn); } }
+.copy { display: flex; gap: .5rem; }
+.copy input { flex: 1; min-width: 0; font-size: .9rem; }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }

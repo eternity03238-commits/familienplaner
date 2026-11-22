@@ -33,7 +33,8 @@
     "build:pages": "FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web",
     "art:verify": "node --experimental-strip-types scripts/art/verify-assets.ts",
     "build:pages:art": "NEXT_PUBLIC_FAMILYOS_V3_ART=1 NEXT_PUBLIC_ASSET_BASE=/familienplaner FAMILYOS_PAGES_BASE=/familienplaner npm run build -w @familyos/web",
-    "art:export": "node --experimental-strip-types scripts/art/export-originals.ts"
+    "art:export": "node --experimental-strip-types scripts/art/export-originals.ts",
+    "test:e2e:live": "node --experimental-strip-types tests/e2e/setup-live.ts"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",

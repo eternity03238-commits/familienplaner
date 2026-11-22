@@ -5,7 +5,7 @@ import { join } from "node:path";
 const root = new URL("../apps/web/.next/", import.meta.url).pathname;
 const staticDir = join(root, "static");
 if (!existsSync(staticDir)) { console.error("apps/web/.next/static not found: run `npm run build` first."); process.exit(2); }
-const forbidden = [/SERVICE_ROLE/i, /service_role/, /ANTHROPIC_API_KEY/, /GOOGLE_CLIENT_SECRET/, /sk-ant-/, /GOCSPX-/, /-----BEGIN [A-Z ]*PRIVATE KEY-----/, /\.map$/];
+const forbidden = [/SERVICE_ROLE/i, /service_role/, /sb_secret_[A-Za-z0-9]/, /ANTHROPIC_API_KEY/, /GOOGLE_CLIENT_SECRET/, /sk-ant-/, /GOCSPX-/, /-----BEGIN [A-Z ]*PRIVATE KEY-----/, /\.map$/];
 let scanned = 0;
 const problems: string[] = [];
 const walk = (d: string): void => {

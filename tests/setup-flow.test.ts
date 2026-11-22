@@ -58,3 +58,17 @@ test("email and code validation", () => {
   assert.ok(f.validCode("123456"));
   assert.ok(!f.validCode("12345a"));
 });
+
+test("only new or renamed children are written; saved names are not re-sent", () => {
+  let s: f.SetupState = { ...f.initialState, children: [{ key: "k1", name: "Mia", id: "p1", savedName: "Mia" }, { key: "k2", name: "Benjamin", id: "p2", savedName: "Ben" }, { key: "k3", name: " Lea " }, { key: "k4", name: "" }] };
+  assert.deepEqual(f.pendingChildWrites(s), [{ kind: "rename", key: "k2", id: "p2", name: "Benjamin" }, { kind: "add", key: "k3", name: "Lea" }]);
+  s = { ...s, children: s.children.map(c => (c.id ? { ...c, savedName: c.name } : c)) };
+  assert.equal(f.pendingChildWrites(s).length, 1);
+});
+
+test("partner joining by invite only enters a first name", () => {
+  const s: f.SetupState = { ...f.initialState, step: "familie", invite: "x".repeat(32), signedIn: true };
+  assert.deepEqual(f.stepsFor(s), ["konto", "familie", "fertig"]);
+  assert.match(f.blocker(s)!, /Vornamen/);
+  assert.equal(f.blocker({ ...s, myName: "Sam" }), null, "no family name needed when joining");
+});
