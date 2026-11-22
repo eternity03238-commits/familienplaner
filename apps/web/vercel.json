@@ -1,6 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["dub1"],
-  "installCommand": "cd ../.. && npm ci --include=dev --no-audit --no-fund",
+  "regions": [
+    "dub1"
+  ],
+  "installCommand": "d=$PWD; while [ ! -f \"$d/package-lock.json\" ] && [ \"$d\" != / ]; do d=$(dirname \"$d\"); done; cd \"$d\" && npm ci --include=dev --no-audit --no-fund",
   "buildCommand": "next build"
 }
