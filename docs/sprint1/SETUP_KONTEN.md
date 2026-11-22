@@ -38,3 +38,10 @@ Die Datenbankänderungen spielt ein GitHub-Workflow ein (`.github/workflows/db-d
    - **Save**
 2. SMTP und Mailvorlagen werden **nicht** gebraucht.
 3. Authentication → URL Configuration → Site URL: die Vercel-Adresse, sobald es sie gibt.
+
+## 6. Vercel-Einstellungen (Monorepo)
+Settings → Build and Deployment:
+- Framework Preset **Next.js**; Build, Output und Install Command **ohne Override**. Installation und Build stehen in `apps/web/vercel.json`, das Installationsskript in `apps/web/scripts/vercel-install.sh`.
+- Root Directory **`apps/web`**.
+- **„Include files outside the root directory in the Build Step“: Enabled**, danach **Save**. Ohne diesen Schalter fehlen die gemeinsamen Pakete und die Lockdatei, und der Build bricht beim Installieren ab.
+- Nach einer Änderung einen **neuen** Build auslösen, zum Beispiel durch einen Push. Ein „Redeploy“ eines alten Builds kann die alten Einstellungen übernehmen.
