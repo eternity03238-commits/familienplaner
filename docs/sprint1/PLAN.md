@@ -54,4 +54,4 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - Kindergeräte koppeln: im Live-Modus noch nicht freigeschaltet. Das Einlösen braucht eine Server-Route mit Service-Rolle (nächster Schritt).
   - Tests: `tests/setup-backend.test.ts`. Dazu `tests/e2e/setup-live.ts` in der CI gegen den echten lokalen Supabase-Stack: Codes kommen aus Mailpit, RPCs und RLS sind echt.
   - Bundle-Prüfung blockiert jetzt auch `sb_secret_…`-Schlüssel.
-  - Datenbank-Deploy über `db-deploy.yml` (Tag `db/dry-run/…` bzw. `db/apply/…`, Secret `SUPABASE_DB_URL`), danach eine lesende RLS-Prüfung.
+  - Datenbank-Deploy über `db-deploy.yml` (Push auf Branch `db-deploy/dry-run` bzw. `db-deploy/apply`, Secret `SUPABASE_DB_URL`), danach eine lesende RLS-Prüfung.

@@ -1,6 +1,6 @@
 # Applies packages/database/migrations to the owner's Supabase project (Frankfurt).
 # Never runs on ordinary pushes. Triggers:
-#   * tag push `db/dry-run/<name>` → preview only, `db/apply/<name>` → apply (only after the owner's go in chat/PR)
+#   * push to branch `db-deploy/dry-run` → preview only, `db-deploy/apply` → apply (only after the owner's go)
 #   * workflow_dispatch (available once this file is on the default branch)
 # Needs the repository secret SUPABASE_DB_URL (Session pooler URI incl. password), set by the owner in
 # Settings → Secrets and variables → Actions. The value is masked in logs and never leaves GitHub.
@@ -8,7 +8,7 @@ name: "Supabase: Migrationen anwenden"
 
 on:
   push:
-    tags: ["db/dry-run/*", "db/apply/*"]
+    branches: ["db-deploy/dry-run", "db-deploy/apply"]
   workflow_dispatch:
     inputs:
       mode:
@@ -27,12 +27,12 @@ concurrency:
 
 jobs:
   migrate:
-    name: Migrationen (${{ startsWith(github.ref, 'refs/tags/db/apply/') && 'apply' || inputs.mode || 'dry-run' }})
+    name: Migrationen (${{ github.ref == 'refs/heads/db-deploy/apply' && 'apply' || inputs.mode || 'dry-run' }})
     runs-on: ubuntu-latest
     environment: supabase-production
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-      MODE: ${{ startsWith(github.ref, 'refs/tags/db/apply/') && 'apply' || inputs.mode || 'dry-run' }}
+      MODE: ${{ github.ref == 'refs/heads/db-deploy/apply' && 'apply' || inputs.mode || 'dry-run' }}
     steps:
       - uses: actions/checkout@v4
       - name: Secret vorhanden?
