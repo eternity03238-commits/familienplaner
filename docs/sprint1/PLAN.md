@@ -55,3 +55,6 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - Tests: `tests/setup-backend.test.ts`. Dazu `tests/e2e/setup-live.ts` in der CI gegen den echten lokalen Supabase-Stack: Codes kommen aus Mailpit, RPCs und RLS sind echt.
   - Bundle-Prüfung blockiert jetzt auch `sb_secret_…`-Schlüssel.
   - Datenbank-Deploy über `db-deploy.yml` (Push auf Branch `db-deploy/dry-run` bzw. `db-deploy/apply`, Secret `SUPABASE_DB_URL`), danach eine lesende RLS-Prüfung.
+- **Datenbank eingespielt (22.11.2026, Freigabe der Inhaberin):** 0001 bis 0004 im Supabase-Projekt (eu-west-1) über `db-deploy.yml`, Lauf auf Commit `9918e8d`.
+  - Prüfung danach: 27 Tabellen, 0 ohne RLS, 0 öffentliche Funktionen für `anon` ausführbar.
+  - Noch keine Nutzerdaten. Es gibt noch keinen App-Deploy mit Live-Modus.
