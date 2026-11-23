@@ -16,7 +16,11 @@ Ein AI-first Familienplaner, der Kalender, Schule, Sport, Lernzeiten und Projekt
 ## MVP-Funktionen (priorisierte Reihenfolge)
 P0: Anmeldung/Eltern- und Kinderprofile; getrennte Rechte; Familienkalender; Aufgaben und Routinen; Aufgaben abhaken; responsive Tagesansicht.
 P1: Hausaufgaben, Klassenarbeiten, Projekte, Sport, Fachzuordnung; manuelle Eingabe und quellmarkierter Import; verlässliche Kalenderintegration.
-P2: AI-Lernplanvorschläge, Elternfreigaben, automatische Umplanung, Wochenzusammenfassung.
+P2: AI-Lernplanvorschläge, passende Lernmethoden in Explore, Elternfreigaben, automatische Umplanung, Wochenzusammenfassung.
+
+## Lernmethoden in Explore
+
+Zu einer Hausaufgabe, Klassenarbeit oder einem Projekt schlägt FamilyOS eine kurze Methode vor, die zum Lernziel passt. Klasse 5 startet mit Abruffragen und Karteikarten, verteilten Wiederholungen, Sachtext-Leseschritten und erklärten Lösungsbeispielen. Das Kind kann die Methode ausprobieren, wechseln oder überspringen. Vorgeschlagene Wiederholungen folgen den bestehenden Planungs- und Freigaberegeln. [Lernmethoden, Forschungsgrundlagen und Akzeptanzkriterien](docs/learning/LERNMETHODEN.md).
 
 ## Später, explizit NICHT Sprint 0
 Patchwork-Freigabeoberfläche, mehrere Haushalte, fremde Gast-/Betreuerkonten, weitere Kalender-/Login-Provider, Schul-Autoconnectors, Foto-/OCR-Pipelines, App-Store-Apps, öffentliche Multi-Familien-Plattform.
