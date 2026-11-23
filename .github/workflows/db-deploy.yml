@@ -1,0 +1,84 @@
+# Applies packages/database/migrations to the owner's Supabase project (Frankfurt).
+# Never runs on ordinary pushes. Triggers:
+#   * push to branch `db-deploy/dry-run` → preview only, `db-deploy/apply` → apply (only after the owner's go)
+#   * workflow_dispatch (available once this file is on the default branch)
+# Needs the repository secret SUPABASE_DB_URL (Session pooler URI incl. password), set by the owner in
+# Settings → Secrets and variables → Actions. The value is masked in logs and never leaves GitHub.
+name: "Supabase: Migrationen anwenden"
+
+on:
+  push:
+    branches: ["db-deploy/dry-run", "db-deploy/apply"]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "dry-run zeigt nur, was passieren würde; apply spielt die Migrationen ein"
+        required: true
+        default: dry-run
+        type: choice
+        options: [dry-run, apply]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-migrations
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    name: Migrationen (${{ github.ref == 'refs/heads/db-deploy/apply' && 'apply' || inputs.mode || 'dry-run' }})
+    runs-on: ubuntu-latest
+    environment: supabase-production
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      MODE: ${{ github.ref == 'refs/heads/db-deploy/apply' && 'apply' || inputs.mode || 'dry-run' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Secret vorhanden?
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "::error::Secret SUPABASE_DB_URL fehlt (Settings → Secrets and variables → Actions)."; exit 1
+          fi
+          case "$SUPABASE_DB_URL" in
+            *pooler.supabase.com:5432/*) ;;
+            *) echo "::error::Bitte die 'Session pooler'-Adresse verwenden (…pooler.supabase.com:5432/postgres)."; exit 1 ;;
+          esac
+      - name: Nur echte Migrationen (keine Test-Shims, keine Seeds)
+        run: |
+          ls packages/database/migrations
+          ! grep -l "familyos.test\|create schema if not exists auth" packages/database/migrations/*.sql
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Stand vorher
+        run: supabase migration list --db-url "$SUPABASE_DB_URL"
+      - name: Vorschau (dry-run)
+        run: supabase db push --db-url "$SUPABASE_DB_URL" --dry-run
+      - name: Anwenden
+        if: env.MODE == 'apply'
+        run: supabase db push --db-url "$SUPABASE_DB_URL" --yes
+      - name: Prüfung nach dem Anwenden (nur lesend)
+        if: env.MODE == 'apply'
+        run: |
+          supabase migration list --db-url "$SUPABASE_DB_URL"
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -At <<'SQL'
+          \echo 'Tabellen in public ohne RLS (muss 0 sein):'
+          select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity;
+          \echo 'Tabellen in public (erwartet 28):'
+          select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind = 'r';
+          \echo 'Für anon ausführbare public-Funktionen (muss 0 sein):'
+          select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+            where n.nspname = 'public' and has_function_privilege('anon', p.oid, 'EXECUTE');
+          do $$ begin
+            if exists (select 1 from pg_class c join pg_namespace n on n.oid = c.relnamespace
+                       where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity) then
+              raise exception 'RLS missing on a public table';
+            end if;
+            if exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                       where n.nspname = 'public' and has_function_privilege('anon', p.oid, 'EXECUTE')) then
+              raise exception 'anon can execute a public function';
+            end if;
+          end $$;
+          SQL

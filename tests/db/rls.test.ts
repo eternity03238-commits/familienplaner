@@ -119,13 +119,13 @@ test("expired and revoked grants deny access", async () => {
     await asUser(who)(async q => assert.equal((await q.rows("select 1 from public.tasks")).length, 0, who));
 });
 
-test("adult private calendar events are private; no blanket guardian access", async () => {
+test("adult private events stay private; guardians see all events of their children (ADR-0007)", async () => {
   await asUser("ad1")(async q => {
     const ev = await ids(q, "select id from public.calendar_events");
     assert.ok(ev.includes(f.event.ad1Private));
     assert.ok(!ev.includes(f.event.ad2Private), "other adult's private event must stay private");
     assert.ok(ev.includes(f.event.kaShared), "guardian sees shared child events");
-    assert.ok(!ev.includes(f.event.kaPrivate), "child's private event stays private (design decision, see report)");
+    assert.ok(ev.includes(f.event.kaPrivate), "guardians see every event of their child (ADR-0007)");
   });
   await asUser("ad2")(async q => {
     const ev = await ids(q, "select id from public.calendar_events");
@@ -134,13 +134,20 @@ test("adult private calendar events are private; no blanket guardian access", as
   await asUser("ka")(async q => {
     assert.deepEqual(await ids(q, "select id from public.calendar_events"), sorted(f.event.kaShared, f.event.kaPrivate));
   });
+  await asUser("kb")(async q => assert.deepEqual(await ids(q, "select id from public.calendar_events"), [], "sibling sees nothing of child A"));
+  await asUser("outsider")(async q => assert.deepEqual(await ids(q, "select id from public.calendar_events"), []));
+  // A scoped grantee without guardianship still only sees shared events, and only with the schedule scope.
+  await asUser("grSports")(async q => assert.ok(!(await ids(q, "select id from public.calendar_events")).includes(f.event.kaPrivate)));
 });
 
 test("tables without any read policy stay invisible to authenticated users", async () => {
   await asUser("ad1")(async q => {
     for (const t of ["access_grants", "child_guardianships", "families", "households", "family_memberships", "household_memberships",
-      "schools", "school_enrollments", "subjects", "task_completions", "routines", "integration_connections", "external_resource_mappings", "sync_runs", "audit_events"])
+      "schools", "school_enrollments", "subjects", "task_completions", "routines", "external_resource_mappings", "sync_runs", "audit_events"])
       assert.equal((await q.fails(`select 1 from public.${t}`)).code, "42501", t);
+    // 0005: only the own connections are readable (status columns only).
+    const foreign = await q.rows("select id from public.integration_connections where owner_person_id <> app_private.current_person_id()");
+    assert.deepEqual(foreign, []);
   });
 });
 

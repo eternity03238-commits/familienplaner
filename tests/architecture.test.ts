@@ -56,7 +56,11 @@ test("connectors and auth packages do not import the database package directly (
 test("privileged secrets are never referenced from web app code or exposed via NEXT_PUBLIC_", () => {
   const web = all.filter(p => rel(p).startsWith("apps/web/") && /\.(tsx?|mjs|js|json|css|webmanifest)$/.test(p) && !rel(p).includes("package-lock") && !rel(p).endsWith("package.json"));
   assert.ok(web.length > 0);
-  for (const file of web) assert.doesNotMatch(read(file), /SERVICE_ROLE|ANTHROPIC_API_KEY|GOOGLE_CLIENT_SECRET|service_role/, rel(file));
+  // Since Sprint 1 the server holds secrets, but only in apps/web/lib/server (guarded by `server-only`).
+  const serverDir = (f: string) => rel(f).startsWith("apps/web/lib/server/");
+  for (const file of web.filter(f => !serverDir(f))) assert.doesNotMatch(read(file), /SERVICE_ROLE|SUPABASE_SECRET_KEY|ANTHROPIC_API_KEY|GOOGLE_CLIENT_SECRET|service_role/, rel(file));
+  for (const file of web.filter(serverDir)) assert.match(read(file), /^import "server-only";/, `${rel(file)} must import "server-only" first`);
+  for (const file of web.filter(f => /^"use client"/.test(read(f)))) assert.doesNotMatch(read(file), /lib\/server\//, `${rel(file)}: client code must not import server modules`);
   const env = read(join(ROOT, ".env.example"));
   for (const line of env.split("\n").filter(l => /^[A-Z_]+=/.test(l))) {
     const [key, value = ""] = line.split("=");

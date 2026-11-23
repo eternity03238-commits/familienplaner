@@ -73,12 +73,16 @@ jobs:
         with:
           version: latest
       - name: Start local stack (no production project, no secrets)
-        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,storage-api,mailpit
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,storage-api
       - name: Apply migrations from scratch
         run: supabase db reset
       - name: RLS and integrity tests against the real stack
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
         run: npm run test:db
+      - name: Live setup flow end-to-end (email + password, RPCs, RLS)
+        run: |
+          export SUPABASE_ANON_KEY="$(supabase status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
+          npm run test:e2e:live
       - if: always()
         run: supabase stop --no-backup
