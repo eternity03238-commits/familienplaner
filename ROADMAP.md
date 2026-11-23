@@ -22,7 +22,8 @@ Für dieses Projekt: **AI-driven Development Life Cycle** (projektinterner Begri
 
 ## Sprint 4 — KI-Lernplanung
 - Validierte strukturierte KI-Vorschläge, Planungsengine, harte Zeitkonflikte, kindgerechte Lastgrenzen, Approval-Flow.
-- Gate: keine ungefragten Kalender-Mutationen; nachvollziehbare Entscheidungen.
+- Redaktioneller [Lernmethodenkatalog](docs/learning/LERNMETHODEN.md), kurze Lernkarten in Explore und optionale Wiederholungsvorschläge in Command.
+- Gate: nachvollziehbare Methodenwahl nach Lernziel, freiwillige Teilnahme und Übernahme in den Kalender erst nach Freigabe.
 
 ## Sprint 5 — Connectoren / Automation
 - Offiziell zugängliche Schul-APIs/Feeds (nach Prüfen), nachvollziehbare Jobs, Benachrichtigungen, Foto-/Dokumentimport.
