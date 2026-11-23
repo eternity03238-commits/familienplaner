@@ -1,0 +1,104 @@
+/*
+ * FamilyOS Design System V2 — canonical semantic tokens.
+ * Source: docs/design/DESIGN_SYSTEM_V2.md (design/familyos-orbit-wow @ b87daa9, src/styles/tokens.css).
+ * Values from V2 are kept unchanged; additions are marked "(+)" and documented in docs/design/INTEGRATION_V2.md.
+ * Contrast of every pair the UI uses is asserted by tests/design-tokens.test.ts.
+ *
+ * Axes: data-fo-theme="dark" (default) | "light"; data-fo-role="child" (Explore) | "parent" (Command).
+ * Role and theme are DISPLAY preferences only — never a permission (V2 "Roles and themes").
+ */
+:root {
+  color-scheme: dark;
+  /* (+) Text and scrim on top of the scenic original art; identical in both themes because the art is always dark at the text edge. */
+  --fo-on-art: #FFFFFF;
+  /* (+) Dark text on white surfaces that stay white in both themes (e.g. the Google sign-in button). */
+  --fo-art-ink: #1F1F1F;
+  --fo-art-scrim: #0B0E1DF0;
+  --fo-canvas: #0B0E1D;
+  --fo-surface: #181D33;
+  --fo-surface-raised: #222741;
+  --fo-surface-hover: #2A3150;
+  --fo-ink: #F7F7FF;
+  --fo-ink-muted: #C1C9DE;
+  --fo-ink-subtle: #A8B2CD;
+  --fo-stroke: #46506C;          /* decorative dividers only (2.4:1) */
+  --fo-focus: #FFC879;
+  --fo-interactive: #AF8CFF;
+  --fo-interactive-ink: #181029;
+  --fo-interactive-tint: #2B2452; /* (+) selected/pressed backgrounds */
+  --fo-success: #78E0BC;
+  --fo-success-ink: #093629;
+  --fo-success-tint: #173A34;     /* (+) */
+  --fo-warning: #FFCD8C;
+  --fo-warning-ink: #3D2A0F;
+  --fo-warning-tint: #3A2D23;     /* (+) */
+  --fo-danger: #FF9FAF;
+  --fo-danger-ink: #411A23;
+  --fo-accent-school: #B69AF6;
+  --fo-accent-sport: #76DDC5;
+  --fo-accent-family: #F2C48E;
+  --fo-hatch: #2A3150;            /* (+) private/hidden slots */
+
+  --fo-font: "DM Sans Variable", "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --fo-radius-sm: 10px;
+  --fo-radius-md: 14px;
+  --fo-radius-lg: 18px;
+  --fo-radius-xl: 24px;
+  --fo-space-1: 4px;
+  --fo-space-2: 8px;
+  --fo-space-3: 12px;
+  --fo-space-4: 16px;
+  --fo-space-5: 20px;
+  --fo-space-6: 24px;
+  --fo-space-8: 32px;
+  --fo-type-label: 11px;
+  --fo-type-small: 13px;
+  --fo-type-body: 15px;
+  --fo-type-title: 28px;
+  --fo-ease: cubic-bezier(.2, .7, .2, 1);
+  --fo-motion-fast: 150ms;
+  --fo-motion-normal: 220ms;
+  --fo-ring: 0 0 0 3px var(--fo-focus);
+  --fo-touch: 44px;                /* (+) */
+}
+
+[data-fo-theme="light"] {
+  color-scheme: light;
+  --fo-canvas: #F5F3F0;
+  --fo-surface: #FFFFFF;
+  --fo-surface-raised: #ECEAF2;
+  --fo-surface-hover: #E5E1EF;
+  --fo-ink: #191A2A;
+  --fo-ink-muted: #4A5064;
+  --fo-ink-subtle: #626B80;
+  --fo-stroke: #BCC2D0;
+  --fo-interactive: #6345B4;
+  --fo-interactive-ink: #FFFFFF;
+  --fo-interactive-tint: #ECE6FA;
+  --fo-success: #1B735B;
+  --fo-success-ink: #FFFFFF;
+  --fo-success-tint: #E2F2EC;
+  --fo-warning: #8F5518;
+  --fo-warning-ink: #FFFFFF;
+  --fo-warning-tint: #F8EBDA;
+  --fo-danger: #B82B47;
+  --fo-danger-ink: #FFFFFF;
+  --fo-focus: #6D4BC7;
+  --fo-accent-school: #6E4FC7;     /* (+) light counterparts, ≥4.8:1 */
+  --fo-accent-sport: #16735F;
+  --fo-accent-family: #8A5414;
+  --fo-hatch: #E5E1EF;
+}
+
+[data-fo-role="parent"] { --fo-radius-lg: 16px; --fo-interactive: #B9A0ED; }
+[data-fo-role="parent"][data-fo-theme="light"] { --fo-interactive: #6345B4; }
+[data-fo-role="child"] { --fo-radius-lg: 20px; }
+
+/* Explore "Tech" look: same grammar, cooler accent (display preference). */
+[data-fo-look="tech"] { --fo-interactive: #7FD6E8; --fo-interactive-ink: #08222A; --fo-interactive-tint: #16343E; }
+[data-fo-look="tech"][data-fo-theme="light"] { --fo-interactive: #0F6577; --fo-interactive-ink: #FFFFFF; --fo-interactive-tint: #E0F1F4; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --fo-motion-fast: 0ms; --fo-motion-normal: 0ms; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

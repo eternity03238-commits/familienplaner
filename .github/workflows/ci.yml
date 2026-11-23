@@ -1,0 +1,88 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Unit, security, types, lint, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Dependency audit (high and critical fail the build)
+        run: npm run audit:deps
+      - name: Unit, domain, planning, auth and architecture/security tests
+        run: npm test
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - name: Browser bundle contains no secrets or source maps
+        run: npm run security:bundle
+      - name: Smoke test of the built app (security headers, health, 404s)
+        run: npm run smoke:web
+
+  database:
+    name: Migrations, RLS and integrity tests (PostgreSQL 16 + Supabase compat shim)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_ADMIN_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Create disposable DB (shim + migrations)
+        run: echo "DATABASE_URL=$(npm run -s test:db:prepare | tail -1)" >> "$GITHUB_ENV"
+      - run: npm run test:db
+      - name: Migration rollback strategy
+        run: npm run test:db:rollback
+
+  # Real Supabase local stack (Docker). NOT yet verified: the Sprint 0 sandbox could not pull the Supabase images.
+  # The first CI run of this job is the open verification step documented in docs/sprint0/REPORT.md.
+  supabase-local:
+    name: Migrations and RLS tests on the real Supabase local stack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local stack (no production project, no secrets)
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,storage-api
+      - name: Apply migrations from scratch
+        run: supabase db reset
+      - name: RLS and integrity tests against the real stack
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        run: npm run test:db
+      - name: Live setup flow end-to-end (email + password, RPCs, RLS)
+        run: |
+          export SUPABASE_ANON_KEY="$(supabase status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
+          npm run test:e2e:live
+      - if: always()
+        run: supabase stop --no-backup

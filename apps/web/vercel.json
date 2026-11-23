@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": [
+    "dub1"
+  ],
+  "installCommand": "sh \"$(ls apps/web/scripts/vercel-install.sh scripts/vercel-install.sh 2>/dev/null | head -n 1)\"",
+  "buildCommand": "next build"
+}
