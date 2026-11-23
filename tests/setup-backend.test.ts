@@ -43,3 +43,13 @@ test("preview backend never needs a network", async () => {
   assert.equal(await b.loadFamily(), null);
   assert.equal(await b.createFamily("A", "B"), "preview-family");
 });
+
+test("Google sign-in return: code accepted strictly, errors become German next steps", async () => {
+  const { readOAuthReturn } = await import("../apps/web/lib/setup/backend.ts");
+  assert.deepEqual(readOAuthReturn("?code=abc123-DEF_456"), { code: "abc123-DEF_456" });
+  assert.equal(readOAuthReturn("?code=<script>"), null);
+  assert.match((readOAuthReturn("?error=access_denied&error_description=x") as { error: string }).error, /abgebrochen/);
+  assert.match((readOAuthReturn("?error=server_error") as { error: string }).error, /nicht geklappt/);
+  assert.equal(readOAuthReturn(""), null);
+  assert.match(explain({ code: "provider_disabled" }), /Google ist in Supabase/);
+});

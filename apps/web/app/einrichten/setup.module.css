@@ -113,3 +113,8 @@
 .segment button { font: inherit; min-height: 2.75rem; border: 0; border-radius: calc(var(--fo-radius-md) - .2rem); background: none; color: var(--fo-ink-muted); font-weight: 650; cursor: pointer; }
 .segment button[aria-pressed="true"] { background: var(--fo-surface-raised); color: var(--fo-ink); box-shadow: 0 0 0 1px var(--fo-stroke); }
 .hint { color: var(--fo-ink-muted); font-size: .85rem; }
+
+/* Google sign-in: Google's own neutral button style (white, logo, dark text) in both themes. */
+.google { display: flex; align-items: center; justify-content: center; gap: .75rem; width: 100%; min-height: 3rem; padding: .75rem 1rem; border-radius: var(--fo-radius-md); border: 1px solid var(--fo-stroke); background: var(--fo-on-art); color: var(--fo-art-ink); font: inherit; font-weight: 700; cursor: pointer; }
+.google:disabled { opacity: .7; cursor: progress; }
+.emailBox { display: grid; gap: 1.1rem; padding-top: .4rem; border-top: 1px solid var(--fo-stroke); }

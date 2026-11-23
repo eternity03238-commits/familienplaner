@@ -13,6 +13,10 @@ export interface SetupBackend {
   /** Creates the account and signs in. Requires "Confirm email" to be off (no mail is sent). */
   signUp(email: string, password: string): Promise<void>;
   signIn(email: string, password: string): Promise<void>;
+  /** Leaves the page for Google (live) and comes back to /einrichten with ?code=…; preview signs in directly. */
+  signInWithGoogle(returnUrl: string): Promise<"redirected" | "signed-in">;
+  /** Finishes the Google sign-in after the redirect (PKCE code exchange). */
+  completeGoogle(code: string): Promise<void>;
   loadFamily(): Promise<ExistingFamily | null>;
   createFamily(familyName: string, myName: string): Promise<string>;
   addChild(familyId: string, name: string): Promise<string>;
@@ -33,6 +37,8 @@ export function explain(e: unknown): string {
   if (o.code === "user_already_exists" || o.code === "email_exists" || /already registered/i.test(msg)) return "Für diese E-Mail-Adresse gibt es schon ein Konto. Wähle „Ich habe ein Konto“.";
   if (o.code === "weak_password" || /password should/i.test(msg)) return "Das Passwort ist zu kurz oder zu einfach. Nimm mindestens 8 Zeichen oder den Vorschlag deines iPhones.";
   if (o.code === "email_not_confirmed" || o.code === "confirmation_required") return "Die Anmeldung ist noch nicht freigeschaltet: In Supabase muss „Confirm email“ ausgeschaltet sein.";
+  if (o.code === "provider_disabled" || /provider is not enabled/i.test(msg)) return "Die Anmeldung mit Google ist in Supabase noch nicht eingeschaltet.";
+  if (/code verifier|flow_state|bad_code_verifier|invalid flow state/i.test(msg)) return "Die Google-Anmeldung hat zu lange gedauert oder wurde in einem anderen Fenster gestartet. Bitte noch einmal tippen.";
   if (o.code === "signup_disabled" || /signups not allowed/i.test(msg)) return "Neue Konten sind gerade gesperrt. Bitte in Supabase die Registrierung erlauben.";
   if (o.code === "22023" && /invite/i.test(msg)) return "Diese Einladung ist abgelaufen oder wurde schon benutzt. Bitte um einen neuen Link.";
   if (o.code === "22023") return "Bitte die Eingabe prüfen: Namen dürfen 1 bis 60 Zeichen haben.";
@@ -50,6 +56,8 @@ export function previewBackend(): SetupBackend {
     mode: "preview",
     async signUp() { await wait(250); },
     async signIn() { await wait(250); },
+    async signInWithGoogle() { await wait(250); return "signed-in"; },
+    async completeGoogle() { await wait(100); },
     async loadFamily() { return null; },
     async createFamily() { await wait(200); return "preview-family"; },
     async addChild() { await wait(80); return `preview-child-${++n}`; },
@@ -76,6 +84,11 @@ export function liveBackend(sb: SupabaseClient): SetupBackend {
       if (!data?.session) throw new SetupError(explain({ code: "confirmation_required" }));
     },
     async signIn(email, password) { await call(sb.auth.signInWithPassword({ email: email.trim(), password })); },
+    async signInWithGoogle(returnUrl) {
+      await call(sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: returnUrl, queryParams: { prompt: "select_account" } } }));
+      return "redirected";
+    },
+    async completeGoogle(code) { await call(sb.auth.exchangeCodeForSession(code)); },
     async loadFamily() {
       const rows = await call<{ family_id: string; family_name: string; person_id: string; display_name: string; role: string; is_me: boolean }[]>(sb.rpc("my_family"));
       if (!rows?.length) return null;
@@ -104,4 +117,15 @@ export const inviteLink = (origin: string, base: string, token: string) => `${or
 export function readInviteToken(hash: string): string | null {
   const m = /(?:^#|&)einladung=([A-Za-z0-9_=-]{16,80})(?:&|$)/.exec(hash);
   return m ? decodeURIComponent(m[1]) : null;
+}
+
+/** Reads the result of a Google sign-in redirect from the query string (code or a German error). */
+export function readOAuthReturn(search: string): { code: string } | { error: string } | null {
+  const q = new URLSearchParams(search);
+  const code = q.get("code");
+  if (code && /^[A-Za-z0-9_-]{8,512}$/.test(code)) return { code };
+  if (q.get("error") || q.get("error_description")) {
+    return { error: q.get("error") === "access_denied" ? "Anmeldung mit Google abgebrochen. Du kannst es jederzeit noch einmal versuchen." : "Die Anmeldung mit Google hat nicht geklappt. Bitte noch einmal versuchen." };
+  }
+  return null;
 }

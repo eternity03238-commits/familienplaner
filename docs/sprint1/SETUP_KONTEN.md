@@ -52,3 +52,8 @@ Settings → Build and Deployment:
 3. Client vom Typ **Webanwendung** anlegen. Weiterleitungs-URI: `https://<feste Vercel-Adresse>/api/google/callback`.
 4. In Vercel eintragen: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SUPABASE_SECRET_KEY` (`sb_secret_…`). Optional `GOOGLE_REDIRECT_URI` mit genau der Adresse aus Schritt 3, falls die App unter mehreren Adressen geöffnet wird. Danach neu deployen.
 5. Hinweis: Im Testing-Modus muss man sich nach 7 Tagen neu mit Google verbinden. Die App zeigt das an.
+
+## 8. Mit Google anmelden (Supabase)
+1. Supabase → Authentication → Sign In / Providers → **Google**: aktivieren, dieselbe Client-ID und denselben Clientschlüssel wie in Vercel eintragen → Save. Die dort angezeigte **Callback URL** kopieren (`https://<ref>.supabase.co/auth/v1/callback`).
+2. Google Cloud → Clients → `FamilyOS Vercel` → bei „Autorisierte Weiterleitungs-URIs“ zusätzlich diese Callback URL eintragen → Speichern.
+3. Supabase → Authentication → URL Configuration: **Site URL** = feste Vercel-Adresse. **Redirect URLs** → „Add URL“: `https://<feste Vercel-Adresse>/**`.

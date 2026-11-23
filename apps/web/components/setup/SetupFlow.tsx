@@ -10,7 +10,7 @@ import { ArrowLeft, ArrowRight, Check, Copy, Loader2, Plus, QrCode, Share2, Smar
 import { artUrl } from "../../lib/art/paths.ts";
 import { usePrefs } from "../Prefs.tsx";
 import * as flow from "../../lib/setup/flow.ts";
-import { inviteLink, readInviteToken, setupBackend, SetupError, type SetupBackend } from "../../lib/setup/backend.ts";
+import { inviteLink, readInviteToken, readOAuthReturn, setupBackend, SetupError, type SetupBackend } from "../../lib/setup/backend.ts";
 import { supabaseConfig } from "../../lib/supabase/browser.ts";
 import styles from "../../app/einrichten/setup.module.css";
 
@@ -18,7 +18,13 @@ const ASSET_BASE = process.env.NEXT_PUBLIC_ASSET_BASE ?? "";
 /** Build-time decision (public env vars are inlined), identical on server and client: no hydration mismatch. */
 const LIVE = supabaseConfig() !== null;
 /** Invite token captured once from the URL fragment on the client; the server snapshot is always null. */
-const INVITE = typeof window === "undefined" ? null : readInviteToken(window.location.hash);
+const INVITE_KEY = "familyos.invite";
+/** Invite token from the URL fragment, or kept across the Google sign-in round trip (this tab only). */
+const INVITE = typeof window === "undefined" ? null : readInviteToken(window.location.hash) ?? (() => {
+  try { const t = sessionStorage.getItem(INVITE_KEY); sessionStorage.removeItem(INVITE_KEY); return t ? readInviteToken(`#einladung=${t}`) : null; } catch { return null; }
+})();
+/** Result of returning from Google (?code=… or ?error=…), captured once at page load. */
+const OAUTH = typeof window === "undefined" ? null : readOAuthReturn(window.location.search);
 const noSubscribe = () => () => {};
 let backendInstance: SetupBackend | null = null;
 const getBackend = () => (backendInstance ??= setupBackend());
@@ -41,10 +47,30 @@ export function SetupFlow() {
   // Joining by invite is part of the state; the URL token only seeds it.
   const view: flow.SetupState = inviteToken && st.invite === null && !st.familyId ? { ...st, invite: inviteToken } : st;
 
-  // Remove the token from the address bar right away (history, screenshots, shoulder surfing).
+  const [showEmail, setShowEmail] = useState(false);
+  const oauth = useSyncExternalStore(noSubscribe, () => OAUTH, () => null);
+
+  // Remove invite tokens and OAuth codes from the address bar right away (history, screenshots, shoulder surfing).
   useEffect(() => {
-    if (INVITE) history.replaceState(null, "", window.location.pathname + window.location.search);
+    if (INVITE || OAUTH) history.replaceState(null, "", window.location.pathname);
   }, []);
+
+  // Coming back from Google: finish the sign-in, then continue like any other sign-in.
+  const handled = useRef(false);
+  useEffect(() => {
+    if (handled.current || !oauth) return;
+    handled.current = true;
+    void Promise.resolve().then(() => {
+      if ("error" in oauth) { setFailure(oauth.error); return; }
+      void run(async b => { await b.completeGoogle(oauth.code); await afterSignIn(b); });
+    });
+  });
+
+  const google = () => void run(async b => {
+    if (view.invite) { try { sessionStorage.setItem(INVITE_KEY, view.invite); } catch { /* private mode: invite link must be reopened */ } }
+    const r = await b.signInWithGoogle(`${window.location.origin}${process.env.NEXT_PUBLIC_ASSET_BASE ?? ""}/einrichten/`);
+    if (r === "signed-in") await afterSignIn(b);
+  });
 
   // Move focus to the new step's heading so screen readers announce it (not on first load).
   useEffect(() => {
@@ -189,9 +215,15 @@ export function SetupFlow() {
           <form onSubmit={submit} noValidate>
             {st.step === "konto" && <>
               <Title innerRef={heading}>{view.invite ? "Du wurdest eingeladen" : "Willkommen bei FamilyOS"}</Title>
-              <p>{st.accountMode === "neu"
-                ? (view.invite ? "Leg dein Konto an, dann bist du gleich in eurer Familie." : "Leg einmal dein Konto an. Dein iPhone merkt sich das Passwort, danach reicht Face ID.")
-                : "Schön, dass du wieder da bist."}</p>
+              <p>{view.invite ? "Melde dich an, dann bist du gleich in eurer Familie." : "Melde dich mit deinem Google-Konto an. Ein neues Passwort brauchst du nicht."}</p>
+              <button type="button" className={styles.google} onClick={google} disabled={busy} aria-busy={busy}>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+                Mit Google anmelden
+              </button>
+              <button type="button" className={styles.quiet} aria-expanded={showEmail} aria-controls="email-login" onClick={() => { setFailure(null); setShowEmail(v => !v); }}>
+                {showEmail ? "E-Mail-Anmeldung ausblenden" : "Lieber mit E-Mail und Passwort"}
+              </button>
+              {showEmail && <div id="email-login" className={styles.emailBox}>
               <div className={styles.segment} role="group" aria-label="Konto">
                 <button type="button" aria-pressed={st.accountMode === "neu"} onClick={() => { setTouched(false); setFailure(null); setSt(s => ({ ...s, accountMode: "neu" })); }}>Neu hier</button>
                 <button type="button" aria-pressed={st.accountMode === "login"} onClick={() => { setTouched(false); setFailure(null); setSt(s => ({ ...s, accountMode: "login" })); }}>Ich habe ein Konto</button>
@@ -206,6 +238,7 @@ export function SetupFlow() {
                   minLength={flow.PASSWORD_MIN} maxLength={72} value={password} onChange={e => setPassword(e.target.value)} />}
               </Field>
               <Primary busy={busy}>{st.accountMode === "neu" ? "Konto anlegen" : "Anmelden"}</Primary>
+              </div>}
             </>}
 
             {st.step === "familie" && view.invite && <>
