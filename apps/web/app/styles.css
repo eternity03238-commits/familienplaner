@@ -338,3 +338,14 @@ button, input { font: inherit; color: inherit; }
 .fo-live-connections h2 { font-size: 19px; }
 .fo-live-how { margin: 0; padding-inline-start: 1.2em; display: grid; gap: 4px; }
 .fo-live-link { display: inline-flex; align-items: center; min-height: 44px; color: var(--fo-interactive); font-weight: 700; }
+.fo-live-events { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.fo-live-events li { display: grid; grid-template-columns: 6.5em 1fr; gap: var(--fo-space-3); padding: var(--fo-space-3) 0; border-bottom: 1px solid var(--fo-stroke); }
+.fo-live-events li > span:last-child { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.fo-live-events small { color: var(--fo-ink-muted); font-size: var(--fo-type-small); }
+.fo-live-events__time { color: var(--fo-ink-muted); font-variant-numeric: tabular-nums; font-size: var(--fo-type-small); padding-top: 2px; }
+.fo-live-google { display: grid; gap: var(--fo-space-3); }
+.fo-live-google__row { display: grid; gap: var(--fo-space-2); }
+.fo-live-google__row p { overflow-wrap: anywhere; }
+.fo-live-google__actions { display: flex; flex-wrap: wrap; gap: var(--fo-space-2); }
+.fo-live-google .fo-button { display: inline-flex; align-items: center; gap: 8px; }
+.fo-live-google .fo-status { display: block; padding: var(--fo-space-2) var(--fo-space-3); border-radius: var(--fo-radius-md); }

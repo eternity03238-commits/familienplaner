@@ -14,7 +14,7 @@ test("every public table has RLS enabled AND forced", async () => {
       where n.nspname = 'public' and c.relkind in ('r','p') and not (c.relrowsecurity and c.relforcerowsecurity)`);
     assert.deepEqual(bad, []);
     const count = await q.rows<{ n: string }>(`select count(*)::text n from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname='public' and c.relkind='r'`);
-    assert.equal(count[0].n, "27", "table inventory changed: extend 0002/0004/this test deliberately");
+    assert.equal(count[0].n, "28", "table inventory changed: extend 0002/0004/0005/this test deliberately");
   });
 });
 
@@ -36,6 +36,14 @@ test("anon has no privilege at all on public tables; authenticated only SELECT o
       assert.deepEqual(r.anon, [], `anon privileges on ${r.t}`);
       assert.deepEqual(r.auth, SELECTABLE_BY_AUTHENTICATED.includes(r.t) ? ["SELECT"] : [], `authenticated privileges on ${r.t}`);
     }
+  });
+});
+
+test("integration_connections: authenticated may read status columns only, never the vault reference (0005)", async () => {
+  await asBackend(async q => {
+    const cols = await q.rows<{ c: string }>(`select column_name c from information_schema.column_privileges
+      where table_schema='public' and table_name='integration_connections' and grantee='authenticated' and privilege_type='SELECT' order by 1`);
+    assert.ok(cols.length > 0 && !cols.some(r => r.c === "encrypted_token_reference"), JSON.stringify(cols));
   });
 });
 
@@ -86,14 +94,20 @@ test("service_role is the only API role with write access (backend-only); anon/a
   });
 });
 
-test("public RPCs: exactly the onboarding functions, executable by authenticated only (0004)", async () => {
+test("public RPCs: end-user functions for authenticated only, srv_* for the server (service_role) only", async () => {
   await asBackend(async q => {
-    const rows = await q.rows<{ name: string; auth: boolean; svc: boolean }>(`select p.proname name,
-        has_function_privilege('authenticated', p.oid, 'EXECUTE') auth, has_function_privilege('service_role', p.oid, 'EXECUTE') svc
+    const rows = await q.rows<{ name: string; auth: boolean; svc: boolean; anon: boolean }>(`select p.proname name,
+        has_function_privilege('authenticated', p.oid, 'EXECUTE') auth, has_function_privilege('service_role', p.oid, 'EXECUTE') svc,
+        has_function_privilege('anon', p.oid, 'EXECUTE') anon
       from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public' order by 1`);
-    assert.deepEqual(rows.map(r => r.name), ["accept_family_invite", "add_child", "create_child_pairing_code", "create_family",
+    const user = rows.filter(r => !r.name.startsWith("srv_")), server = rows.filter(r => r.name.startsWith("srv_"));
+    assert.deepEqual(user.map(r => r.name), ["accept_family_invite", "add_child", "create_child_pairing_code", "create_family",
       "create_family_invite", "my_family", "rename_family", "rename_person", "revoke_child_device"]);
-    for (const r of rows) { assert.equal(r.auth, true, r.name); assert.equal(r.svc, false, `${r.name}: service_role has no business calling end-user RPCs`); }
+    assert.deepEqual(server.map(r => r.name), ["srv_apply_google_events", "srv_consume_oauth_state", "srv_create_oauth_state",
+      "srv_disconnect_google", "srv_google_connections", "srv_mark_sync_failed", "srv_parent_person", "srv_save_google_connection"]);
+    for (const r of rows) assert.equal(r.anon, false, `${r.name}: anon must not execute`);
+    for (const r of user) { assert.equal(r.auth, true, r.name); assert.equal(r.svc, false, `${r.name}: service_role has no business calling end-user RPCs`); }
+    for (const r of server) { assert.equal(r.auth, false, `${r.name}: end users must never reach token functions`); assert.equal(r.svc, true, r.name); }
     const svc = await q.rows<{ name: string }>(`select p.proname name from pg_proc p join pg_namespace n on n.oid = p.pronamespace
       where n.nspname = 'app_private' and has_function_privilege('service_role', p.oid, 'EXECUTE') order by 1`);
     assert.deepEqual(svc.map(r => r.name), ["redeem_child_pairing"]);

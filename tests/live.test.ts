@@ -30,3 +30,17 @@ test("live parent frame never renders demo screens or the demo banner", () => {
   const src = readFileSync(new URL("../apps/web/components/command/CommandFrame.tsx", import.meta.url), "utf8");
   assert.match(src, /state\.kind !== "preview"[\s\S]*demoNote=\{null\}[\s\S]*<LiveCommand/);
 });
+
+test("calendar grouping by Berlin day: all-day first, multi-day timed events on each day, DST-safe", async () => {
+  const { byDay, berlinDate, sinceText } = await import("../apps/web/lib/live/google-client.ts");
+  const ev = (id: string, s: string, e: string) => ({ id, title: id, location: null, allDay: false, date: null, startsAt: s, endsAt: e, source: "google_calendar" });
+  const days = byDay([
+    ev("late", "2026-11-24T22:30:00Z", "2026-11-24T23:30:00Z"), // 23:30 Berlin on the 24th... ends 00:30 on the 25th
+    ev("morning", "2026-11-24T07:00:00Z", "2026-11-24T08:00:00Z"),
+    { id: "holiday", title: "Ferien", location: null, allDay: true, date: "2026-11-24", startsAt: null, endsAt: null, source: "google_calendar" }
+  ], "2026-11-24", 2);
+  assert.deepEqual(days.map(d => [d.day, d.events.map(e => e.id)]), [["2026-11-24", ["holiday", "morning", "late"]], ["2026-11-25", ["late"]]]);
+  assert.equal(berlinDate("2026-03-28T23:30:00Z"), "2026-03-29", "Berlin date after midnight");
+  assert.equal(sinceText(null), "noch nie");
+  assert.equal(sinceText(new Date(Date.now() - 5 * 60000).toISOString()), "vor 5 Min.");
+});

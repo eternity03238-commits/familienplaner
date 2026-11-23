@@ -66,3 +66,7 @@ Siehe `SETUP_KONTEN.md`: zwei Konten anlegen (erledigt), Supabase einstellen (ca
   - Die Kinderansicht bleibt Beispiel, mit eigenem Hinweis, bis Kindergeräte gekoppelt sind.
   - Abgemeldet oder ohne Familie: Hinweis mit Weg zu `/einrichten`.
   - Tests: `tests/live.test.ts`. Live-Screens im Browser mit simulierter Supabase-Antwort geprüft (hell/dunkel, ohne Konsolenfehler). `design:check` 156/0.
+- **Google Kalender, nur lesend (23.11.2026, vorgezogen aus Sprint 2):** ADR-0008, Migration 0005.
+  - In der App: „Mit Google verbinden“ unter Verbindungen. Termine erscheinen in „Heute“ und im Kalender (7 Tage). Dazu gibt es „Jetzt aktualisieren“ und „Trennen“.
+  - Tests: DB 55/55 mit Vault-Nachbildung lokal, in der CI gegen echtes Supabase. Unit-Tests 112/112, Build, Bundle-Check, `design:check` 156/0, Smoke-Test.
+  - Die echte Google-Anmeldung kann erst nach der Einrichtung durch die Inhaberin getestet werden.

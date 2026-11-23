@@ -23,14 +23,14 @@ export const CONNECTIONS: ConnectionInfo[] = [
   {
     id: "google_calendar",
     name: "Google Kalender",
-    what: "Eure Termine erscheinen automatisch im Familienkalender, zum Beispiel Arzt, Training oder Elternabend.",
+    what: "Deine Termine erscheinen automatisch in FamilyOS, zum Beispiel Arzt, Training oder Elternabend.",
     status: "next",
     how: [
-      "Unter „Verbindungen“ auf „Google Kalender verbinden“ tippen.",
+      "Unter „Verbindungen“ auf „Mit Google verbinden“ tippen.",
       "Bei Google anmelden und nur das Lesen der Kalender erlauben.",
-      "Auswählen, welche Kalender FamilyOS sehen darf, zum Beispiel nur „Familie“."
+      "FamilyOS übernimmt die Kalender, die in deinem Google Kalender eingeblendet sind, für die nächsten 60 Tage."
     ],
-    until: "Termine von Hand eintragen kommt im selben Ausbauschritt."
+    until: "Jeder Elternteil verbindet seinen eigenen Google Kalender."
   },
   {
     id: "lernsax",

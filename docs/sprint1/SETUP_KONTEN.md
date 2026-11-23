@@ -45,3 +45,10 @@ Settings → Build and Deployment:
 - Root Directory **`apps/web`**.
 - **„Include files outside the root directory in the Build Step“: Enabled**, danach **Save**. Ohne diesen Schalter fehlen die gemeinsamen Pakete und die Lockdatei, und der Build bricht beim Installieren ab.
 - Nach einer Änderung einen **neuen** Build auslösen, zum Beispiel durch einen Push. Ein „Redeploy“ eines alten Builds kann die alten Einstellungen übernehmen.
+
+## 7. Google Kalender (OAuth)
+1. console.cloud.google.com: neues Projekt `FamilyOS` anlegen und die **Google Calendar API** aktivieren.
+2. Google Auth Platform: Zielgruppe **Extern**, Status **Testing**. **Testnutzer**: eure beiden Google-Adressen. Datenzugriff: `.../auth/calendar.readonly`.
+3. Client vom Typ **Webanwendung** anlegen. Weiterleitungs-URI: `https://<feste Vercel-Adresse>/api/google/callback`.
+4. In Vercel eintragen: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SUPABASE_SECRET_KEY` (`sb_secret_…`). Optional `GOOGLE_REDIRECT_URI` mit genau der Adresse aus Schritt 3, falls die App unter mehreren Adressen geöffnet wird. Danach neu deployen.
+5. Hinweis: Im Testing-Modus muss man sich nach 7 Tagen neu mit Google verbinden. Die App zeigt das an.

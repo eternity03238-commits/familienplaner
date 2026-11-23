@@ -4,7 +4,7 @@
 - Offizieller Google OAuth und Calendar API.
 - Start mit minimalen Scopes (zunächst read-only; Schreibzugriff später getrennt).
 - Initial-Sync, Delta-/syncToken-Verarbeitung, Push-Webhook-Signale, Cursor-Persistenz, Mapping, Konflikt-/Resync-Strategie.
-- Es gibt im Starter **keine** OAuth-Routen mit echter Implementierung.
+- **Umgesetzt (ADR-0008, 23.11.2026):** OAuth mit PKCE, nur lesend, Token im Supabase Vault, Abgleich −1/+60 Tage über `/api/google/*`. Noch offen: Push-Webhooks, syncToken-Deltas, Kalenderauswahl in der App, Teilen mit der Familie.
 
 ## LernSax (Name aus Nutzereingabe „lernlax“ noch zu bestätigen)
 Abonnierbare Feeds / WebDAV / IMAP sind je nach Einrichtung möglich; konkrete Schul- und Kontofunktionen separat prüfen. Kein ungeprüftes Auslesen von Loginseiten.

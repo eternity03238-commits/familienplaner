@@ -143,8 +143,11 @@ test("adult private events stay private; guardians see all events of their child
 test("tables without any read policy stay invisible to authenticated users", async () => {
   await asUser("ad1")(async q => {
     for (const t of ["access_grants", "child_guardianships", "families", "households", "family_memberships", "household_memberships",
-      "schools", "school_enrollments", "subjects", "task_completions", "routines", "integration_connections", "external_resource_mappings", "sync_runs", "audit_events"])
+      "schools", "school_enrollments", "subjects", "task_completions", "routines", "external_resource_mappings", "sync_runs", "audit_events"])
       assert.equal((await q.fails(`select 1 from public.${t}`)).code, "42501", t);
+    // 0005: only the own connections are readable (status columns only).
+    const foreign = await q.rows("select id from public.integration_connections where owner_person_id <> app_private.current_person_id()");
+    assert.deepEqual(foreign, []);
   });
 });
 
