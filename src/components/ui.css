@@ -1,0 +1,28 @@
+/* FamilyOS shared UI primitives */
+.fo-button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 15px;border-radius:var(--fo-radius-sm);border:1px solid transparent;font:inherit;font-size:var(--fo-type-small);font-weight:800;cursor:pointer;transition:transform var(--fo-motion-fast) var(--fo-ease),background var(--fo-motion-fast) var(--fo-ease)}
+.fo-button:disabled{opacity:.45;cursor:not-allowed}
+.fo-button:not(:disabled):active{transform:scale(.985)}
+.fo-button:focus-visible,.fo-task:focus-visible{outline:none;box-shadow:var(--fo-ring)}
+.fo-button--primary{color:var(--fo-interactive-ink);background:var(--fo-interactive)}
+.fo-button--secondary{color:var(--fo-ink);background:var(--fo-surface-raised);border-color:var(--fo-stroke)}
+.fo-button--success{color:var(--fo-success-ink);background:var(--fo-success)}
+.fo-button--quiet{color:var(--fo-ink);background:transparent;border-color:var(--fo-stroke)}
+.fo-surface{background:var(--fo-surface);color:var(--fo-ink);border:1px solid var(--fo-stroke);border-radius:var(--fo-radius-lg);padding:var(--fo-space-4)}
+.fo-eyebrow{display:block;text-transform:uppercase;font-weight:800;font-size:var(--fo-type-label);letter-spacing:.14em;color:var(--fo-ink-muted)}
+.fo-source{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--fo-stroke);padding:6px 9px;border-radius:30px;color:var(--fo-ink-muted);font-size:11px;line-height:1.3}
+.fo-source--stale{color:var(--fo-warning)}.fo-source--connected{color:var(--fo-success)}
+.fo-status{display:inline-flex;padding:5px 9px;border-radius:8px;font-size:11px;font-weight:800;background:var(--fo-surface-raised);color:var(--fo-ink)}
+.fo-status--warning{color:var(--fo-warning)}.fo-status--success{color:var(--fo-success)}
+.fo-section-heading{display:flex;gap:12px;align-items:baseline;justify-content:space-between}.fo-section-heading h2{margin:0;font-size:20px;letter-spacing:-.03em;color:var(--fo-ink)}
+.fo-progress{display:grid;gap:9px}
+.fo-progress-caption{display:flex;gap:10px;justify-content:space-between;font-size:var(--fo-type-small);color:var(--fo-ink)}
+.fo-progress-caption strong{font-variant-numeric:tabular-nums}
+.fo-progress-track{width:100%;height:9px;border-radius:99px;background:var(--fo-surface-raised);overflow:hidden}
+.fo-progress-track>div{height:100%;background:var(--fo-interactive);border-radius:inherit;transition:width var(--fo-motion-normal) var(--fo-ease)}
+.fo-task{width:100%;min-height:62px;display:flex;align-items:center;gap:12px;padding:12px;text-align:left;border:1px solid var(--fo-stroke);border-radius:var(--fo-radius-md);color:var(--fo-ink);background:var(--fo-surface);font:inherit;cursor:pointer}
+.fo-task-check{flex-shrink:0;width:26px;height:26px;border:2px solid var(--fo-ink-muted);border-radius:50%;display:grid;place-items:center}
+.fo-task--done .fo-task-check{background:var(--fo-success);border-color:var(--fo-success);color:var(--fo-success-ink)}
+.fo-task-copy{display:grid;gap:5px;flex:1;min-width:0}.fo-task-copy strong{font-size:var(--fo-type-body)}.fo-task-copy small{font-size:12px;color:var(--fo-ink-muted);line-height:1.4}
+.fo-task--done .fo-task-copy strong{text-decoration:line-through;text-decoration-thickness:1px;color:var(--fo-ink-muted)}
+.fo-task-duration{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--fo-ink-muted);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.fo-button,.fo-progress-track>div{transition:none}}
